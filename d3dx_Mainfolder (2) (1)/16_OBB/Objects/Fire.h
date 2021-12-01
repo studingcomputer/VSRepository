@@ -16,4 +16,6 @@ private:
 	Clip* clip;
 
 	D3DXVECTOR2 position;
+	D3DXVECTOR2 scale;
+	D3DXVECTOR3 rotation;
 };

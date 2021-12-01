@@ -12,16 +12,33 @@ public:
 	void Render();
 
 	void DrawBound(bool val) { bDrawBound = val; }
+	void DrawCollision(bool val) { bDrawCollision = val; }
 
 public:
 	bool AABB(D3DXVECTOR2& position);
 	bool AABB(Sprite* b);
 
+	bool OBB(Sprite* b);
+
 	static bool AABB(Sprite* a, D3DXVECTOR2& position);
 	static bool AABB(Sprite* a, Sprite* b);
+	static bool OBB(Sprite* a, Sprite* b);
 
 private:
 	void CreateBound();
+
+private:
+
+	struct OBBDesc
+	{
+		D3DXVECTOR2 Position;
+		D3DXVECTOR2 Direction[2];
+		float Length[2];
+	};
+
+	static void CreateOBB(OUT OBBDesc * out, D3DXVECTOR2& position, D3DXMATRIX& world, D3DXVECTOR2& length);
+	static float SeperateAxis(D3DXVECTOR2& seperate, D3DXVECTOR2& e1, D3DXVECTOR2& e2);
+	static bool CheckOBB(OBBDesc& obbA, OBBDesc& obbB);
 
 public:
 	void Position(float x, float y);
@@ -47,6 +64,7 @@ private:
 
 private:
 	bool bDrawBound;
+	bool bDrawCollision;
 	wstring textureFile;
 
 	Shader* shader;
@@ -59,6 +77,8 @@ private:
 	D3DXVECTOR2 scale;
 	D3DXVECTOR3 rotation;
 	D3DXVECTOR2 textureSize;
+
+	D3DXMATRIX world;
 
 	ID3D11ShaderResourceView* srv;
 
