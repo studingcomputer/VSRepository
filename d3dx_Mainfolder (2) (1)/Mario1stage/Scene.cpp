@@ -188,6 +188,9 @@ void Render()
 
 bool CheckCollapse_floor()
 {
+	int dbdebug[2] = {-7, -7};
+	Sprite* sprdb[2] = { nullptr, nullptr };
+
 	for (Sprite* spr : sprite)
 	{
 		if (!(
@@ -198,7 +201,9 @@ bool CheckCollapse_floor()
 			res_debug = spr->If_Met(player->RtAn()->Position(), player->RtAn()->TextureSize());
 			if (player->Crash(res_debug, spr->Position(), spr->TextureSize()))
 			{
-				return true;
+				dbdebug[0] = res_debug;
+				sprdb[0] = spr;
+				break;
 			}
 		}
 	}
@@ -211,9 +216,25 @@ bool CheckCollapse_floor()
 		{
 			res_debug = spr->If_Met(player->RtAn()->Position(), player->RtAn()->TextureSize());
 			if (player->Crash(res_debug, spr->Position(), spr->TextureSize()))
-				return true;
+			{
+				dbdebug[1] = res_debug;
+				sprdb[1] = spr;
+				break;
+			}
 		}
 	}
+
+	if ((dbdebug[0] != -7 && dbdebug[1] != -7) || (dbdebug[1] != -7 && dbdebug[0] == -7))
+	{
+		player->Crash(dbdebug[1], sprdb[1]->Position(), sprdb[1]->TextureSize());
+		return true;
+	}
+	else if (dbdebug[1] == -7 && dbdebug[0] != -7)
+	{
+		player->Crash(dbdebug[0], sprdb[0]->Position(), sprdb[0]->TextureSize());
+		return true;
+	}
+
 	return false;
 }
 
