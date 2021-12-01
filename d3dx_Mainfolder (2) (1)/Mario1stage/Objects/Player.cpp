@@ -2,7 +2,7 @@
 #include "Player.h"
 
 Player::Player(D3DXVECTOR2 position, D3DXVECTOR2 scale)
-	:moveSpeed(300.0f), gravity(-0.9f), focusOffset(-100, -185)
+	:moveSpeed(300.0f), gravity(-1.0f), focusOffset(-100, -185)
 {
 	animation = new Animation;
 
@@ -54,10 +54,10 @@ void Player::Update(D3DXMATRIX & V, D3DXMATRIX & P)
 
 	bool bMove = false;
 
-	if (velocity.x < -0.00005)
-		velocity.x += 0.00005f;
-	else if (velocity.x > 0.00005)
-		velocity.x -= 0.00005f;
+	if (velocity.x < -0.0001)
+		velocity.x += 0.0001f;
+	else if (velocity.x > 0.0001)
+		velocity.x -= 0.0001f;
 	else
 		velocity.x = 0.0f;
 
@@ -70,7 +70,7 @@ void Player::Update(D3DXMATRIX & V, D3DXMATRIX & P)
 	else if (Key->Press('D') && (animation->Position().x + animation->TextureSize().x * 0.5f < 8440))
 	{
 		bMove = true;
-		velocity.x = moveSpeed * Timer->Elapsed();
+		velocity.x = (moveSpeed * Timer->Elapsed());
 		animation->RotationDegree(0, 0, 0);
 	}
 

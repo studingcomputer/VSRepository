@@ -67,6 +67,24 @@ void InitScene()
 		breakableBrick.push_back(new Sprite(Textures + L"Mario/background.png", Shaders + L"009_Sprite.fx", 383, 144, 400, 160));
 		breakableBrick.back()->Position(391 * 2.5, 152 * 1.5);
 		breakableBrick.back()->Scale(2.5f, 2.5f);
+
+		breakableBrick.push_back(new Sprite(Textures + L"Mario/background.png", Shaders + L"009_Sprite.fx", 1232, 144, 1249, 160));
+		breakableBrick.back()->Position(1240 * 2.5, 152 * 1.5);
+		breakableBrick.back()->Scale(2.5f, 2.5f);
+		breakableBrick.push_back(new Sprite(Textures + L"Mario/background.png", Shaders + L"009_Sprite.fx", 1263, 144, 1280, 160));
+		breakableBrick.back()->Position(1271 * 2.5, 152 * 1.5);
+		breakableBrick.back()->Scale(2.5f, 2.5f);
+
+
+		//1280~1407
+		//y 80
+
+		for (int i = 1280; i < 1391; i += 17)
+		{
+			breakableBrick.push_back(new Sprite(Textures + L"Mario/background.png", Shaders + L"009_Sprite.fx", i, 80, i+17, 96));
+			breakableBrick.back()->Position((i+8) * 2.5, 88 * 5.0);
+			breakableBrick.back()->Scale(2.5f, 2.5f);
+		}
 	}
 
 }
@@ -175,14 +193,6 @@ void Render()
 }
 
 
-/////////////////////////////////////////////////
-//해결필요 문제
-/*
-	player의 crash는 확인하고 실제 자신의 상태에 반영
-	따라서 바닥 충돌 확인 이후 오브젝트 충돌하면 오브젝트가 충돌되지 않은 걸
-	바닥이 충돌되지 않은 것으로 인식해버림
-	또한 조건으로 해버리면 둘 중 하나가 무시되어버림
-*/
 
 
 
