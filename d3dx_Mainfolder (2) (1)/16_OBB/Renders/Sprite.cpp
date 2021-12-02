@@ -204,14 +204,14 @@ bool Sprite::AABB(Sprite * a, Sprite * b)
 bool Sprite::OBB(Sprite * a, Sprite * b)
 {
 
-	OBBDesc obbA, obbB;
+	OBBDesc obbA, obbB; //비교대상 생성
 	float xScale, yScale;
 
-	D3DXVECTOR2 lengthA = D3DXVECTOR2(a->world._11, a->world._22) * 0.5f;
-	CreateOBB(&obbA, a->Position(), a->world, lengthA);
+	D3DXVECTOR2 lengthA = D3DXVECTOR2(a->world._11, a->world._22) * 0.5f; //오일러 각 회전 이론을 사용한 이미지의 길이값 지정
+	CreateOBB(&obbA, a->Position(), a->world, lengthA); //OBB 생성
 
-	D3DXVECTOR2 lengthB = D3DXVECTOR2(b->world._11, b->world._22) * 0.5f;
-	CreateOBB(&obbB, b->Position(), b->world, lengthB);
+	D3DXVECTOR2 lengthB = D3DXVECTOR2(b->world._11, b->world._22) * 0.5f; //위와 같은 처리
+	CreateOBB(&obbB, b->Position(), b->world, lengthB); //OBB 비교대상 생성
 
 	return CheckOBB(obbA, obbB);
 }
@@ -242,43 +242,44 @@ void Sprite::CreateBound()
 
 void Sprite::CreateOBB(OUT OBBDesc * out, D3DXVECTOR2 & position, D3DXMATRIX & world, D3DXVECTOR2 & length)
 {
-	out->Position = position;
+	out->Position = position; //obb 위치 지정
 
-	out->Length[0] = length.x;
-	out->Length[1] = length.y;
+	out->Length[0] = length.x; //obb의 x길이 지정
+	out->Length[1] = length.y; //obb의 y길이 지정
 
-	out->Direction[0] = D3DXVECTOR2(world._11, world._12);
-	out->Direction[1] = D3DXVECTOR2(world._21, world._22);
+	out->Direction[0] = D3DXVECTOR2(world._11, world._12); //x축 회전행렬 지정
+	out->Direction[1] = D3DXVECTOR2(world._21, world._22); //y축 회전행렬 지정
 
-	D3DXVec2Normalize(&out->Direction[0], &out->Direction[0]);
+	D3DXVec2Normalize(&out->Direction[0], &out->Direction[0]); //위의 과정을 통해 지정된 값 정규화(Normalize)
 	D3DXVec2Normalize(&out->Direction[1], &out->Direction[1]);
 }
 
 float Sprite::SeperateAxis(D3DXVECTOR2 & seperate, D3DXVECTOR2 & e1, D3DXVECTOR2 & e2)
 {
-	float r1 = fabsf(D3DXVec2Dot(&seperate, &e1));
-	float r2 = fabsf(D3DXVec2Dot(&seperate, &e2));
+	float r1 = fabsf(D3DXVec2Dot(&seperate, &e1)); //r1에 seperate와 e1의 내적값 저장
+	float r2 = fabsf(D3DXVec2Dot(&seperate, &e2)); //r2에 seperate와 e2의 내적값 저장
 
-	return r1 + r2;
+	return r1 + r2; // 합쳐서 리턴
 }
 
 bool Sprite::CheckOBB(OBBDesc & obbA, OBBDesc & obbB)
 {
-	D3DXVECTOR2 nea1 = obbA.Direction[0], ea1 = nea1 * obbA.Length[0];
-	D3DXVECTOR2 nea2 = obbA.Direction[1], ea2 = nea2 * obbA.Length[1];
-	D3DXVECTOR2 neb1 = obbB.Direction[0], eb1 = neb1 * obbB.Length[0];
-	D3DXVECTOR2 neb2 = obbB.Direction[1], eb2 = neb2 * obbB.Length[1];
-	D3DXVECTOR2 direction = obbA.Position - obbB.Position;
+	D3DXVECTOR2 nea1 = obbA.Direction[0], ea1 = nea1 * obbA.Length[0]; //OBBA의 x값 저장
+	D3DXVECTOR2 nea2 = obbA.Direction[1], ea2 = nea2 * obbA.Length[1]; //OBBA의 y값 저장
+	D3DXVECTOR2 neb1 = obbB.Direction[0], eb1 = neb1 * obbB.Length[0]; //OBBB의 x값 저장
+	D3DXVECTOR2 neb2 = obbB.Direction[1], eb2 = neb2 * obbB.Length[1]; //OBBB의 y값 저장
+	D3DXVECTOR2 direction = obbA.Position - obbB.Position; //OBB 사이의 거리 저장
 
 
 	float lengthA = 0.0f, lengthB = 0.0f, length = 0.0f;
 
-	lengthA = D3DXVec2Length(&ea1);
-	lengthB = SeperateAxis(nea1, eb1, eb2);
-	length = fabsf(D3DXVec2Dot(&direction, &nea1));
-	if (length > lengthA + lengthB)
-		return false;
+	lengthA = D3DXVec2Length(&ea1); //ea1의 길이 저장
+	lengthB = SeperateAxis(nea1, eb1, eb2); //eb1과 eb2의 각 내적을 합한 길이를 저장
+	length = fabsf(D3DXVec2Dot(&direction, &nea1)); //direction과 nea1의 내적 저장
+	if (length > lengthA + lengthB) //direction과 nea1의 내적이 두 OBB의 내적의 합보다 크다면
+		return false; //거짓 출력
 
+	//위의 과정과 동일
 	lengthA = D3DXVec2Length(&ea2);
 	lengthB = SeperateAxis(nea2, eb1, eb2);
 	length = fabsf(D3DXVec2Dot(&direction, &nea2));
