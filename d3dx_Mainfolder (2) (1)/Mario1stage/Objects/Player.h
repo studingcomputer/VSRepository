@@ -29,6 +29,8 @@ public:
 	D3DXVECTOR2 RtVelocity() { return velocity; }
 	bool RtOnground() { return bOnGround; }
 	bool RtNotOnFloor() { return notonfloor; }
+
+	bool IsDead();
 private:
 	float moveSpeed;
 	D3DXVECTOR2 focusOffset;

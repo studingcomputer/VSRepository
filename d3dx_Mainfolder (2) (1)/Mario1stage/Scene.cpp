@@ -19,16 +19,17 @@ bool CheckCollapse_floor();
 bool CheckCollapse_Object();
 
 int res_debug;
+int deadcount = 0;
 
 void InitScene()
 {
 
 	bg = new Background(Shaders + L"/009_Sprite.fx");
-	bg->Scale(D3DXVECTOR2( 2.5f, 2.5f));
+	bg->Scale(D3DXVECTOR2(2.5f, 2.5f));
 	bg->Position(D3DXVECTOR2(4220, 0));
 	player = new Player(D3DXVECTOR2(100, 120), D3DXVECTOR2(0.8f, 0.8f));
 
-	
+
 	freeCam = new Following(player);
 
 	{//바닥 세팅작업
@@ -50,8 +51,16 @@ void InitScene()
 	}
 
 	{
-		sprite.push_back(new Sprite(Textures + L"Mario/background.png", Shaders + L"009_Sprite.fx", 448, 176, 448+32, 176+32));
-		sprite.back()->Position((448+16) * 2.5, (176+16)* 0.6f);
+		sprite.push_back(new Sprite(Textures + L"Mario/background.png", Shaders + L"009_Sprite.fx", 448, 176, 448 + 32, 176 + 32));
+		sprite.back()->Position((448 + 16) * 2.5, (176 + 16)* 0.6f);
+		sprite.back()->Scale(2.5f, 2.5f);
+
+		sprite.push_back(new Sprite(Textures + L"Mario/background.png", Shaders + L"009_Sprite.fx", 1280, 80, 1391, 96));
+		sprite.back()->Position(1335 * 2.5, 88 * 4.5);
+		sprite.back()->Scale(2.5f, 2.5f);
+
+		sprite.push_back(new Sprite(Textures + L"Mario/background.png", Shaders + L"009_Sprite.fx", 1456, 80, 1504, 96));
+		sprite.back()->Position(1304 * 2.5, 88 * 4.5);
 		sprite.back()->Scale(2.5f, 2.5f);
 	}
 
@@ -76,15 +85,6 @@ void InitScene()
 		breakableBrick.back()->Scale(2.5f, 2.5f);
 
 
-		//1280~1407
-		//y 80
-
-		for (int i = 1280; i < 1391; i += 17)
-		{
-			breakableBrick.push_back(new Sprite(Textures + L"Mario/background.png", Shaders + L"009_Sprite.fx", i, 80, i+17, 96));
-			breakableBrick.back()->Position((i+8) * 2.5, 88 * 5.0);
-			breakableBrick.back()->Scale(2.5f, 2.5f);
-		}
 	}
 
 }
@@ -92,16 +92,27 @@ void InitScene()
 void DestroyScene()
 {
 	for (Sprite* spr : sprite)
+	{
 		SAFE_DELETE(spr);
+	}
+	sprite.clear();
+
 	SAFE_DELETE(player);
 
 	SAFE_DELETE(bg);
 
-
 	SAFE_DELETE(freeCam);
 
 	for (Sprite* spr : floor_)
+	{
 		SAFE_DELETE(spr);
+	}
+	floor_.clear();
+	for (Sprite* spr : breakableBrick)
+	{
+		SAFE_DELETE(spr);
+	}
+	breakableBrick.clear();
 }
 
 D3DXMATRIX V, P;
@@ -117,15 +128,15 @@ void Update()
 
 	bool res = false;
 
-	
 
-	
-	
+
+
+
 
 
 	for (Sprite* spr : sprite)
 		spr->Update(freeCam->View(), P);
-	if(breakableBrick.size() > 0)
+	if (breakableBrick.size() > 0)
 		for (Sprite* spr : breakableBrick)
 			spr->Update(freeCam->View(), P);
 	//for (Sprite* spr : brick_Query)
@@ -141,6 +152,31 @@ void Update()
 	player->UpdatePos();
 
 	player->Update(freeCam->View(), P);
+
+	if (player->IsDead())
+	{
+		//죽었을 때 처리
+		MessageBox(NULL, L"플레이어가 죽었습니다", L"Yo▦ Ki▦Le▦ H▦m", MB_OK);
+		MessageBox(NULL, L"플레이어가 죽었습니다.", L"Yo▦ Ki▦Le▦ H▦m", MB_OK);
+		MessageBox(NULL, L"플레이어가 죽었다고.", L"Yo▦ Ki▦Le▦ H▦m", MB_OK);
+		MessageBox(NULL, L"죄책감조차 못 느끼는 거야?", L"Yo▦ Ki▦Le▦ H▦m", MB_OK);
+		MessageBox(NULL, L"네가 초래한 일이야.", L"Yo▦ Ki▦Le▦ H▦m", MB_OK);
+		if (deadcount++ > 0)
+		{
+			wstring s = L"벌써 이 캐릭터는 " + to_wstring(deadcount) + L"번이나 죽어버렸어.";
+			LPCWSTR message = (LPCWSTR)s.c_str();
+			MessageBox(NULL, message, L"Yo▦ Ki▦Le▦ H▦m", MB_OK);
+			if (deadcount == 10)
+			{
+				MessageBox(NULL, L"차라리, 이 세계를 부숴야겠어.", L"Yo▦ Ki▦Le▦ H▦m", MB_OK);
+				DestroyScene();
+				return;
+			}
+		}
+
+		DestroyScene();
+		InitScene();
+	}
 
 }
 
@@ -165,7 +201,7 @@ void Render()
 
 		for (Sprite* spr : floor_)
 			spr->Render();
-		//-----------debug--------------
+		/*-----------debug--------------
 		string scoreString = "x = " + to_string(player->RtAn()->Position().x);
 		scoreString += " y = " + to_string(player->RtAn()->Position().y);
 
@@ -186,7 +222,7 @@ void Render()
 
 		scoreString = "ground = " + to_string(player->RtGn());
 		ImGui::Text(scoreString.c_str());
-		//-----------debug--------------
+		-----------debug--------------*/
 	}
 	ImGui::Render();
 	SwapChain->Present(0, 0);
@@ -198,7 +234,7 @@ void Render()
 
 bool CheckCollapse_floor()
 {
-	int dbdebug[2] = {-7, -7};
+	int dbdebug[2] = { -7, -7 };
 	Sprite* sprdb[2] = { nullptr, nullptr };
 
 	for (Sprite* spr : sprite)
