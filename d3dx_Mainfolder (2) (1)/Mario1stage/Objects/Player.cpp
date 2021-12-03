@@ -2,7 +2,7 @@
 #include "Player.h"
 
 Player::Player(D3DXVECTOR2 position, D3DXVECTOR2 scale)
-	:moveSpeed(300.0f), gravity(-1.0f), focusOffset(-100, -185)
+	:moveSpeed(300.0f), gravity(-2.3f), focusOffset(-100, -185)
 {
 	animation = new Animation;
 
@@ -108,20 +108,17 @@ void Player::UpdatePos()
 	if (!(bOnGround))
 	{
 		position.y += velocity.y;
-
-		animation->Position(position);
 	}
 
-	if (position.y <= ground_)
+	if ((position.y <= ground_))
 	{
 		position.y = ground_;
 		velocity.y = 0.0f;
 
 		bOnGround = true;
 
-		animation->Position(position);
-
 	}
+
 
 
 	animation->Position(position);
@@ -130,7 +127,7 @@ void Player::StartJump()
 {
 	if (bOnGround == true)
 	{
-		velocity.y = 0.2f;
+		velocity.y = 0.3f;
 		bOnGround = false;
 	}
 }
@@ -145,8 +142,9 @@ bool Player::Crash(int a, D3DXVECTOR2 pos_, D3DXVECTOR2 pos_axis)
 	{
 		if (!notonfloor && velocity.y < 0.01)
 		{
-			swap(in_ground, ground_);
 			ground_ = animation->Position().y;
+			if(in_ground > ground_)
+				in_ground = ground_;
 			bOnGround = true;
 			notonfloor = true;
 			animation->Position(animation->Position().x, ground_);
@@ -154,9 +152,13 @@ bool Player::Crash(int a, D3DXVECTOR2 pos_, D3DXVECTOR2 pos_axis)
 		return true;
 	}
 	case 2:
-		velocity.y = -0.05f;
-		
-		return true;
+		if (velocity.y > 0)
+		{
+			velocity.y = -0.05f;
+
+			return true;
+		}
+		break;
 	case 3:
 		if (velocity.x < 0)
 		{
@@ -182,7 +184,7 @@ bool Player::Crash(int a, D3DXVECTOR2 pos_, D3DXVECTOR2 pos_axis)
 			//(RtAn()->Position().y - RtAn()->TextureSize().y * 0.5f > ground_)
 			if ((pos_.x + pos_axis.x * 0.5f < animation->Position().x - animation->TextureSize().x * 0.5f) || (pos_.x - pos_axis.x * 0.5f > animation->Position().x + animation->TextureSize().x * 0.5f))//벗어났는데 바닥보다 자신이 높게 있으면
 			{
-				swap(ground_, in_ground);//'블럭'과 충돌하지 않았으므로 기본값으로 전환
+				ground_ = 0;//'블럭'과 충돌하지 않았으므로 기본값으로 전환
 				bOnGround = false;
 				notonfloor = false;
 			}
@@ -192,9 +194,6 @@ bool Player::Crash(int a, D3DXVECTOR2 pos_, D3DXVECTOR2 pos_axis)
 	return false;
 }
 
-void Player::GotOn()
-{
-}
 
 
 void Player::Render()
@@ -228,4 +227,11 @@ void Player::Focus(D3DXVECTOR2 * position, D3DXVECTOR2 * size)
 		(*position).y = 115.0f - focusOffset.y;
 		(*size) = D3DXVECTOR2(1, 1);
 	}
+}
+
+bool Player::IsDead()
+{
+	if (bOnGround && ground_ == 0)
+		return true;
+	return false;
 }

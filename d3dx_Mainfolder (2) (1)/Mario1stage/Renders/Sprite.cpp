@@ -36,12 +36,14 @@ int Sprite::If_Met(D3DXVECTOR2 _pos, D3DXVECTOR2 _scale)
 
  		if (((_pos.y - _scale.y * 0.5f) >= (position.y - TextureSize().y * 0.5f)) && (((_pos.y - _scale.y * 0.5f) - (position.y + TextureSize().y * 0.5f)) <= 0.1f) && (((_pos.y - _scale.y * 0.5f) - (position.y + TextureSize().y * 0.5f)) >= -0.1f))
 			return 1;//위
-		else if (((_pos.y + _scale.y * 0.5f) < (position.y + TextureSize().y * 0.5f)) && (((_pos.y + _scale.y * 0.5f) - (position.y - TextureSize().y * 0.5f)) > -1.0f) && (((_pos.y + _scale.y * 0.5f) - (position.y - TextureSize().y * 0.5f)) < 1.0f) && ((_pos.x + _scale.x * 0.5f) > (position.x - TextureSize().x * 0.5f)) && ((_pos.x - _scale.x * 0.5f) < (position.x + TextureSize().x * 0.5f)))
+		if (((_pos.y + _scale.y * 0.5f) < (position.y + TextureSize().y * 0.5f)) && (((_pos.y + _scale.y * 0.5f) - (position.y - TextureSize().y * 0.5f)) > -1.0f) && (((_pos.y + _scale.y * 0.5f) - (position.y - TextureSize().y * 0.5f)) < 1.0f) && ((_pos.x + _scale.x * 0.5f) > (position.x - TextureSize().x * 0.5f)) && ((_pos.x - _scale.x * 0.5f) < (position.x + TextureSize().x * 0.5f)))
 			return 2;//아래
 		else if (((_pos.x - _scale.x * 0.5f) >= (position.x - TextureSize().x * 0.5f)) && (((_pos.x - _scale.x * 0.5f) - (position.x + TextureSize().x * 0.5f)) <= 1.0f) && (((_pos.x - _scale.x * 0.5f) - (position.x + TextureSize().x * 0.5f)) >= -1.0f))
 			return 3;//오른쪽
 		else if (((_pos.x + _scale.x * 0.5f) <= (position.x + TextureSize().x * 0.5f)) && (((_pos.x + _scale.x * 0.5f) - (position.x - TextureSize().x * 0.5f)) >= -1.0f) && (((_pos.x + _scale.x * 0.5f) - (position.x - TextureSize().x * 0.5f)) <= 1.0f))
 			return 4;//왼쪽
+		
+		return 1;
 	}
 	return -1;
 }

@@ -18,7 +18,6 @@ public:
 	int RtGn() { return ground_; }
 
 	bool Crash(int a, D3DXVECTOR2 pos_, D3DXVECTOR2 pos_axis);
-	void GotOn();
 
 	bool DoOnGround() { return bOnGround; }
 
@@ -28,6 +27,7 @@ public:
 
 	D3DXVECTOR2 RtVelocity() { return velocity; }
 	bool RtOnground() { return bOnGround; }
+	int Rt_InGround() { return in_ground; }
 	bool RtNotOnFloor() { return notonfloor; }
 
 	bool IsDead();
@@ -42,7 +42,7 @@ private:
 	
 
 	float ground_ = 0.0f;
-	float in_ground = 150.0f;
+	float in_ground = Height;
 
 	bool notonfloor = false;
 

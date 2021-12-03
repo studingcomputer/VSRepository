@@ -60,7 +60,40 @@ void InitScene()
 		sprite.back()->Scale(2.5f, 2.5f);
 
 		sprite.push_back(new Sprite(Textures + L"Mario/background.png", Shaders + L"009_Sprite.fx", 1456, 80, 1504, 96));
-		sprite.back()->Position(1304 * 2.5, 88 * 4.5);
+		sprite.back()->Position(1480 * 2.5, 88 * 4.5);
+		sprite.back()->Scale(2.5f, 2.5f);
+
+		sprite.push_back(new Sprite(Textures + L"Mario/background.png", Shaders + L"009_Sprite.fx", 608, 160, 608 + 32, 160 + 48));
+		sprite.back()->Position((608 + 16) * 2.5, (160 + 32)* 0.7f);
+		sprite.back()->Scale(2.5f, 2.5f);
+
+		sprite.push_back(new Sprite(Textures + L"Mario/background.png", Shaders + L"009_Sprite.fx", 736, 144, 736 + 32, 144 + 64));
+		sprite.back()->Position((736 + 16) * 2.5, (144 + 16)* 1.0f);
+		sprite.back()->Scale(2.5f, 2.5f);
+
+		//enterence
+		sprite.push_back(new Sprite(Textures + L"Mario/background.png", Shaders + L"009_Sprite.fx", 912, 144, 912 + 32, 144 + 64));
+		sprite.back()->Position((912 + 16) * 2.5, (144 + 16)* 1.0f);
+		sprite.back()->Scale(2.5f, 2.5f);
+
+		//exit
+		sprite.push_back(new Sprite(Textures + L"Mario/background.png", Shaders + L"009_Sprite.fx", 2608, 176, 2608 + 32, 176 + 32));
+		sprite.back()->Position((2608 + 16) * 2.5, (176 + 16)* 0.6f);
+		sprite.back()->Scale(2.5f, 2.5f);
+
+		//2144 192 (4, total 4)
+
+		sprite.push_back(new Sprite(Textures + L"Mario/background.png", Shaders + L"009_Sprite.fx", 2144, 192, 2144+64, 192+16));
+		sprite.back()->Position(2176 * 2.5, 200 * 0.5);
+		sprite.back()->Scale(2.5f, 2.5f);
+		sprite.push_back(new Sprite(Textures + L"Mario/background.png", Shaders + L"009_Sprite.fx", 2144 + 16, 192 - 16, 2144 + 64, 192));
+		sprite.back()->Position((2176 + 16) * 2.5, 200 * 0.7);
+		sprite.back()->Scale(2.5f, 2.5f);
+		sprite.push_back(new Sprite(Textures + L"Mario/background.png", Shaders + L"009_Sprite.fx", 2144 + 32, 192 - 32, 2144 + 64, 192 - 16));
+		sprite.back()->Position((2176 + 32) * 2.5, 200 * 0.9);
+		sprite.back()->Scale(2.5f, 2.5f);
+		sprite.push_back(new Sprite(Textures + L"Mario/background.png", Shaders + L"009_Sprite.fx", 2144 + 48, 192 - 48, 2144 + 64, 192 - 32));
+		sprite.back()->Position((2176 + 48) * 2.5, 200 * 1.1);
 		sprite.back()->Scale(2.5f, 2.5f);
 	}
 
@@ -85,6 +118,46 @@ void InitScene()
 		breakableBrick.back()->Scale(2.5f, 2.5f);
 
 
+		breakableBrick.push_back(new Sprite(Textures + L"Mario/background.png", Shaders + L"009_Sprite.fx", 1504, 144, 1504+16, 160));
+		breakableBrick.back()->Position(1512 * 2.5, 152 * 1.5);
+		breakableBrick.back()->Scale(2.5f, 2.5f);
+
+		
+		breakableBrick.push_back(new Sprite(Textures + L"Mario/background.png", Shaders + L"009_Sprite.fx", 1600, 144, 1616, 160));
+		breakableBrick.back()->Position(1608 * 2.5, 152 * 1.5);
+		breakableBrick.back()->Scale(2.5f, 2.5f);
+
+		breakableBrick.push_back(new Sprite(Textures + L"Mario/background.png", Shaders + L"009_Sprite.fx", 1616, 144, 1632, 160));
+		breakableBrick.back()->Position(1624 * 2.5, 152 * 1.5);
+		breakableBrick.back()->Scale(2.5f, 2.5f);
+
+		breakableBrick.push_back(new Sprite(Textures + L"Mario/background.png", Shaders + L"009_Sprite.fx", 1888, 144, 1888+16, 160));
+		breakableBrick.back()->Position(1896 * 2.5, 152 * 1.5);
+		breakableBrick.back()->Scale(2.5f, 2.5f);
+
+		//1936 : 48
+
+		for (int i = 0; i <= 3; i++)
+		{
+			breakableBrick.push_back(new Sprite(Textures + L"Mario/background.png", Shaders + L"009_Sprite.fx", 1936 + 16*i, 80, 1936 + 16 * (i + 1), 95));
+			breakableBrick.back()->Position((1936 + (16 * i) + 8) * 2.5, 87 * 4.5);
+			breakableBrick.back()->Scale(2.5f, 2.5f);
+		}
+		breakableBrick.push_back(new Sprite(Textures + L"Mario/background.png", Shaders + L"009_Sprite.fx", 2048, 80, 2064, 95));
+		breakableBrick.back()->Position(2054 * 2.5, 87 * 4.5);
+		breakableBrick.back()->Scale(2.5f, 2.5f);
+
+		breakableBrick.push_back(new Sprite(Textures + L"Mario/background.png", Shaders + L"009_Sprite.fx", 2095, 80, 2111, 95));
+		breakableBrick.back()->Position(2103 * 2.5, 87 * 4.5);
+		breakableBrick.back()->Scale(2.5f, 2.5f);
+
+		//2064
+		for (int i = 0; i < 2; i++)
+		{
+			breakableBrick.push_back(new Sprite(Textures + L"Mario/background.png", Shaders + L"009_Sprite.fx", 2064 + 16 * i, 144, 2064 + 16 * (i + 1), 160));
+			breakableBrick.back()->Position((2064 + (16 * i) + 8) * 2.5, 152 * 1.5);
+			breakableBrick.back()->Scale(2.5f, 2.5f);
+		}
 	}
 
 }
@@ -157,21 +230,11 @@ void Update()
 	{
 		//죽었을 때 처리
 		MessageBox(NULL, L"플레이어가 죽었습니다", L"Yo▦ Ki▦Le▦ H▦m", MB_OK);
-		MessageBox(NULL, L"플레이어가 죽었습니다.", L"Yo▦ Ki▦Le▦ H▦m", MB_OK);
-		MessageBox(NULL, L"플레이어가 죽었다고.", L"Yo▦ Ki▦Le▦ H▦m", MB_OK);
-		MessageBox(NULL, L"죄책감조차 못 느끼는 거야?", L"Yo▦ Ki▦Le▦ H▦m", MB_OK);
-		MessageBox(NULL, L"네가 초래한 일이야.", L"Yo▦ Ki▦Le▦ H▦m", MB_OK);
 		if (deadcount++ > 0)
 		{
-			wstring s = L"벌써 이 캐릭터는 " + to_wstring(deadcount) + L"번이나 죽어버렸어.";
+			wstring s = to_wstring(deadcount) + L"번째 죽음";
 			LPCWSTR message = (LPCWSTR)s.c_str();
 			MessageBox(NULL, message, L"Yo▦ Ki▦Le▦ H▦m", MB_OK);
-			if (deadcount == 10)
-			{
-				MessageBox(NULL, L"차라리, 이 세계를 부숴야겠어.", L"Yo▦ Ki▦Le▦ H▦m", MB_OK);
-				DestroyScene();
-				return;
-			}
 		}
 
 		DestroyScene();
@@ -201,7 +264,7 @@ void Render()
 
 		for (Sprite* spr : floor_)
 			spr->Render();
-		/*-----------debug--------------
+		//-----------debug--------------
 		string scoreString = "x = " + to_string(player->RtAn()->Position().x);
 		scoreString += " y = " + to_string(player->RtAn()->Position().y);
 
@@ -222,7 +285,10 @@ void Render()
 
 		scoreString = "ground = " + to_string(player->RtGn());
 		ImGui::Text(scoreString.c_str());
-		-----------debug--------------*/
+
+		scoreString = "in_ground = " + to_string(player->Rt_InGround());
+		ImGui::Text(scoreString.c_str());
+		//-----------debug--------------
 	}
 	ImGui::Render();
 	SwapChain->Present(0, 0);
@@ -298,13 +364,16 @@ bool CheckCollapse_Object()
 		{
 			int result = spr->If_Met(player->RtAn()->Position(), player->RtAn()->TextureSize());
 
-			if (result == 2)
-			{
-				breakableBrick.erase(std::find(breakableBrick.begin(), breakableBrick.end(), spr));//삭제
-			}
+			
 
 			if (player->Crash(result, spr->Position(), spr->TextureSize()))
+			{
+				if (result == 2)
+				{
+					breakableBrick.erase(std::find(breakableBrick.begin(), breakableBrick.end(), spr));//삭제
+				}
 				return true;
+			}
 		}
 	}
 	/*for (Sprite* spr : brick_Query)
