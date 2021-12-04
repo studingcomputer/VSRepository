@@ -24,10 +24,10 @@ int Sprite::If_Met(D3DXVECTOR2 _pos, D3DXVECTOR2 _scale)
 {
 	if (
 		!(
-		(	 (position.y + TextureSize().y * 0.5f) - (_pos.y - _scale.y * 0.5f) < -0.1f) ||
-			((position.y - TextureSize().y * 0.5f) - (_pos.y + _scale.y * 0.5f) > 0.1f) ||
-			((position.x + TextureSize().x * 0.5f) - (_pos.x - _scale.x * 0.5f) < -0.1f) ||
-			((position.x - TextureSize().x * 0.5f) - (_pos.x + _scale.x * 0.5f) > 0.1f)
+		(	 (position.y + TextureSize().y * 0.5f) - (_pos.y - _scale.y * 0.5f) < -1.0f) ||
+			((position.y - TextureSize().y * 0.5f) - (_pos.y + _scale.y * 0.5f) > 1.0f) ||
+			((position.x + TextureSize().x * 0.5f) - (_pos.x - _scale.x * 0.5f) < -1.0f) ||
+			((position.x - TextureSize().x * 0.5f) - (_pos.x + _scale.x * 0.5f) > 1.0f)
 			)
 		)
 	{

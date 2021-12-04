@@ -87,13 +87,231 @@ void InitScene()
 		sprite.back()->Position(2176 * 2.5, 200 * 0.5);
 		sprite.back()->Scale(2.5f, 2.5f);
 		sprite.push_back(new Sprite(Textures + L"Mario/background.png", Shaders + L"009_Sprite.fx", 2144 + 16, 192 - 16, 2144 + 64, 192));
-		sprite.back()->Position((2176 + 16) * 2.5, 200 * 0.7);
+		sprite.back()->Position((2176 + 8) * 2.5, 200 * 0.7);
 		sprite.back()->Scale(2.5f, 2.5f);
 		sprite.push_back(new Sprite(Textures + L"Mario/background.png", Shaders + L"009_Sprite.fx", 2144 + 32, 192 - 32, 2144 + 64, 192 - 16));
-		sprite.back()->Position((2176 + 32) * 2.5, 200 * 0.9);
+		sprite.back()->Position((2176 + 16) * 2.5, 200 * 0.9);
 		sprite.back()->Scale(2.5f, 2.5f);
 		sprite.push_back(new Sprite(Textures + L"Mario/background.png", Shaders + L"009_Sprite.fx", 2144 + 48, 192 - 48, 2144 + 64, 192 - 32));
-		sprite.back()->Position((2176 + 48) * 2.5, 200 * 1.1);
+		sprite.back()->Position((2176 + 24) * 2.5, 200 * 1.1);
+		sprite.back()->Scale(2.5f, 2.5f);
+
+		/////////////////////////////////////////////
+
+
+		
+
+		int a, b, c, d;
+
+		a = 2240;
+		b = 144;
+		c = 16;
+		d = 64;
+
+		sprite.push_back(new Sprite(Textures + L"Mario/background.png", Shaders + L"009_Sprite.fx", a, b, a + c, b + d));
+		sprite.back()->Position((a + (c / 2)) * 2.5, (b + (d / 2)) * 0.9);
+		sprite.back()->Scale(2.5f, 2.5f);
+
+		a = 2256;
+		b = 160;
+		c = 16;
+		d = 16;
+
+		sprite.push_back(new Sprite(Textures + L"Mario/background.png", Shaders + L"009_Sprite.fx", a, b, a + c, b + d));
+		sprite.back()->Position((a + (c/2)) * 2.5, (b + (d/2)) * 1.05);
+		sprite.back()->Scale(2.5f, 2.5f);
+
+		a = 2256;
+		b = 176;
+		c = 32;
+		d = 16;
+
+		sprite.push_back(new Sprite(Textures + L"Mario/background.png", Shaders + L"009_Sprite.fx", a, b, a + c, b + d));
+		sprite.back()->Position((a + (c / 2)) * 2.5, (b + (d / 2)) * 0.75);
+		sprite.back()->Scale(2.5f, 2.5f);
+
+		a = 2256;
+		b = 192;
+		c = 48;
+		d = 16;
+
+		sprite.push_back(new Sprite(Textures + L"Mario/background.png", Shaders + L"009_Sprite.fx", a, b, a + c, b + d));
+		sprite.back()->Position((a + (c / 2)) * 2.5, (b + (d / 2)) * 0.5);
+		sprite.back()->Scale(2.5f, 2.5f);
+
+		a = 2368;
+		b = 192;
+		c = 64;
+		d = 16;
+
+		sprite.push_back(new Sprite(Textures + L"Mario/background.png", Shaders + L"009_Sprite.fx", a, b, a + c, b + d));
+		sprite.back()->Position((a + (c / 2)) * 2.5, (b + (d / 2)) * 0.5);
+		sprite.back()->Scale(2.5f, 2.5f);
+
+
+		a = 2384;
+		b = 176;
+		c = 48;
+		d = 16;
+
+		sprite.push_back(new Sprite(Textures + L"Mario/background.png", Shaders + L"009_Sprite.fx", a, b, a + c, b + d));
+		sprite.back()->Position((a + (c / 2)) * 2.5, (b + (d / 2)) * 0.75);
+		sprite.back()->Scale(2.5f, 2.5f);
+
+
+		a = 2400;
+		b = 160;
+		c = 32;
+		d = 16;
+
+		sprite.push_back(new Sprite(Textures + L"Mario/background.png", Shaders + L"009_Sprite.fx", a, b, a + c, b + d));
+		sprite.back()->Position((a + (c / 2)) * 2.5, (b + (d / 2)) * 1.055);
+		sprite.back()->Scale(2.5f, 2.5f);
+
+		a = 2416;
+		b = 144;
+		c = 16;
+		d = 16;
+
+		sprite.push_back(new Sprite(Textures + L"Mario/background.png", Shaders + L"009_Sprite.fx", a, b, a + c, b + d));
+		sprite.back()->Position((a + (c / 2)) * 2.5, (b + (d / 2)) * 1.4317);
+		sprite.back()->Scale(2.5f, 2.5f);
+
+
+		a = 2432;
+		b = 144;
+		c = 16;
+		d = 64;
+
+		sprite.push_back(new Sprite(Textures + L"Mario/background.png", Shaders + L"009_Sprite.fx", a, b, a + c, b + d));
+		sprite.back()->Position((a + (c / 2)) * 2.5, (b + (d / 2)) * 0.9);
+		sprite.back()->Scale(2.5f, 2.5f);
+
+
+		a = 2480;
+		b = 144;
+		c = 16;
+		d = 64;
+
+		sprite.push_back(new Sprite(Textures + L"Mario/background.png", Shaders + L"009_Sprite.fx", a, b, a + c, b + d));
+		sprite.back()->Position((a + (c / 2)) * 2.5, (b + (d / 2)) * 0.9);
+		sprite.back()->Scale(2.5f, 2.5f);
+
+
+		a = 2496;
+		b = 160;
+		c = 16;
+		d = 16;
+
+		sprite.push_back(new Sprite(Textures + L"Mario/background.png", Shaders + L"009_Sprite.fx", a, b, a + c, b + d));
+		sprite.back()->Position((a + (c / 2)) * 2.5, (b + (d / 2)) * 1.1);
+		sprite.back()->Scale(2.5f, 2.5f);
+
+		a = 2496;
+		b = 179;
+		c = 32;
+		d = 16;
+
+		sprite.push_back(new Sprite(Textures + L"Mario/background.png", Shaders + L"009_Sprite.fx", a, b, a + c, b + d));
+		sprite.back()->Position((a + (c / 2)) * 2.5, (b + (d / 2)) * 0.7);
+		sprite.back()->Scale(2.5f, 2.5f);
+
+		a = 2496;
+		b = 192;
+		c = 48;
+		d = 16;
+
+		sprite.push_back(new Sprite(Textures + L"Mario/background.png", Shaders + L"009_Sprite.fx", a, b, a + c, b + d));
+		sprite.back()->Position((a + (c / 2)) * 2.5, (b + (d / 2)) * 0.59);
+		sprite.back()->Scale(2.5f, 2.5f);
+
+
+		a = 2896;
+		b = 192;
+		c = 128;
+		d = 16;
+
+		sprite.push_back(new Sprite(Textures + L"Mario/background.png", Shaders + L"009_Sprite.fx", a, b, a + c, b + d));
+		sprite.back()->Position((a + (c / 2)) * 2.5, (b + (d / 2)) * 1.4317);
+		sprite.back()->Scale(2.5f, 2.5f);
+
+		a = 2912;
+		b = 176;
+		c = 112;
+		d = 16;
+
+		sprite.push_back(new Sprite(Textures + L"Mario/background.png", Shaders + L"009_Sprite.fx", a, b, a + c, b + d));
+		sprite.back()->Position((a + (c / 2)) * 2.5, (b + (d / 2)) * 1.1);
+		sprite.back()->Scale(2.5f, 2.5f);
+
+
+		a = 2928;
+		b = 160;
+		c = 96;
+		d = 16;
+
+		sprite.push_back(new Sprite(Textures + L"Mario/background.png", Shaders + L"009_Sprite.fx", a, b, a + c, b + d));
+		sprite.back()->Position((a + (c / 2)) * 2.5, (b + (d / 2)) * 1.1);
+		sprite.back()->Scale(2.5f, 2.5f);
+
+
+		a = 2944;
+		b = 144;
+		c = 80;
+		d = 16;
+
+		sprite.push_back(new Sprite(Textures + L"Mario/background.png", Shaders + L"009_Sprite.fx", a, b, a + c, b + d));
+		sprite.back()->Position((a + (c / 2)) * 2.5, (b + (d / 2)) * 1.1);
+		sprite.back()->Scale(2.5f, 2.5f);
+
+
+		a = 2960;
+		b = 128;
+		c = 64;
+		d = 16;
+
+		sprite.push_back(new Sprite(Textures + L"Mario/background.png", Shaders + L"009_Sprite.fx", a, b, a + c, b + d));
+		sprite.back()->Position((a + (c / 2)) * 2.5, (b + (d / 2)) * 1.1);
+		sprite.back()->Scale(2.5f, 2.5f);
+
+
+		a = 2917;
+		b = 112;
+		c = 48;
+		d = 16;
+
+		sprite.push_back(new Sprite(Textures + L"Mario/background.png", Shaders + L"009_Sprite.fx", a, b, a + c, b + d));
+		sprite.back()->Position((a + (c / 2)) * 2.5, (b + (d / 2)) * 1.1);
+		sprite.back()->Scale(2.5f, 2.5f);
+
+
+		a = 2992;
+		b = 96;
+		c = 32;
+		d = 16;
+
+		sprite.push_back(new Sprite(Textures + L"Mario/background.png", Shaders + L"009_Sprite.fx", a, b, a + c, b + d));
+		sprite.back()->Position((a + (c / 2)) * 2.5, (b + (d / 2)) * 1.1);
+		sprite.back()->Scale(2.5f, 2.5f);
+
+
+		a = 3008;
+		b = 80;
+		c = 16;
+		d = 16;
+
+		sprite.push_back(new Sprite(Textures + L"Mario/background.png", Shaders + L"009_Sprite.fx", a, b, a + c, b + d));
+		sprite.back()->Position((a + (c / 2)) * 2.5, (b + (d / 2)) * 1.1);
+		sprite.back()->Scale(2.5f, 2.5f);
+
+
+		a = 3024;
+		b = 80;
+		c = 16;
+		d = 128;
+
+		sprite.push_back(new Sprite(Textures + L"Mario/background.png", Shaders + L"009_Sprite.fx", a, b, a + c, b + d));
+		sprite.back()->Position((a + (c / 2)) * 2.5, (b + (d / 2)) * 1.1);
 		sprite.back()->Scale(2.5f, 2.5f);
 	}
 
@@ -313,9 +531,11 @@ bool CheckCollapse_floor()
 			res_debug = spr->If_Met(player->RtAn()->Position(), player->RtAn()->TextureSize());
 			if (player->Crash(res_debug, spr->Position(), spr->TextureSize()))
 			{
-				dbdebug[0] = res_debug;
-				sprdb[0] = spr;
-				break;
+				if ((sprdb[0] == nullptr) || (res_debug == 1))
+				{
+					dbdebug[0] = res_debug;
+					sprdb[0] = spr;
+				}
 			}
 		}
 	}

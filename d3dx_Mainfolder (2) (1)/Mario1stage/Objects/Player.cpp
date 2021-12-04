@@ -2,7 +2,7 @@
 #include "Player.h"
 
 Player::Player(D3DXVECTOR2 position, D3DXVECTOR2 scale)
-	:moveSpeed(300.0f), gravity(-2.3f), focusOffset(-100, -185)
+	:moveSpeed(300.0f), gravity(-9.8f), focusOffset(-100, -185)
 {
 	animation = new Animation;
 
@@ -54,10 +54,10 @@ void Player::Update(D3DXMATRIX & V, D3DXMATRIX & P)
 
 	bool bMove = false;
 
-	if (velocity.x < -0.0001)
-		velocity.x += 0.0001f;
-	else if (velocity.x > 0.0001)
-		velocity.x -= 0.0001f;
+	if (velocity.x < -0.001)
+		velocity.x += 0.001f;
+	else if (velocity.x > 0.001)
+		velocity.x -= 0.001f;
 	else
 		velocity.x = 0.0f;
 
@@ -127,7 +127,7 @@ void Player::StartJump()
 {
 	if (bOnGround == true)
 	{
-		velocity.y = 0.3f;
+		velocity.y = 0.6f;
 		bOnGround = false;
 	}
 }
@@ -198,7 +198,7 @@ bool Player::Crash(int a, D3DXVECTOR2 pos_, D3DXVECTOR2 pos_axis)
 
 void Player::Render()
 {
-	ImGui::SliderFloat("Move Speed", &moveSpeed, 50, 400);
+	ImGui::SliderFloat("Move Speed", &moveSpeed, 50, 1000);
 
 	animation->Render();
 
