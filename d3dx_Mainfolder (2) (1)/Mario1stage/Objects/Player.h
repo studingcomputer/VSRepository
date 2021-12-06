@@ -30,6 +30,8 @@ public:
 	int Rt_InGround() { return in_ground; }
 	bool RtNotOnFloor() { return notonfloor; }
 
+	void WalkTo(int to, D3DXMATRIX & V, D3DXMATRIX & P);
+
 	bool IsDead();
 private:
 	float moveSpeed;

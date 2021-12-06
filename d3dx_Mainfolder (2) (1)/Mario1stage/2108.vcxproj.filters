@@ -57,6 +57,9 @@
     <ClCompile Include="Viewer\Freedom.cpp">
       <Filter>Viewer</Filter>
     </ClCompile>
+    <ClCompile Include="Objects\Enemy.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Systems\Keyboard.h">
@@ -116,6 +119,9 @@
     </ClInclude>
     <ClInclude Include="Viewer\IFollowing.h">
       <Filter>Viewer</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\Enemy.h">
+      <Filter>Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

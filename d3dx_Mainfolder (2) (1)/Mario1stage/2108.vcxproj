@@ -150,6 +150,7 @@
   <ItemGroup>
     <ClCompile Include="Objects\Background.cpp" />
     <ClCompile Include="Objects\Bullet.cpp" />
+    <ClCompile Include="Objects\Enemy.cpp" />
     <ClCompile Include="Objects\Player.cpp" />
     <ClCompile Include="Renders\Animation.cpp" />
     <ClCompile Include="Renders\Clip.cpp" />
@@ -174,6 +175,7 @@
   <ItemGroup>
     <ClInclude Include="Objects\Background.h" />
     <ClInclude Include="Objects\Bullet.h" />
+    <ClInclude Include="Objects\Enemy.h" />
     <ClInclude Include="Objects\Player.h" />
     <ClInclude Include="Renders\Animation.h" />
     <ClInclude Include="Renders\Clip.h" />

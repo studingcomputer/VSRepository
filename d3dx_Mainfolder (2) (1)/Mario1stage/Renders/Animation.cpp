@@ -103,8 +103,10 @@ void Animation::Update(D3DXMATRIX & V, D3DXMATRIX & P)
 {
 	if (currentClip < 0)
 		return;
-
-	clips[currentClip]->Position(position);
+	for(Clip* cl : clips)
+	{
+		cl->Position(position);
+	}
 	clips[currentClip]->Scale(scale);
 	clips[currentClip]->Rotation(rotation);
 

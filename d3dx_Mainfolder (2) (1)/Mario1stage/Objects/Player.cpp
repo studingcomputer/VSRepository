@@ -35,6 +35,19 @@ Player::Player(D3DXVECTOR2 position, D3DXVECTOR2 scale)
 		animation->AddClip(clip);
 	}
 
+	//end
+	{
+		clip = new Clip(PlayMode::Loop);
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, 8, 254, 8 + 38, 254 + 72), 0.5f);
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, 74, 254, 74 + 41, 254 + 72), 0.5f);
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, 138, 254, 138 + 41, 254 + 72), 0.5f);
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, 200, 254, 200 + 41, 254 + 72), 0.5f);
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, 272, 254, 272 + 41, 254 + 72), 0.5f);
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, 333, 254, 333 + 41, 254 + 72), 0.5f);
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, 397, 254, 397 + 41, 72 + 254), 0.5f);
+		animation->AddClip(clip);
+	}
+
 	animation->Position(position);
 	animation->Scale(scale);
 	animation->Play(0);
@@ -227,6 +240,43 @@ void Player::Focus(D3DXVECTOR2 * position, D3DXVECTOR2 * size)
 		(*position).y = 115.0f - focusOffset.y;
 		(*size) = D3DXVECTOR2(1, 1);
 	}
+}
+
+void Player::WalkTo(int to, D3DXMATRIX & V, D3DXMATRIX & P)
+{
+	if (ground_ != in_ground)
+	{
+		ground_ = in_ground;
+		bOnGround = false;
+	}
+	if (!bOnGround)
+	{
+		velocity.x = 0.0f;
+		velocity.y = -0.2f;
+		animation->Position(D3DXVECTOR2(7960, animation->Position().y));
+		animation->Play(3);
+	}
+	else
+	{
+		if (animation->Position().x < to)
+		{
+			velocity.y = 0.0f;
+			velocity.x = 0.2f;
+			animation->Play(1);
+		}
+		else
+		{
+			velocity.x = 0.0f;
+			velocity.y = 0.0f;
+			animation->Play(4);
+
+		}
+	}
+
+	UpdatePos(); 
+
+
+	animation->Update(V, P);
 }
 
 bool Player::IsDead()

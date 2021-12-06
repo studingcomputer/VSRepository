@@ -31,6 +31,8 @@ public:
 	void Update(D3DXMATRIX& V, D3DXMATRIX& P);
 	void Render();
 
+	Sprite* RtSp() { return clips[currentClip]->RtSp(); }
+
 
 private:
 
