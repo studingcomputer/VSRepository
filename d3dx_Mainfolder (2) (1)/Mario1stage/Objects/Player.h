@@ -33,12 +33,16 @@ public:
 	void WalkTo(int to, D3DXMATRIX & V, D3DXMATRIX & P);
 
 	bool IsDead();
+
+	bool LvDown();
 private:
 	float moveSpeed;
 	D3DXVECTOR2 focusOffset;
 
 
 	D3DXVECTOR2 velocity = D3DXVECTOR2(0.0f, 0.0f);
+
+	D3DXVECTOR2 scale;
 	float gravity;
 	bool bOnGround;
 	
@@ -51,6 +55,7 @@ private:
 
 	Animation* animation;
 
+	int lvl = 1;
 
 private:
 

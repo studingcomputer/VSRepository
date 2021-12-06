@@ -5,7 +5,6 @@ enum class PlayMode
 	End = 0, Loop, Reverse
 };
 
-
 struct Frame
 {
 	float Time;
@@ -18,7 +17,6 @@ struct Frame
 class Clip
 {
 public:
-
 	Clip(PlayMode mode = PlayMode::End, float speed = 1.0f);
 	~Clip();
 
@@ -38,7 +36,7 @@ public:
 	void RotationDegree(D3DXVECTOR3& vec);
 	D3DXVECTOR3 RotationDegree();
 
-	D3DXVECTOR2 TextureSize() { return frames[currentFrame]->Image->TextureSize(); }
+	D3DXVECTOR2 TextureSize();
 
 	void AddFrame(Sprite* sprite, float time);
 
@@ -49,7 +47,9 @@ public:
 	void Update(D3DXMATRIX& V, D3DXMATRIX& P);
 	void Render();
 
-	Sprite* RtSp() { return frames[(int)mode - 1]->Image; }
+	void DrawBound(bool val);
+
+	Sprite* GetSprite();
 
 private:
 	D3DXVECTOR2 position;
@@ -65,6 +65,5 @@ private:
 
 	PlayMode mode;
 
-	vector<Frame * > frames;
-
+	vector<Frame *> frames;
 };

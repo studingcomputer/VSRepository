@@ -1,26 +1,14 @@
 #pragma once
 
-enum class PlayMode
-{
-	End = 0, Loop, Reverse
-};
-
-
-struct Frame
-{
-	float Time;
-	Sprite* Image;
-
-	Frame(Sprite* sprite, float time);
-	~Frame();
-};
-
-class Clip
+class Animation
 {
 public:
+	Animation();
+	~Animation();
 
-	Clip(PlayMode mode = PlayMode::End, float speed = 1.0f);
-	~Clip();
+	void AddClip(Clip* clip);
+	void Play(UINT clipNumber);
+	void Stop();
 
 	void Position(float x, float y);
 	void Position(D3DXVECTOR2 vec);
@@ -38,33 +26,21 @@ public:
 	void RotationDegree(D3DXVECTOR3& vec);
 	D3DXVECTOR3 RotationDegree();
 
-	D3DXVECTOR2 TextureSize() { return frames[currentFrame]->Image->TextureSize(); }
-
-	void AddFrame(Sprite* sprite, float time);
-
-	void Play();
-	void Play(UINT startFrame);
-	void Stop();
+	D3DXVECTOR2 TextureSize();
 
 	void Update(D3DXMATRIX& V, D3DXMATRIX& P);
 	void Render();
 
-	Sprite* RtSp() { return frames[(int)mode - 1]->Image; }
+	void DrawBound(bool val);
+
+	Clip* GetClip();
+	Sprite* GetSprite();
 
 private:
 	D3DXVECTOR2 position;
 	D3DXVECTOR2 scale;
 	D3DXVECTOR3 rotation;
 
-	float length;
-	float speed;
-
-	bool bPlay;
-	UINT currentFrame;
-	float playTime;
-
-	PlayMode mode;
-
-	vector<Frame * > frames;
-
+	UINT currentClip;
+	vector<Clip*> clips;
 };

@@ -427,7 +427,7 @@ void InitScene()
 	}
 
 	{
-		Enemies.push_back(new Enemy(D3DXVECTOR2(140, 140), D3DXVECTOR2(2.5f, 2.5f)));
+		Enemies.push_back(new Enemy(D3DXVECTOR2(1400, 140), D3DXVECTOR2(2.5f, 2.5f)));
 	}
 
 }
@@ -696,7 +696,34 @@ bool CheckCollapse_floor()
 		player->Crash(dbdebug[0], sprdb[0]->Position(), sprdb[0]->TextureSize());
 		return true;
 	}
+	for (Enemy* enemy : Enemies)
+	{
+		if (!(
+			(enemy->RtSp()->Position().x - enemy->RtSp()->TextureSize().x * 0.5f > freeCam->Position().x + Width) ||
+			(enemy->RtSp()->Position().x + enemy->RtSp()->TextureSize().x * 0.5f < freeCam->Position().x)
+			))
+		{
+			int result = enemy->RtSp()->If_Met(player->RtAn()->Position(), player->RtAn()->TextureSize());
 
+			result = player->Crash(result, enemy->RtSp()->Position(), enemy->RtSp()->TextureSize());
+
+			if (result)
+			{
+				if (result == 1)
+				{
+					enemy->Dead();
+				}
+				else
+				{
+					if (player->LvDown())
+					{
+						isgameend = true;
+					}
+				}
+				return true;
+			}
+		}
+	}
 	return false;
 }
 
@@ -726,6 +753,7 @@ bool CheckCollapse_Object()
 			}
 		}
 	}
+	
 	/*for (Sprite* spr : brick_Query)
 	{
 		if (!(
@@ -776,19 +804,13 @@ bool MCheckCollapse_floor(int _where)
 
 	for (Sprite* spr : sprite)
 	{
-		if (!(
-			(spr->Position().x - spr->TextureSize().x * 0.5f > freeCam->Position().x + Width) ||
-			(spr->Position().x + spr->TextureSize().x * 0.5f < freeCam->Position().x)
-			))
+		res_debug = spr->If_Met(Enemies[_where]->RtAn()->Position(), Enemies[_where]->RtAn()->TextureSize());
+		if (Enemies[_where]->Crash(res_debug, spr->Position(), spr->TextureSize()))
 		{
-			res_debug = spr->If_Met(Enemies[_where]->RtAn()->Position(), Enemies[_where]->RtAn()->TextureSize());
-			if (Enemies[_where]->Crash(res_debug, spr->Position(), spr->TextureSize()))
+			if ((sprdb[0] == nullptr) || (res_debug == 1))
 			{
-				if ((sprdb[0] == nullptr) || (res_debug == 1))
-				{
-					dbdebug[0] = res_debug;
-					sprdb[0] = spr;
-				}
+				dbdebug[0] = res_debug;
+				sprdb[0] = spr;
 			}
 		}
 	}

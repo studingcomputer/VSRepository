@@ -2,7 +2,7 @@
 #include "Player.h"
 
 Player::Player(D3DXVECTOR2 position, D3DXVECTOR2 scale)
-	:moveSpeed(300.0f), gravity(-9.8f), focusOffset(-100, -185)
+	:moveSpeed(300.0f), gravity(-9.8f), focusOffset(-100, -185), scale(scale)
 {
 	animation = new Animation;
 
@@ -87,7 +87,8 @@ void Player::Update(D3DXMATRIX & V, D3DXMATRIX & P)
 		animation->RotationDegree(0, 0, 0);
 	}
 
-	
+	animation->Scale(D3DXVECTOR2(scale.x, scale.y*lvl));
+		
 	
 
 	if (!bOnGround && velocity.y > 0)
@@ -283,5 +284,15 @@ bool Player::IsDead()
 {
 	if (bOnGround && ground_ == 0)
 		return true;
+	return false;
+}
+
+bool Player::LvDown()
+{
+	lvl--;
+	if (lvl == 0)
+	{
+		return true;
+	}
 	return false;
 }

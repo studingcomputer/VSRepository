@@ -18,16 +18,9 @@ Enemy::Enemy(D3DXVECTOR2 position, D3DXVECTOR2 scale)
 		animation->AddClip(clip);
 	}
 
-	//Run
 	{
 		clip = new Clip(PlayMode::Loop);
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, 74, 10, 74 + 41, 10 + 72), 0.1f);
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, 10, 12, 10 + 41, 12 + 70), 0.1f);
-		animation->AddClip(clip);
-	}
-	{
-		clip = new Clip(PlayMode::Loop);
-		clip->AddFrame(new Sprite(Textures + L"Mario/enemies.png", Shaders + L"009_Sprite.fx", 60, 16, 68, 24), 0.2f);
+		clip->AddFrame(new Sprite(Textures + L"Mario/enemies.png", Shaders + L"009_Sprite.fx", 60, 8, 76, 16), 0.2f);
 		animation->AddClip(clip);
 	}
 
@@ -95,18 +88,11 @@ bool Enemy::Crash(int a, D3DXVECTOR2 pos_, D3DXVECTOR2 pos_axis)
 		return true;
 	}
 	case 2:
-		if (velocity.y > 0)
-		{
-			velocity.y = -0.05f;
+		velocity.y = -0.05f;
 
-			return true;
-		}
-		break;
+		return true;
 	case 3:
-		if (velocity.x < 0)
-		{
-			velocity.x = 0.2f;
-		}
+		velocity.x = 0.2f;
 		////velocity.y = -0.15f;
 		//if (untilFloor)
 		//	untilFloor = false;
