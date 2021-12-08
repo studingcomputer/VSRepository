@@ -226,12 +226,15 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	if (ImGui::WndProc((UINT*)hwnd, msg, wParam, lParam))
 		return true;
+	if (Mouse != NULL)
+		Mouse->WndProc(msg, wParam, lParam);
 
 	switch (msg)
 	{
 		//case WM_LBUTTONDOWN:
 		//	MessageBox(hwnd, L"Hello", L"World", MB_OK);
 		//	break;
+
 
 		case WM_SIZE:
 		{

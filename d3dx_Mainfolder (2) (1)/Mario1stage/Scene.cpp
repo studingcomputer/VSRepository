@@ -42,7 +42,7 @@ void InitScene()
 	bg = new Background(Shaders + L"/009_Sprite.fx");
 	bg->Scale(D3DXVECTOR2(2.5f, 2.5f));
 	bg->Position(D3DXVECTOR2(4220, 0));
-	player = new Player(D3DXVECTOR2(5655, 300), D3DXVECTOR2(0.8f, 0.8f));
+	player = new Player(D3DXVECTOR2(120, 300), D3DXVECTOR2(0.8f, 0.8f));
 
 
 	freeCam = new Following(player);
@@ -414,11 +414,11 @@ void InitScene()
 			breakableBrick.back()->Scale(2.5f, 2.5f);
 		}
 		breakableBrick.push_back(new Sprite(Textures + L"Mario/background.png", Shaders + L"009_Sprite.fx", 2048, 80, 2064, 95));
-		breakableBrick.back()->Position(2054 * 2.5, 87 * 4.5);
+		breakableBrick.back()->Position(2056 * 2.5, 88 * 4.5);
 		breakableBrick.back()->Scale(2.5f, 2.5f);
 
 		breakableBrick.push_back(new Sprite(Textures + L"Mario/background.png", Shaders + L"009_Sprite.fx", 2095, 80, 2111, 95));
-		breakableBrick.back()->Position(2103 * 2.5, 87 * 4.5);
+		breakableBrick.back()->Position(2103 * 2.5, 88 * 4.5);
 		breakableBrick.back()->Scale(2.5f, 2.5f);
 
 		//2064
@@ -428,6 +428,16 @@ void InitScene()
 			breakableBrick.back()->Position((2064 + (16 * i) + 8) * 2.5, 152 * 1.5);
 			breakableBrick.back()->Scale(2.5f, 2.5f);
 		}
+
+		breakableBrick.push_back(new Sprite(Textures + L"Mario/background.png", Shaders + L"009_Sprite.fx", 2095, 80, 2111, 95));
+		breakableBrick.back()->Position(2696 * 2.5, 152 * 1.5);
+		breakableBrick.back()->Scale(2.5f, 2.5f);
+		breakableBrick.push_back(new Sprite(Textures + L"Mario/background.png", Shaders + L"009_Sprite.fx", 2095, 80, 2111, 95));
+		breakableBrick.back()->Position(2712 * 2.5, 152 * 1.5);
+		breakableBrick.back()->Scale(2.5f, 2.5f);
+		breakableBrick.push_back(new Sprite(Textures + L"Mario/background.png", Shaders + L"009_Sprite.fx", 2095, 80, 2111, 95));
+		breakableBrick.back()->Position(2743 * 2.5, 152 * 1.5);
+		breakableBrick.back()->Scale(2.5f, 2.5f);
 	}
 
 	{
@@ -438,13 +448,24 @@ void InitScene()
 
 	{
 		brick_Query.push_back(new ItemBox(1, D3DXVECTOR2((328 * 2.5 + 360 * 2.5) * 0.5, 152 * 1.5), D3DXVECTOR2(2.5f, 2.5f)));
-		brick_Query.push_back(new ItemBox(0, D3DXVECTOR2((328 * 2.5 + 360 * 2.5) * 0.5, 152 * 1.5), D3DXVECTOR2(2.5f, 2.5f)));
+		brick_Query.push_back(new ItemBox(0, D3DXVECTOR2((392 * 2.5 + 360 * 2.5) * 0.5, 152 * 1.5), D3DXVECTOR2(2.5f, 2.5f)));
+		brick_Query.push_back(new ItemBox(0, D3DXVECTOR2(272 * 2.5, 152 * 1.5), D3DXVECTOR2(2.5f, 2.5f)));
+		brick_Query.push_back(new ItemBox(0, D3DXVECTOR2(360 * 2.5, 88 * 4.5), D3DXVECTOR2(2.5f, 2.5f)));
+		brick_Query.push_back(new ItemBox(0, D3DXVECTOR2(1256 * 2.5, 152 * 1.5), D3DXVECTOR2(2.5f, 2.5f)));
+		brick_Query.push_back(new ItemBox(0, D3DXVECTOR2(1512 * 2.5, 88 * 4.5), D3DXVECTOR2(2.5f, 2.5f)));
+		brick_Query.push_back(new ItemBox(0, D3DXVECTOR2(1704 * 2.5, 152 * 1.5), D3DXVECTOR2(2.5f, 2.5f)));
+		brick_Query.push_back(new ItemBox(0, D3DXVECTOR2(1752 * 2.5, 152 * 1.5), D3DXVECTOR2(2.5f, 2.5f)));
+		brick_Query.push_back(new ItemBox(0, D3DXVECTOR2(1800 * 2.5, 152 * 1.5), D3DXVECTOR2(2.5f, 2.5f)));
+		brick_Query.push_back(new ItemBox(0, D3DXVECTOR2(1752 * 2.5, 88 * 4.5), D3DXVECTOR2(2.5f, 2.5f)));
+		brick_Query.push_back(new ItemBox(0, D3DXVECTOR2(2072 * 2.5, 88 * 4.5), D3DXVECTOR2(2.5f, 2.5f)));
+		brick_Query.push_back(new ItemBox(0, D3DXVECTOR2(2088 * 2.5, 88 * 4.5), D3DXVECTOR2(2.5f, 2.5f)));
+		brick_Query.push_back(new ItemBox(0, D3DXVECTOR2(2728 * 2.5, 152 * 1.5), D3DXVECTOR2(2.5f, 2.5f)));
 	}
 
 	{
 		items.push_back(new Sprite(Textures + L"Mario/flower.png", Shaders + L"009_Sprite.fx"));
-		breakableBrick.back()->Position(-1000, -1000);
-		breakableBrick.back()->Scale(2.5f, 2.5f);
+		items.back()->Position(-500, -200);
+		items.back()->Scale(0.04f, 0.04f);
 	}
 
 }
@@ -486,6 +507,7 @@ void DestroyScene()
 	Enemies.clear();
 	for (ItemBox* box : brick_Query)
 		SAFE_DELETE(box);
+	brick_Query.clear();
 }
 
 D3DXMATRIX V, P;
@@ -507,7 +529,10 @@ void Update()
 
 
 
-
+		for (Sprite* spr : items)
+		{
+			spr->Update(freeCam->View(), P);
+		}
 
 		for (Sprite* spr : sprite)
 			spr->Update(freeCam->View(), P);
@@ -788,11 +813,32 @@ bool CheckCollapse_Object()
 			if (res == 2 && spr->RtItem() != -1)
 			{
 				spr->Under_Crash();
-				items.back()->Position(spr->RtSpr()->Position().x, (spr->RtSpr()->Position().y + spr->RtSpr()->TextureSize().y * 0.5f) + items.back()->TextureSize().y *0.5f);
+				items.back()->Position(spr->RtSpr()->Position().x, (spr->RtSpr()->Position().y + spr->RtSpr()->TextureSize().y * 0.5f) + items.back()->TextureSize().y * 0.5 );
+				player->Crash(res, spr->RtSpr()->Position(), spr->RtSpr()->TextureSize());
 				return true;
 			}
 			else if (player->Crash(res, spr->RtSpr()->Position(), spr->RtSpr()->TextureSize()))
 			{
+				return true;
+			}
+		}
+	}
+
+	for (Sprite* spr : items)
+	{
+		if (!(
+			(spr->Position().x - spr->TextureSize().x * 0.5f > freeCam->Position().x + Width) ||
+			(spr->Position().x + spr->TextureSize().x * 0.5f < freeCam->Position().x)
+			))
+		{
+			int result = spr->If_Met(player->RtAn()->Position(), player->RtAn()->TextureSize());
+
+
+
+			if (player->Crash(result, spr->Position(), spr->TextureSize()))
+			{
+				player->LVSet(0.5);
+				spr->Position(-500, -200);
 				return true;
 			}
 		}

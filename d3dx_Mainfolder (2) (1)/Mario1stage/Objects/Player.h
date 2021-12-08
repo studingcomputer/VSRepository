@@ -33,7 +33,7 @@ public:
 	void WalkTo(int to, D3DXMATRIX & V, D3DXMATRIX & P);
 
 	bool IsDead();
-
+	void LVSet(float num) { lvl += num; }
 	bool LvDown();
 private:
 	float moveSpeed;
@@ -55,7 +55,7 @@ private:
 
 	Animation* animation;
 
-	int lvl = 1;
+	float lvl = 1;
 
 private:
 

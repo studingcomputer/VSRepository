@@ -67,10 +67,10 @@ void Player::Update(D3DXMATRIX & V, D3DXMATRIX & P)
 
 	bool bMove = false;
 
-	if (velocity.x < -0.001)
-		velocity.x += 0.001f;
-	else if (velocity.x > 0.001)
-		velocity.x -= 0.001f;
+	if (velocity.x < -0.1)
+		velocity.x += 0.1f;
+	else if (velocity.x > 0.1)
+		velocity.x -= 0.1f;
 	else
 		velocity.x = 0.0f;
 
@@ -87,7 +87,7 @@ void Player::Update(D3DXMATRIX & V, D3DXMATRIX & P)
 		animation->RotationDegree(0, 0, 0);
 	}
 
-	animation->Scale(D3DXVECTOR2(scale.x, scale.y*lvl));
+	animation->Scale(D3DXVECTOR2(scale.x, scale.y*(lvl)));
 		
 	
 

@@ -27,17 +27,17 @@ void DestroyScene()
 	SAFE_DELETE(values);
 }
 
-D3DXVECTOR2 horizontal(0, 800), vertical(0, 600);
+//D3DXVECTOR2 horizontal(0, 800), vertical(0, 600);
 
 void Update()
 {
 	values->MainCamera->Update();
 
-	/*D3DXMatrixOrthoOffCenterLH(&(values->Projection),
+	D3DXMatrixOrthoOffCenterLH(&(values->Projection),
 		(float)Width * -0.5f, (float)Width * 0.5f, 
-		(float)Height * -0.5f, (float)Height * 0.5f, -1, 1);*/
+		(float)Height * -0.5f, (float)Height * 0.5f, -10, 10);
 
-	D3DXMatrixOrthoOffCenterLH(&(values->Projection), horizontal.x, horizontal.y, vertical.x, vertical.y, -10, 10);
+	//D3DXMatrixOrthoOffCenterLH(&(values->Projection), horizontal.x, horizontal.y, vertical.x, vertical.y, -10, 10);
 
 	for (Scene* scene : scenes)
 		scene->Update();
@@ -49,8 +49,7 @@ void Render()
 	D3DXCOLOR bgColor = D3DXCOLOR(0, 0, 0, 0);
 	DeviceContext->ClearRenderTargetView(RTV, (float*)bgColor);
 	{
-		ImGui::SliderFloat2("Horizontal", (float*)&horizontal, -1000, 1000);
-		ImGui::SliderFloat2("Vertical", (float*)&vertical, -1000, 1000);
+		
 
 		for (Scene* scene : scenes)
 			scene->Render();

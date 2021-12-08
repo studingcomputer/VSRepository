@@ -16,5 +16,5 @@ private:
 	Sprite* backGround;
 
 	Player* player;
-	//vector<class Marker*> markers;
+	vector<class Marker*> markers;
 };
