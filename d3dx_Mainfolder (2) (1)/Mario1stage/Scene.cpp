@@ -5,6 +5,7 @@
 #include "Objects/Enemy.h"
 #include "Viewer/Freedom.h"
 #include "Viewer/Following.h"
+#include "Objects/ItemBox.h"
 
 
 Background* bg;
@@ -12,7 +13,9 @@ Player* player;
 vector<Sprite*> sprite;
 vector<Sprite*> end_sprite;
 vector<Sprite*> breakableBrick;
-vector<Sprite*> brick_Query;
+
+
+vector<ItemBox*> brick_Query;
 
 Sprite* anEntrence;
 Sprite* flag;
@@ -20,13 +23,14 @@ vector<Sprite*> floor_;
 Camara* freeCam;
 vector<Enemy *> Enemies;
 
+vector<Sprite*> items;
+
 bool CheckCollapse_floor();
 bool CheckCollapse_Object();
 bool MCheckCollapse_floor(int _where);
 bool MCheckCollapse_Object(int _where);
 bool CheckCollapse_End();
 
-bool MonCollapse();
 
 int res_debug;
 int deadcount = 0;
@@ -38,7 +42,7 @@ void InitScene()
 	bg = new Background(Shaders + L"/009_Sprite.fx");
 	bg->Scale(D3DXVECTOR2(2.5f, 2.5f));
 	bg->Position(D3DXVECTOR2(4220, 0));
-	player = new Player(D3DXVECTOR2(100, 120), D3DXVECTOR2(0.8f, 0.8f));
+	player = new Player(D3DXVECTOR2(5655, 300), D3DXVECTOR2(0.8f, 0.8f));
 
 
 	freeCam = new Following(player);
@@ -427,7 +431,20 @@ void InitScene()
 	}
 
 	{
-		Enemies.push_back(new Enemy(D3DXVECTOR2(1400, 140), D3DXVECTOR2(2.5f, 2.5f)));
+		Enemies.push_back(new Enemy(D3DXVECTOR2(1400, 140), D3DXVECTOR2(2.5f, 2.5f))); 
+		Enemies.push_back(new Enemy(D3DXVECTOR2(5700, 140), D3DXVECTOR2(2.5f, 2.5f)));
+		Enemies.push_back(new Enemy(D3DXVECTOR2(7000, 140), D3DXVECTOR2(2.5f, 2.5f)));
+	}
+
+	{
+		brick_Query.push_back(new ItemBox(1, D3DXVECTOR2((328 * 2.5 + 360 * 2.5) * 0.5, 152 * 1.5), D3DXVECTOR2(2.5f, 2.5f)));
+		brick_Query.push_back(new ItemBox(0, D3DXVECTOR2((328 * 2.5 + 360 * 2.5) * 0.5, 152 * 1.5), D3DXVECTOR2(2.5f, 2.5f)));
+	}
+
+	{
+		items.push_back(new Sprite(Textures + L"Mario/flower.png", Shaders + L"009_Sprite.fx"));
+		breakableBrick.back()->Position(-1000, -1000);
+		breakableBrick.back()->Scale(2.5f, 2.5f);
 	}
 
 }
@@ -467,6 +484,8 @@ void DestroyScene()
 		SAFE_DELETE(an);
 	}
 	Enemies.clear();
+	for (ItemBox* box : brick_Query)
+		SAFE_DELETE(box);
 }
 
 D3DXMATRIX V, P;
@@ -495,9 +514,8 @@ void Update()
 		if (breakableBrick.size() > 0)
 			for (Sprite* spr : breakableBrick)
 				spr->Update(freeCam->View(), P);
-		//for (Sprite* spr : brick_Query)
-		//	spr->Update(freeCam->View(), P);
-		//anEntrence->Update(freeCam->View(), P);
+		for (ItemBox* box : brick_Query)
+			box->Update(freeCam->View(), P);
 		for (Sprite* spr : floor_)
 			spr->Update(freeCam->View(), P);
 		for (Sprite* spr : end_sprite)
@@ -556,20 +574,23 @@ void Update()
 
 		bool res = false;
 
+		for (Sprite* spr : items)
+		{
+			spr->Update(freeCam->View(), P);
+		}
 
 
 
 
-
-
+		
 		for (Sprite* spr : sprite)
 			spr->Update(freeCam->View(), P);
 		if (breakableBrick.size() > 0)
 			for (Sprite* spr : breakableBrick)
 				spr->Update(freeCam->View(), P);
-		//for (Sprite* spr : brick_Query)
-		//	spr->Update(freeCam->View(), P);
-		//anEntrence->Update(freeCam->View(), P);
+		for (ItemBox* box : brick_Query)
+			box->Update(freeCam->View(), P);
+		
 		for (Sprite* spr : floor_)
 			spr->Update(freeCam->View(), P);
 		for (Sprite* spr : end_sprite)
@@ -601,10 +622,12 @@ void Render()
 			for (Sprite* spr : breakableBrick)
 				spr->Render();
 
-		//for (Sprite* spr : brick_Query)
-		//	spr->Render();
+		for (ItemBox* spr : brick_Query)
+			spr->Render();
 
-		//anEntrence->Render();
+		for (Sprite* spr : items)
+			spr->Render();
+
 		flag->Render();
 		for (Sprite* spr : floor_)
 			spr->Render();
@@ -754,25 +777,26 @@ bool CheckCollapse_Object()
 		}
 	}
 	
-	/*for (Sprite* spr : brick_Query)
+	for (ItemBox* spr : brick_Query)
 	{
 		if (!(
-			(spr->Position().x - spr->TextureSize().x * 0.5f > freeCam->Position().x + Width) ||
-			(spr->Position().x + spr->TextureSize().x * 0.5f < freeCam->Position().x)
+			(spr->RtSpr()->Position().x - spr->RtSpr()->TextureSize().x * 0.5f > freeCam->Position().x + Width) ||
+			(spr->RtSpr()->Position().x + spr->RtSpr()->TextureSize().x * 0.5f < freeCam->Position().x)
 			))
 		{
-			if (player->Crash(spr->If_Met(player->RtAn()->Position(), player->RtAn()->TextureSize()), spr->Position(), spr->TextureSize()))
+			int res = spr->RtSpr()->If_Met(player->RtAn()->Position(), player->RtAn()->TextureSize());
+			if (res == 2 && spr->RtItem() != -1)
+			{
+				spr->Under_Crash();
+				items.back()->Position(spr->RtSpr()->Position().x, (spr->RtSpr()->Position().y + spr->RtSpr()->TextureSize().y * 0.5f) + items.back()->TextureSize().y *0.5f);
 				return true;
+			}
+			else if (player->Crash(res, spr->RtSpr()->Position(), spr->RtSpr()->TextureSize()))
+			{
+				return true;
+			}
 		}
 	}
-	if (!(
-		(anEntrence->Position().x - anEntrence->TextureSize().x * 0.5f > freeCam->Position().x + Width) ||
-		(anEntrence->Position().x + anEntrence->TextureSize().x * 0.5f < freeCam->Position().x)
-		))
-	{
-		if (player->Crash(anEntrence->If_Met(player->RtAn()->Position(), player->RtAn()->TextureSize()), anEntrence->Position(), anEntrence->TextureSize()))
-			return true;
-	}*/
 	return false;
 }
 
@@ -816,11 +840,6 @@ bool MCheckCollapse_floor(int _where)
 	}
 	for (Sprite* spr : floor_)
 	{
-		if (!(
-			(spr->Position().x - spr->TextureSize().x * 0.5f > freeCam->Position().x + Width) ||
-			(spr->Position().x + spr->TextureSize().x * 0.5f < freeCam->Position().x)
-			))
-		{
 			res_debug = spr->If_Met(Enemies[_where]->RtAn()->Position(), Enemies[_where]->RtAn()->TextureSize());
 			if (Enemies[_where]->Crash(res_debug, spr->Position(), spr->TextureSize()))
 			{
@@ -828,7 +847,6 @@ bool MCheckCollapse_floor(int _where)
 				sprdb[1] = spr;
 				break;
 			}
-		}
 	}
 
 	if ((dbdebug[0] != -7 && dbdebug[1] != -7) || (dbdebug[1] != -7 && dbdebug[0] == -7))
@@ -852,11 +870,6 @@ bool MCheckCollapse_Object(int _where)
 	//이하 생략
 	for (Sprite* spr : breakableBrick)
 	{
-		if (!(
-			(spr->Position().x - spr->TextureSize().x * 0.5f > freeCam->Position().x + Width) ||
-			(spr->Position().x + spr->TextureSize().x * 0.5f < freeCam->Position().x)
-			))
-		{
 			int result = spr->If_Met(Enemies[_where]->RtAn()->Position(), Enemies[_where]->RtAn()->TextureSize());
 
 
@@ -869,26 +882,7 @@ bool MCheckCollapse_Object(int _where)
 				}
 				return true;
 			}
-		}
 	}
-	/*for (Sprite* spr : brick_Query)
-	{
-		if (!(
-			(spr->Position().x - spr->TextureSize().x * 0.5f > freeCam->Position().x + Width) ||
-			(spr->Position().x + spr->TextureSize().x * 0.5f < freeCam->Position().x)
-			))
-		{
-			if (Enemies[_where]->Crash(spr->If_Met(player->RtAn()->Position(), player->RtAn()->TextureSize()), spr->Position(), spr->TextureSize()))
-				return true;
-		}
-	}
-	if (!(
-		(anEntrence->Position().x - anEntrence->TextureSize().x * 0.5f > freeCam->Position().x + Width) ||
-		(anEntrence->Position().x + anEntrence->TextureSize().x * 0.5f < freeCam->Position().x)
-		))
-	{
-		if (Enemies[_where]->Crash(anEntrence->If_Met(player->RtAn()->Position(), player->RtAn()->TextureSize()), anEntrence->Position(), anEntrence->TextureSize()))
-			return true;
-	}*/
+	
 	return false;
 }

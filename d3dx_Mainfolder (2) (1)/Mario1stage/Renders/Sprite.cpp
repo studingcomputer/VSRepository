@@ -34,7 +34,7 @@ int Sprite::If_Met(D3DXVECTOR2 _pos, D3DXVECTOR2 _scale)
 		//일단 충돌함
 		//오브젝트는 위에 있지만 않으면 그냥 튕겨내면 됨
 
- 		if (((_pos.y - _scale.y * 0.5f) >= (position.y - TextureSize().y * 0.5f)) && (((_pos.y - _scale.y * 0.5f) - (position.y + TextureSize().y * 0.5f)) <= 0.1f) && (((_pos.y - _scale.y * 0.5f) - (position.y + TextureSize().y * 0.5f)) >= -0.1f))
+ 		if (((_pos.y - _scale.y * 0.5f) > (position.y - TextureSize().y * 0.5f)) && (((_pos.y - _scale.y * 0.5f) - (position.y + TextureSize().y * 0.5f)) < 0.1f) && (((_pos.y - _scale.y * 0.5f) - (position.y + TextureSize().y * 0.5f)) > -0.1f))
 			return 1;//위
 		if (((_pos.y + _scale.y * 0.5f) < (position.y + TextureSize().y * 0.5f)) && (((_pos.y + _scale.y * 0.5f) - (position.y - TextureSize().y * 0.5f)) > -1.0f) && (((_pos.y + _scale.y * 0.5f) - (position.y - TextureSize().y * 0.5f)) < 1.0f) && ((_pos.x + _scale.x * 0.5f) > (position.x - TextureSize().x * 0.5f)) && ((_pos.x - _scale.x * 0.5f) < (position.x + TextureSize().x * 0.5f)))
 			return 2;//아래

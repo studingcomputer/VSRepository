@@ -60,6 +60,9 @@
     <ClCompile Include="Objects\Enemy.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
+    <ClCompile Include="Objects\ItemBox.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Systems\Keyboard.h">
@@ -121,6 +124,9 @@
       <Filter>Viewer</Filter>
     </ClInclude>
     <ClInclude Include="Objects\Enemy.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects\ItemBox.h">
       <Filter>Objects</Filter>
     </ClInclude>
   </ItemGroup>

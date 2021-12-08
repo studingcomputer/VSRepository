@@ -88,7 +88,7 @@ bool Enemy::Crash(int a, D3DXVECTOR2 pos_, D3DXVECTOR2 pos_axis)
 		return true;
 	}
 	case 2:
-		velocity.y = -0.05f;
+		Dead();
 
 		return true;
 	case 3:
@@ -98,7 +98,7 @@ bool Enemy::Crash(int a, D3DXVECTOR2 pos_, D3DXVECTOR2 pos_axis)
 		//	untilFloor = false;
 		return true;
 	case 4:
-		Dead();
+		velocity.x = -0.2f;
 		//velocity.y = -0.15f;
 		//if(untilFloor)
 		//	untilFloor = false;
