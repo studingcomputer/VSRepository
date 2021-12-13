@@ -2,8 +2,9 @@
   "ExpandedNodes": [
     "",
     "\\d3dx_Mainfolder (2) (1)",
-    "\\d3dx_Mainfolder (2) (1)\\Mario1stage"
+    "\\d3dx_Mainfolder (2) (1)\\Mario1stage",
+    "\\d3dx_Mainfolder (2) (1)\\Mario1stage\\Objects"
   ],
-  "SelectedNode": "\\d3dx_Mainfolder (2) (1)\\Mario1stage\\Scene.cpp",
+  "SelectedNode": "\\d3dx_Mainfolder (2) (1)",
   "PreviewInSolutionExplorer": false
 }
