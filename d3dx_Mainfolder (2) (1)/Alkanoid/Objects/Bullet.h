@@ -17,4 +17,5 @@ private:
 	D3DXVECTOR2 position;
 	D3DXVECTOR2 scale;
 	D3DXVECTOR3 rotation;
+	D3DXVECTOR2 velocity;
 };
