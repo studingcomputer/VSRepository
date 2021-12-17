@@ -2,6 +2,7 @@
 #include "Scene/Scene.h"
 
 class Player;
+class Line;
 
 class Sonic : public Scene
 {
@@ -17,4 +18,5 @@ private:
 
 	Player* player;
 	vector<class Marker*> markers;
+	vector<Line*> lines;
 };

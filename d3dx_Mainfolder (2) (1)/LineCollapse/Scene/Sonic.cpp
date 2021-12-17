@@ -3,6 +3,7 @@
 #include "Objects/Player.h"
 #include "Viewer/Freedom.h"
 #include "Objects/Marker.h"
+#include "Renders/Line.h"
 
 Sonic::Sonic(SceneValues * values)
 	:Scene(values)
@@ -20,9 +21,12 @@ Sonic::~Sonic()
 	for (Marker* marker : markers)
 		SAFE_DELETE(marker);
 	SAFE_DELETE(backGround);
+	for (Line* l : lines)
+		SAFE_DELETE(l);
 }
 
 D3DXVECTOR2 mPos;
+int stack_ = 0;
 void Sonic::Update()
 {
 	D3DXMATRIX V = values->MainCamera->View();
@@ -39,11 +43,22 @@ void Sonic::Update()
 	if (Mouse->Down(0) == true)
 	{
 		markers.push_back(new Marker(Shaders + L"009_Sprite.fx", mPos));
+		stack_++;
+		if (stack_ == 2)
+		{
+			stack_ = 0;
+			// 첫번째 경우: 최근 생성된 마커의 수가 2개일 경우 그 2개의 마커 사이에 선을 생성
+			lines.push_back(new Line(Shaders + L"009_Sprite.fx", markers[markers.size() - 2]->Position(), markers[markers.size() - 1]->Position()));
+		}
 	}
 
 	for (Marker* marker : markers)
 	{
 		marker->Update(V, P);
+	}
+	for (Line* l : lines)
+	{
+		l->Update(V, P);
 	}
 }
 
@@ -54,6 +69,10 @@ void Sonic::Render()
 	for (Marker* marker : markers)
 	{
 		marker->Render();
+	}
+	for (Line* l : lines)
+	{
+		l->Render();
 	}
 
 	backGround->Render();

@@ -3,7 +3,7 @@
 class Line
 {
 public:
-	Line(D3DXVECTOR2 pos1, D3DXVECTOR2 pos2);
+	Line(wstring shaderFile, D3DXVECTOR2& pos1, D3DXVECTOR2& pos2);
 	~Line();
 
 	virtual void Update(D3DXMATRIX& V, D3DXMATRIX& P);
@@ -11,9 +11,23 @@ public:
 
 	bool CheckCollapse(D3DXVECTOR2 pos, D3DXVECTOR2 scale);
 
-	void Re_Build_Line(D3DXVECTOR2 pos);
 
 private:
 
-	D3DXVECTOR2 position1, position2;
+	D3DXVECTOR2* position1;
+	D3DXVECTOR2* position2;
+
+	struct Vertex
+	{
+		D3DXVECTOR3 Position;
+		D3DXVECTOR3 Color;
+	}; 
+	Vertex vertices[2];
+
+	Shader* shader;
+	ID3D11Buffer* vertexBuffer;
+
+	D3DXMATRIX world;
+
+	bool isContactHasOccured = false;
 };
