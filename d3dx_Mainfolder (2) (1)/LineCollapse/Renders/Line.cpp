@@ -13,15 +13,20 @@ Line::Line(wstring shaderFile, D3DXVECTOR2& pos1, D3DXVECTOR2& pos2)
 
 	//Create Vertex Buffer
 	{
-		D3D11_BUFFER_DESC desc = { 0 };
-		desc.Usage = D3D11_USAGE_DEFAULT;
-		desc.ByteWidth = sizeof(Vertex) * 2;
-		desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+		D3D11_BUFFER_DESC bufferDesc;
+		ZeroMemory(&bufferDesc, sizeof(D3D11_BUFFER_DESC));
 
-		D3D11_SUBRESOURCE_DATA data = { 0 };
+		bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+		bufferDesc.ByteWidth = sizeof(Vertex) * 2;
+		bufferDesc.Usage = D3D11_USAGE_DEFAULT;
+		bufferDesc.CPUAccessFlags = 0;
+
+		D3D11_SUBRESOURCE_DATA data;
+		ZeroMemory(&data, sizeof(D3D11_SUBRESOURCE_DATA));
+
 		data.pSysMem = vertices;
 
-		HRESULT hr = Device->CreateBuffer(&desc, &data, &vertexBuffer);
+		HRESULT hr = Device->CreateBuffer(&bufferDesc, &data, &vertexBuffer);
 		assert(SUCCEEDED(hr));
 	}
 }
@@ -33,7 +38,7 @@ Line::~Line()
 
 void Line::Update(D3DXMATRIX & V, D3DXMATRIX & P)
 {
-	vertices[0].Position = D3DXVECTOR3(position1->x, position1->y, 0.0f);//2번째부터 메모리 안의 값이 이상해지는 버그가 있음(고침) 그런데 마커의 위치를 옮길 때 메모리 두개로 돌려막기하는 이상한 현상 발생
+	vertices[0].Position = D3DXVECTOR3(position1->x, position1->y, 0.0f);//2번째부터 메모리 안의 값이 이상해지는 버그가 있음(고침) 그런데 마커의 위치를 옮길 때 메모리 두개로 돌려막기하는 이상한 현상 발생(고침)
 	vertices[1].Position = D3DXVECTOR3(position2->x, position2->y, 0.0f);
 
 	DeviceContext->UpdateSubresource

@@ -20,7 +20,6 @@ private:
 	struct Vertex
 	{
 		D3DXVECTOR3 Position;
-		D3DXVECTOR3 Color;
 	}; 
 	Vertex vertices[2];
 

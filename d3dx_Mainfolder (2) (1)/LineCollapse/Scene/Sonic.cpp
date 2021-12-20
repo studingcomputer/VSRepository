@@ -10,12 +10,13 @@ Sonic::Sonic(SceneValues * values)
 {
 	wstring shaderFile = Shaders + L"009_Sprite.fx";
 
+	player = new Player(D3DXVECTOR2(0, 0), D3DXVECTOR2(2.0f, 2.0f));
+
 	backGround = new Sprite(Textures + L"Stage3.png", shaderFile);
 	backGround->Position(0, 0);
 
 	((Freedom*)(values->MainCamera))->Position(0, 0);
 
-	lines.push_back(new Line(Shaders + L"009_Sprite.fx", D3DXVECTOR2(0, 0), D3DXVECTOR2(200, 0)));
 }
 
 Sonic::~Sonic()
@@ -63,18 +64,19 @@ void Sonic::Update()
 					break;
 				}
 			}
-		}
-		if (!onMarker)
-		{
-			markers.push_back(new Marker(Shaders + L"009_Sprite.fx", mPos));
-			stack_++;
-			if (stack_ == 2)
+			if (onMarked == nullptr)
 			{
-				stack_ = 0;
-				// 첫번째 경우: 최근 생성된 마커의 수가 2개일 경우 그 2개의 마커 사이에 선을 생성
-				lines.push_back(new Line(Shaders + L"009_Sprite.fx", *(markers[markers.size() - 2]->Position()), *(markers[markers.size() - 1]->Position())));
+				markers.push_back(new Marker(Shaders + L"009_Sprite.fx", mPos));
+				stack_++;
+				if (stack_ == 2)
+				{
+					stack_ = 0;
+					// 첫번째 경우: 최근 생성된 마커의 수가 2개일 경우 그 2개의 마커 사이에 선을 생성
+					lines.push_back(new Line(Shaders + L"009_Sprite.fx", *(markers[markers.size() - 2]->Position()), *(markers[markers.size() - 1]->Position())));
+				}
 			}
 		}
+		
 	}
 
 	if (onMarker)
@@ -90,20 +92,22 @@ void Sonic::Update()
 	{
 		l->Update(V, P);
 	}
+	player->Update(V, P);
 }
 
 void Sonic::Render()
 {
 	ImGui::LabelText("Position", "%.0f, %.0f", mPos.x, mPos.y);
 
+	backGround->Render();
 	for (Marker* marker : markers)
 	{
 		marker->Render();
 	}
+	player->Render();
 	for (Line* l : lines)
 	{
 		l->Render();
 	}
 
-	backGround->Render();
 }
