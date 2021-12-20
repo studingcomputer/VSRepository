@@ -38,6 +38,20 @@ float Math::Clamp(float value, float min, float max)
 	return value;
 }
 
+int Math::Round(int value)
+{
+	if (value < 0)
+		return -(value);
+	return value;
+}
+
+float Math::Round(float value)
+{
+	if (value < 0)
+		return -(value);
+	return value;
+}
+
 int Math::Random(int r1, int r2)
 {
 	return (int)(rand() % (r2 - r1 + 1)) + r1;

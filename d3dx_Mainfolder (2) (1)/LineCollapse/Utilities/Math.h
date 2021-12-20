@@ -13,5 +13,8 @@ public:
 	static float Random(float r1, float r2);
 
 	static float Clamp(float value, float min, float max);
+
+	static int Round(int value);
+	static float Round(float value);
 };
 

@@ -42,6 +42,13 @@ void Sonic::Update()
 
 	if (Mouse->Down(0) == true)
 	{
+		for (Marker* mark : markers)
+		{
+			if (Math::Round(mPos.x - mark->Position().x) < 5, Math::Round(mPos.y - mark->Position().y) < 5)
+			{
+				//마우스가 마커를 클릭했을때
+			}
+		}
 		markers.push_back(new Marker(Shaders + L"009_Sprite.fx", mPos));
 		stack_++;
 		if (stack_ == 2)
@@ -64,7 +71,7 @@ void Sonic::Update()
 
 void Sonic::Render()
 {
-	ImGui::LabelText("Posiiton", "%.0f, %.0f", mPos.x, mPos.y);
+	ImGui::LabelText("Position", "%.0f, %.0f", mPos.x, mPos.y);
 
 	for (Marker* marker : markers)
 	{
