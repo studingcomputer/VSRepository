@@ -14,6 +14,8 @@ Sonic::Sonic(SceneValues * values)
 	backGround->Position(0, 0);
 
 	((Freedom*)(values->MainCamera))->Position(0, 0);
+
+	lines.push_back(new Line(Shaders + L"009_Sprite.fx", D3DXVECTOR2(0, 0), D3DXVECTOR2(200, 0)));
 }
 
 Sonic::~Sonic()
@@ -27,6 +29,8 @@ Sonic::~Sonic()
 
 D3DXVECTOR2 mPos;
 int stack_ = 0;
+bool onMarker = false;
+Marker* onMarked = nullptr;
 void Sonic::Update()
 {
 	D3DXMATRIX V = values->MainCamera->View();
@@ -42,21 +46,40 @@ void Sonic::Update()
 
 	if (Mouse->Down(0) == true)
 	{
-		for (Marker* mark : markers)
+		if (onMarker)
 		{
-			if (Math::Round(mPos.x - mark->Position().x) < 5, Math::Round(mPos.y - mark->Position().y) < 5)
+			onMarker = false;
+			onMarked = nullptr;
+		}
+		else
+		{
+			for (Marker* mark : markers)
 			{
-				//마우스가 마커를 클릭했을때
+				if (Math::Round(mPos.x - mark->Position()->x) < 5, Math::Round(mPos.y - mark->Position()->y) < 5)
+				{
+					//마우스가 마커를 클릭했을때
+					onMarker = true;
+					onMarked = mark;
+					break;
+				}
 			}
 		}
-		markers.push_back(new Marker(Shaders + L"009_Sprite.fx", mPos));
-		stack_++;
-		if (stack_ == 2)
+		if (!onMarker)
 		{
-			stack_ = 0;
-			// 첫번째 경우: 최근 생성된 마커의 수가 2개일 경우 그 2개의 마커 사이에 선을 생성
-			lines.push_back(new Line(Shaders + L"009_Sprite.fx", markers[markers.size() - 2]->Position(), markers[markers.size() - 1]->Position()));
+			markers.push_back(new Marker(Shaders + L"009_Sprite.fx", mPos));
+			stack_++;
+			if (stack_ == 2)
+			{
+				stack_ = 0;
+				// 첫번째 경우: 최근 생성된 마커의 수가 2개일 경우 그 2개의 마커 사이에 선을 생성
+				lines.push_back(new Line(Shaders + L"009_Sprite.fx", *(markers[markers.size() - 2]->Position()), *(markers[markers.size() - 1]->Position())));
+			}
 		}
+	}
+
+	if (onMarker)
+	{
+		onMarked->Position(mPos);
 	}
 
 	for (Marker* marker : markers)

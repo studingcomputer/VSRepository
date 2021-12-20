@@ -10,7 +10,8 @@ public:
 	void Render();
 
 	Clip* GetClip() { return clip; }
-	D3DXVECTOR2 Position() { return position; }
+	D3DXVECTOR2* Position() { return &position; }
+	void Position(D3DXVECTOR2 input) { position = input; }
 
 private:
 	Clip* clip;
