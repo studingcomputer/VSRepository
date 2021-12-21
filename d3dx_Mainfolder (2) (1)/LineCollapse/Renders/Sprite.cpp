@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Sprite.h"
+#include "Line.h"
 
 //-----------------------------------------------------------------------------
 //Sprite
@@ -215,6 +216,7 @@ bool Sprite::OBB(Sprite * a, Sprite * b)
 
 	return CheckOBB(obbA, obbB);
 }
+
 
 void Sprite::CreateBound()
 {

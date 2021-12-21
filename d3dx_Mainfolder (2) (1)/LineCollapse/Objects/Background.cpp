@@ -84,3 +84,19 @@ void Background::Render()
 		tile[1]->Render();
 	}
 }
+
+Sprite * Background::RtSpriteFor(int which)
+{
+	if (which < 2)
+	{
+		return cloud[which];
+	}
+	else if (which < 4)
+	{
+		return bush[which - 2];
+	}
+	else if (which < 6)
+	{
+		return tile[which - 4];
+	}
+}

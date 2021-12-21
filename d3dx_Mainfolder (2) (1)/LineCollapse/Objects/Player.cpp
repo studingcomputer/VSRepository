@@ -2,7 +2,7 @@
 #include "Player.h"
 
 Player::Player(D3DXVECTOR2 position, D3DXVECTOR2 scale)
-	:moveSpeed(200.0f), focusOffset(-180,-120)
+	:moveSpeed(200.0f), focusOffset(-180,-120), velocity(D3DXVECTOR2(0.0f,0.0f))
 {
 	animation = new Animation;
 
@@ -54,18 +54,25 @@ void Player::Update(D3DXMATRIX & V, D3DXMATRIX & P)
 	D3DXVECTOR2 position = animation->Position();
 
 	bool bMove = false;
+	if (velocity.x != 0.0f)
+		velocity.x = 0.0f;
+	if (!onGround)
+		velocity.y -= 9.8 * Timer->Elapsed();
 	if (Key->Press('A'))
 	{
 		bMove = true;
-		position.x -= moveSpeed * Timer->Elapsed();
+		velocity.x = -( moveSpeed * Timer->Elapsed() );
 		animation->RotationDegree(0, 180, 0);
 	}
 	else if (Key->Press('D'))
 	{
 		bMove = true;
-		position.x += moveSpeed * Timer->Elapsed();
+		velocity.x = moveSpeed * Timer->Elapsed();
 		animation->RotationDegree(0, 0, 0);
 	}
+
+	position.x += velocity.x;
+	position.y += velocity.y;
 
 	animation->Position(position);
 	animation->Play(bMove ? 1 : 0);
@@ -87,4 +94,32 @@ void Player::Focus(D3DXVECTOR2 * position, D3DXVECTOR2 * size)
 	*position = animation->Position() - focusOffset;
 	(*size) = D3DXVECTOR2(1, 1);
 
+}
+
+bool Player::CheckCollapse_justforfloor(Line * line)
+{
+	if (line->CheckCollapse(animation->GetSprite()))
+	{
+		velocity.y = 0.0f;
+		onGround = true;
+		return true;
+	}
+	else
+	{
+		onGround = false;
+	}
+}
+
+bool Player::CheckCollapse_justforsprite(Sprite * spr)
+{
+	if (Sprite::OBB(spr, animation->GetSprite()))
+	{
+		velocity.y = 0.0f;
+		onGround = true;
+		return true;
+	}
+	else
+	{
+		onGround = false;
+	}
 }

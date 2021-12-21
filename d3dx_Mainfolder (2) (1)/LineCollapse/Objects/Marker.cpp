@@ -3,7 +3,7 @@
 
 Marker::Marker(wstring shaderFile, D3DXVECTOR2 start)
 {
-	clip = new Clip(PlayMode::Loop);
+	clip = new Clip(PlayMode::End);
 	for (UINT i = 0; i < 7; i++)
 	{
 		float x = (float)i * 15 + 173;

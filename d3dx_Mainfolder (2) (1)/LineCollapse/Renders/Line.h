@@ -9,10 +9,14 @@ public:
 	virtual void Update(D3DXMATRIX& V, D3DXMATRIX& P);
 	void Render();
 
-	bool CheckCollapse(D3DXVECTOR2 pos, D3DXVECTOR2 scale);
+	bool CheckCollapse(Sprite* input);
 
 
 private:
+
+	float GetYAxisWhereXIs(float _where);
+
+	void ResetEquation();
 
 	D3DXVECTOR2* position1;
 	D3DXVECTOR2* position2;
@@ -29,4 +33,7 @@ private:
 	D3DXMATRIX world;
 
 	bool isContactHasOccured = false;
+
+	float inclination;
+	float y_intercept;
 };

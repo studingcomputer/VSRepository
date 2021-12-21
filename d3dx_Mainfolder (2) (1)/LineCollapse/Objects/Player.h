@@ -1,5 +1,6 @@
 #pragma once
 #include "Viewer/IFollowing.h"
+#include "Renders/Line.h"
 
 class Player : public IFollowing
 {
@@ -14,9 +15,15 @@ public:
 
 	Sprite* GetSprite() { return animation->GetSprite(); }
 
+	bool CheckCollapse_justforfloor(Line* line);
+	bool CheckCollapse_justforsprite(Sprite* spr);
+
 private:
 	float moveSpeed;
 	Animation* animation;
 
 	D3DXVECTOR2 focusOffset;
+
+	D3DXVECTOR2 velocity;
+	bool onGround = true;
 };

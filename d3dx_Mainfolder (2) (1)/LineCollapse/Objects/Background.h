@@ -9,6 +9,7 @@ public:
 	void Update(D3DXMATRIX& V, D3DXMATRIX& P);
 	void Render();
 
+	Sprite* RtSpriteFor(int which);
 private:
 	Sprite* cloud[2];
 	Sprite* bush[2];
