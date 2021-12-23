@@ -23,7 +23,7 @@ public:
 	static bool AABB(Sprite* a, D3DXVECTOR2& position);
 	static bool AABB(Sprite* a, Sprite* b);
 	static bool OBB(Sprite* a, Sprite* b);
-
+	                                                                                                                                                                             
 
 private:
 	void CreateBound();
