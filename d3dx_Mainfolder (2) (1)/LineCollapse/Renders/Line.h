@@ -11,10 +11,10 @@ public:
 
 	bool CheckCollapse(Sprite* input);
 
+	float GetYAxisWhereXIs(float _where);
 
 private:
 
-	float GetYAxisWhereXIs(float _where);
 
 	void ResetEquation();
 

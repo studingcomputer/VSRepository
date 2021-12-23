@@ -10,12 +10,12 @@ Sonic::Sonic(SceneValues * values)
 {
 	wstring shaderFile = Shaders + L"009_Sprite.fx";
 
-	player = new Player(D3DXVECTOR2(0, 0), D3DXVECTOR2(2.0f, 2.0f));
+	player = new Player(D3DXVECTOR2(-50, 100), D3DXVECTOR2(2.0f, 2.0f));
 
 	backGround = new Sprite(Textures + L"Stage3.png", shaderFile);
 	backGround->Position(0, 0);
-
 	((Freedom*)(values->MainCamera))->Position(0, 0);
+	lines.push_back(new Line(shaderFile, a, b));
 
 }
 
@@ -26,6 +26,7 @@ Sonic::~Sonic()
 	SAFE_DELETE(backGround);
 	for (Line* l : lines)
 		SAFE_DELETE(l);
+	
 }
 
 D3DXVECTOR2 mPos;
@@ -44,6 +45,7 @@ void Sonic::Update()
 	mouse.y = (mouse.y - (float)Height * 0.5f) * -1.0f;
 
 	mPos = mouse + camera;
+
 
 	if (Mouse->Down(0) == true)
 	{
@@ -92,12 +94,18 @@ void Sonic::Update()
 	{
 		l->Update(V, P);
 	}
+	for (Line* l : lines)
+	{
+		if (player->CheckCollapse_justforfloor(l))
+			break;
+	}
 	player->Update(V, P);
 }
 
 void Sonic::Render()
 {
 	ImGui::LabelText("Position", "%.0f, %.0f", mPos.x, mPos.y);
+	ImGui::LabelText("P_Position", "%.2f, %.2f", player->GetSprite()->Position().x, player->GetSprite()->Position().y);
 
 	backGround->Render();
 	for (Marker* marker : markers)

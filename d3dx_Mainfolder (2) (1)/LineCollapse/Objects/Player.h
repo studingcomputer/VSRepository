@@ -25,5 +25,5 @@ private:
 	D3DXVECTOR2 focusOffset;
 
 	D3DXVECTOR2 velocity;
-	bool onGround = true;
+	bool onGround = false;
 };

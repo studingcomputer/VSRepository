@@ -49,7 +49,7 @@ Line::~Line()
 
 void Line::Update(D3DXMATRIX & V, D3DXMATRIX & P)
 {
-	if (position1 > position2)
+	if (position1->x > position2->x)
 	{
 		D3DXVECTOR2* temp = position1;
 		position1 = position2;
@@ -98,9 +98,10 @@ bool Line::CheckCollapse(Sprite * input)
 		))
 	{
 		float yAxis = GetYAxisWhereXIs(input->Position().x);
-		if ((input->Position().y - input->TextureSize().y > yAxis - 1) || (input->Position().y - input->TextureSize().y < yAxis + 1))//오차범위 +-1
+		if ((input->Position().y - input->TextureSize().y > yAxis - 1) && (input->Position().y - input->TextureSize().y < yAxis + 1))//오차범위 +-1
 			return true;
 	}
+	return false;
 }
 
 float Line::GetYAxisWhereXIs(float _where)

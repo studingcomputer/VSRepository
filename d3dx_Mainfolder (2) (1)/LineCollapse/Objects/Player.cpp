@@ -57,7 +57,7 @@ void Player::Update(D3DXMATRIX & V, D3DXMATRIX & P)
 	if (velocity.x != 0.0f)
 		velocity.x = 0.0f;
 	if (!onGround)
-		velocity.y -= 9.8 * Timer->Elapsed();
+		velocity.y -= 9.8 * 0.00001;
 	if (Key->Press('A'))
 	{
 		bMove = true;
@@ -100,14 +100,24 @@ bool Player::CheckCollapse_justforfloor(Line * line)
 {
 	if (line->CheckCollapse(animation->GetSprite()))
 	{
+		int val = line->GetYAxisWhereXIs(animation->Position().x);
 		velocity.y = 0.0f;
 		onGround = true;
 		return true;
 	}
 	else
 	{
+		int val = line->GetYAxisWhereXIs(animation->Position().x);
+		if ((val > (-Height)) && (val < animation->Position().y - animation->TextureSize().y * 0.5f + 2.0f) && onGround)
+		{
+			velocity.y = 0.0f;
+			animation->Position(animation->Position().x, val + animation->TextureSize().y * 0.5f);
+			onGround = true;
+			return true;
+		}
 		onGround = false;
 	}
+	return false;
 }
 
 bool Player::CheckCollapse_justforsprite(Sprite * spr)
