@@ -23,20 +23,15 @@ Line::Line(wstring shaderFile, D3DXVECTOR2& pos1, D3DXVECTOR2& pos2)
 
 	//Create Vertex Buffer
 	{
-		D3D11_BUFFER_DESC bufferDesc;
-		ZeroMemory(&bufferDesc, sizeof(D3D11_BUFFER_DESC));
+		D3D11_BUFFER_DESC desc = { 0 };
+		desc.Usage = D3D11_USAGE_DEFAULT;
+		desc.ByteWidth = sizeof(Vertex) * 2;
+		desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 
-		bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-		bufferDesc.ByteWidth = sizeof(Vertex) * 2;
-		bufferDesc.Usage = D3D11_USAGE_DEFAULT;
-		bufferDesc.CPUAccessFlags = 0;
-
-		D3D11_SUBRESOURCE_DATA data;
-		ZeroMemory(&data, sizeof(D3D11_SUBRESOURCE_DATA));
-
+		D3D11_SUBRESOURCE_DATA data = { 0 };
 		data.pSysMem = vertices;
 
-		HRESULT hr = Device->CreateBuffer(&bufferDesc, &data, &vertexBuffer);
+		HRESULT hr = Device->CreateBuffer(&desc, &data, &vertexBuffer);
 		assert(SUCCEEDED(hr));
 	}
 	ResetEquation();
@@ -63,19 +58,17 @@ void Line::Update(D3DXMATRIX & V, D3DXMATRIX & P)
 	(
 		vertexBuffer, 0, NULL, vertices, sizeof(Vertex) * 2, 0
 	);
-	D3DXMATRIX W;
-	D3DXMATRIX S, T;
-
-	D3DXMatrixIdentity(&W);
-
-	D3DXMatrixScaling(&S, 1.0f, 1.0f, 1.0f);
-	D3DXMatrixTranslation(&T, 0.0f, 0.0f, 0.0f);
-
-	W = S * T;
-
 	shader->AsMatrix("View")->SetMatrix(V);
 	shader->AsMatrix("Projection")->SetMatrix(P);
-	shader->AsMatrix("World")->SetMatrix(W);
+
+	D3DXMATRIX S, T;
+
+	D3DXMatrixScaling(&S, 1.0f, 1.0f, 1.0f);
+	D3DXMatrixTranslation(&T, position1->x + Math::Round(position1->x - position2->x), GetYAxisWhereXIs(position1->x + Math::Round(position1->x - position2->x)), 0);
+
+	world = S * T;
+
+	shader->AsMatrix("World")->SetMatrix(world);
 }
 
 void Line::Render()
@@ -83,11 +76,12 @@ void Line::Render()
 	UINT stride = sizeof(Vertex);
 	UINT offset = 0;
 
-	DeviceContext->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
+	DeviceContext->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset); 
 	DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
 
 
-	shader->Draw(0, (isContactHasOccured ? 1 : 0), 2);
+
+	shader->Draw(0, 0, 5);
 }
 
 bool Line::CheckCollapse(Sprite * input)
@@ -98,9 +92,13 @@ bool Line::CheckCollapse(Sprite * input)
 		))
 	{
 		float yAxis = GetYAxisWhereXIs(input->Position().x);
-		if ((input->Position().y - input->TextureSize().y > yAxis - 1) && (input->Position().y - input->TextureSize().y < yAxis + 1))//오차범위 +-1
+		if ((input->Position().y - input->TextureSize().y*0.5f > yAxis - 1) && (input->Position().y - input->TextureSize().y*0.5f < yAxis + 1))//오차범위 +-1
+		{
+			isContactHasOccured = true;
 			return true;
+		}
 	}
+	isContactHasOccured = false;
 	return false;
 }
 

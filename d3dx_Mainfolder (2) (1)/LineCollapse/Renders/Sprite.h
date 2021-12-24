@@ -58,7 +58,7 @@ public:
 	void RotationDegree(D3DXVECTOR3& vec);
 	D3DXVECTOR3 RotationDegree();
 
-	D3DXVECTOR2 TextureSize() { return textureSize; }
+	D3DXVECTOR2 TextureSize() { return D3DXVECTOR2(textureSize.x * scale.x, textureSize.y * scale.y); }
 
 private:
 	void Initialize(wstring spriteFile, wstring shaderFile, float startX, float startY, float endX, float endY);

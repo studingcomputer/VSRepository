@@ -15,8 +15,10 @@ public:
 
 	Sprite* GetSprite() { return animation->GetSprite(); }
 
-	bool CheckCollapse_justforfloor(Line* line);
+	int CheckCollapse_justforfloor(Line* line);
 	bool CheckCollapse_justforsprite(Sprite* spr);
+
+	bool RtOng() { return onGround; }
 
 private:
 	float moveSpeed;
@@ -26,4 +28,6 @@ private:
 
 	D3DXVECTOR2 velocity;
 	bool onGround = false;
+
+	float val;
 };

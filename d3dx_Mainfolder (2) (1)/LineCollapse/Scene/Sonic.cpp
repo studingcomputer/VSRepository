@@ -10,7 +10,7 @@ Sonic::Sonic(SceneValues * values)
 {
 	wstring shaderFile = Shaders + L"009_Sprite.fx";
 
-	player = new Player(D3DXVECTOR2(-50, 100), D3DXVECTOR2(2.0f, 2.0f));
+	player = new Player(D3DXVECTOR2(-50, 200), D3DXVECTOR2(2.0f, 2.0f));
 
 	backGround = new Sprite(Textures + L"Stage3.png", shaderFile);
 	backGround->Position(0, 0);
@@ -94,11 +94,9 @@ void Sonic::Update()
 	{
 		l->Update(V, P);
 	}
-	for (Line* l : lines)
-	{
-		if (player->CheckCollapse_justforfloor(l))
-			break;
-	}
+
+	CheckLines();
+	
 	player->Update(V, P);
 }
 
@@ -106,6 +104,7 @@ void Sonic::Render()
 {
 	ImGui::LabelText("Position", "%.0f, %.0f", mPos.x, mPos.y);
 	ImGui::LabelText("P_Position", "%.2f, %.2f", player->GetSprite()->Position().x, player->GetSprite()->Position().y);
+	ImGui::LabelText("P_OnGround", "%s", player->RtOng() ? "true" : "false");
 
 	backGround->Render();
 	for (Marker* marker : markers)
@@ -118,4 +117,23 @@ void Sonic::Render()
 		l->Render();
 	}
 
+}
+
+void Sonic::CheckLines()
+{
+	vector<Line*> database;
+	Line* main = nullptr;
+
+	for (Line* l : lines)
+	{
+		int val = player->CheckCollapse_justforfloor(l);
+		if (val == 1)
+			database.push_back(l);
+		else if (val == 2)
+			main = l;
+	}
+	for (Line* l : database)
+		player->CheckCollapse_justforfloor(l);
+	if (main != nullptr)
+		player->CheckCollapse_justforfloor(main);
 }

@@ -57,7 +57,14 @@ void Player::Update(D3DXMATRIX & V, D3DXMATRIX & P)
 	if (velocity.x != 0.0f)
 		velocity.x = 0.0f;
 	if (!onGround)
-		velocity.y -= 9.8 * 0.00001;
+	{
+		velocity.y -= 9.8 * 0.00002;
+		animation->DrawCollision(false);
+	}
+	else
+	{
+		animation->DrawCollision(true);
+	}
 	if (Key->Press('A'))
 	{
 		bMove = true;
@@ -84,7 +91,10 @@ void Player::Update(D3DXMATRIX & V, D3DXMATRIX & P)
 void Player::Render()
 {
 	ImGui::SliderFloat("Move Speed", &moveSpeed, 50, 400);
+	ImGui::LabelText("val", "%.2f", val);
 
+	ImGui::LabelText("first", "%s", (val < animation->Position().y - animation->TextureSize().y * 0.5f + 10.0f) ? "true" : "false");
+	ImGui::LabelText("second", "%s", (val > animation->Position().y - animation->TextureSize().y * 0.5f - 2.0f) ? "true" : "false");
 	animation->Render();
 
 }
@@ -96,28 +106,28 @@ void Player::Focus(D3DXVECTOR2 * position, D3DXVECTOR2 * size)
 
 }
 
-bool Player::CheckCollapse_justforfloor(Line * line)
+int Player::CheckCollapse_justforfloor(Line * line)
 {
 	if (line->CheckCollapse(animation->GetSprite()))
 	{
-		int val = line->GetYAxisWhereXIs(animation->Position().x);
+		val = line->GetYAxisWhereXIs(animation->Position().x);
 		velocity.y = 0.0f;
 		onGround = true;
-		return true;
+		return 1;
 	}
 	else
 	{
-		int val = line->GetYAxisWhereXIs(animation->Position().x);
-		if ((val > (-Height)) && (val < animation->Position().y - animation->TextureSize().y * 0.5f + 2.0f) && onGround)
+		val = line->GetYAxisWhereXIs(animation->Position().x);
+		if ((val < animation->Position().y - animation->TextureSize().y * 0.5f + 10.0f) && (val > animation->Position().y - animation->TextureSize().y * 0.5f - 2.0f))
 		{
 			velocity.y = 0.0f;
 			animation->Position(animation->Position().x, val + animation->TextureSize().y * 0.5f);
 			onGround = true;
-			return true;
+			return 2;
 		}
 		onGround = false;
 	}
-	return false;
+	return -1;
 }
 
 bool Player::CheckCollapse_justforsprite(Sprite * spr)

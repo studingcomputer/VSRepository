@@ -33,6 +33,8 @@ public:
 
 	void DrawBound(bool val);
 
+	void DrawCollision(bool val) { GetSprite()->DrawCollision(val); }
+
 	Clip* GetClip();
 	Sprite* GetSprite();
 
