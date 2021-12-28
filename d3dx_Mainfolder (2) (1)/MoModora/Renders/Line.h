@@ -3,7 +3,7 @@
 class Line
 {
 public:
-	Line(wstring shaderFile, D3DXVECTOR2& pos1, D3DXVECTOR2& pos2);
+	Line(wstring shaderFile, D3DXVECTOR2 pos1, D3DXVECTOR2 pos2);
 	~Line();
 
 	virtual void Update(D3DXMATRIX& V, D3DXMATRIX& P);
@@ -18,8 +18,8 @@ private:
 
 	void ResetEquation();
 
-	D3DXVECTOR2* position1;
-	D3DXVECTOR2* position2;
+	D3DXVECTOR2 position1;
+	D3DXVECTOR2 position2;
 
 	struct Vertex
 	{

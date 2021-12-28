@@ -185,6 +185,16 @@ void Clip::DrawBound(bool val)
 		frame->Image->DrawBound(val);
 }
 
+bool Clip::IsStopped()
+{
+	if (mode == PlayMode::End)
+	{
+		if (currentFrame >= frames.size())
+			return true;
+	}
+	return false;
+}
+
 Sprite * Clip::GetSprite()
 {
 	return frames[currentFrame]->Image;

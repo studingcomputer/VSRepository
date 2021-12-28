@@ -48,6 +48,7 @@ public:
 	void Render();
 
 	void DrawBound(bool val);
+	bool IsStopped();
 
 	Sprite* GetSprite();
 

@@ -78,9 +78,6 @@
     <ClCompile Include="Scene\Sonic.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Objects\Marker.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
     <ClCompile Include="Renders\Line.cpp">
       <Filter>Renders</Filter>
     </ClCompile>
@@ -167,9 +164,6 @@
     </ClInclude>
     <ClInclude Include="Scene\Sonic.h">
       <Filter>Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Objects\Marker.h">
-      <Filter>Objects</Filter>
     </ClInclude>
     <ClInclude Include="Renders\Line.h">
       <Filter>Renders</Filter>

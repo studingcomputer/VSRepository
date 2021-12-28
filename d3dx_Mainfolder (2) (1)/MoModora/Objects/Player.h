@@ -18,7 +18,11 @@ public:
 	int CheckCollapse_justforfloor(Line* line);
 	bool CheckCollapse_justforsprite(Sprite* spr);
 
+	void Animation_Playing();
+
 	bool RtOng() { return onGround; }
+
+	PlayerAct RtStatus() { return status; }
 
 private:
 	float moveSpeed;
@@ -28,6 +32,10 @@ private:
 
 	D3DXVECTOR2 velocity;
 	bool onGround = false;
+
+	PlayerAct status;
+
+	bool triggers[1] = {false};
 
 	float val;
 };

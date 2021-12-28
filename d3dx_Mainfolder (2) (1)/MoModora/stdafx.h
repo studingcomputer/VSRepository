@@ -68,3 +68,18 @@ extern ID3D11RenderTargetView* RTV;
 extern Keyboard* Key;
 extern CMouse* Mouse;
 extern Time* Timer;
+
+enum class PlayerAct
+{
+	Nothing = 1,
+	MovingRight,
+	MovingLeft,
+	Turning,
+	Breaking,
+	rising,
+	Falling,
+	Crouching,
+	Rising,
+	Rolling
+	//나중에 추가예정
+};

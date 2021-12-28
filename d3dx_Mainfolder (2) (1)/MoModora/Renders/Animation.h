@@ -31,6 +31,9 @@ public:
 	void Update(D3DXMATRIX& V, D3DXMATRIX& P);
 	void Render();
 
+	bool Clip_Check_IfEnd() { return clips[currentClip]->IsStopped(); }
+	UINT RtCurrentClip() { return currentClip; }
+
 	void DrawBound(bool val);
 
 	void DrawCollision(bool val) { GetSprite()->DrawCollision(val); }
