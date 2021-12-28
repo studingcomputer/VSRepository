@@ -49,16 +49,19 @@ void Sonic::Update()
 
 	if (Mouse->Down(0) == true)
 	{
-		if (onMarker)
+		bool trigger = false;
+		for (Marker* mark : markers)
 		{
-			onMarker = false;
-			onMarked = nullptr;
-		}
-		else
-		{
-			for (Marker* mark : markers)
+			if (Math::Round(mPos.x - mark->Position()->x) < 5, Math::Round(mPos.y - mark->Position()->y) < 5)
 			{
-				if (Math::Round(mPos.x - mark->Position()->x) < 5, Math::Round(mPos.y - mark->Position()->y) < 5)
+				if (onMarked != nullptr)
+				{
+					onMarker = false;
+					onMarked = nullptr;
+					trigger = true;
+					break;
+				}
+				else
 				{
 					//마우스가 마커를 클릭했을때
 					onMarker = true;
@@ -66,16 +69,16 @@ void Sonic::Update()
 					break;
 				}
 			}
-			if (onMarked == nullptr)
+		}
+		if (onMarked == nullptr && !trigger)
+		{
+			markers.push_back(new Marker(Shaders + L"009_Sprite.fx", mPos));
+			stack_++;
+			if (stack_ == 2)
 			{
-				markers.push_back(new Marker(Shaders + L"009_Sprite.fx", mPos));
-				stack_++;
-				if (stack_ == 2)
-				{
-					stack_ = 0;
-					// 첫번째 경우: 최근 생성된 마커의 수가 2개일 경우 그 2개의 마커 사이에 선을 생성
-					lines.push_back(new Line(Shaders + L"009_Sprite.fx", *(markers[markers.size() - 2]->Position()), *(markers[markers.size() - 1]->Position())));
-				}
+				stack_ = 0;
+				// 첫번째 경우: 최근 생성된 마커의 수가 2개일 경우 그 2개의 마커 사이에 선을 생성
+				lines.push_back(new Line(Shaders + L"009_Sprite.fx", *(markers[markers.size() - 2]->Position()), *(markers[markers.size() - 1]->Position())));
 			}
 		}
 		

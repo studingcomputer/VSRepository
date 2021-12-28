@@ -41,7 +41,7 @@ Player::Player(D3DXVECTOR2 position, D3DXVECTOR2 scale)
 	animation->Scale(scale);
 	animation->Play(0);
 
-	animation->DrawBound(true);
+	animation->DrawBound(false);
 }
 
 Player::~Player()
@@ -58,7 +58,7 @@ void Player::Update(D3DXMATRIX & V, D3DXMATRIX & P)
 		velocity.x = 0.0f;
 	if (!onGround)
 	{
-		velocity.y -= 9.8 * 0.00002;
+		velocity.y -= 9.8f * 0.00002f;
 		animation->DrawCollision(false);
 	}
 	else

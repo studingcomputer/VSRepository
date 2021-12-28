@@ -17,7 +17,7 @@ Line::Line(wstring shaderFile, D3DXVECTOR2& pos1, D3DXVECTOR2& pos2)
 		position2 = &pos1;
 	}
 
-	shader = new Shader(shaderFile);
+	shader = new Shader(Shaders + L"014_Bounding.fx");
 	vertices[0].Position = D3DXVECTOR3(position1->x, position1->y, 0.0f);
 	vertices[1].Position = D3DXVECTOR3(position2->x, position2->y, 0.0f);
 
@@ -64,7 +64,8 @@ void Line::Update(D3DXMATRIX & V, D3DXMATRIX & P)
 	D3DXMATRIX S, T;
 
 	D3DXMatrixScaling(&S, 1.0f, 1.0f, 1.0f);
-	D3DXMatrixTranslation(&T, position1->x + Math::Round(position1->x - position2->x), GetYAxisWhereXIs(position1->x + Math::Round(position1->x - position2->x)), 0);
+	//D3DXMatrixTranslation(&T, position1->x + Math::Round(position1->x - position2->x), GetYAxisWhereXIs(position1->x + Math::Round(position1->x - position2->x)), 0);
+	D3DXMatrixTranslation(&T, 0.0f, 0.0f, 0.0f);
 
 	world = S * T;
 
@@ -76,12 +77,13 @@ void Line::Render()
 	UINT stride = sizeof(Vertex);
 	UINT offset = 0;
 
-	DeviceContext->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset); 
-	DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
+	DeviceContext->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
+	//DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
+	DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 
 
 
-	shader->Draw(0, 0, 5);
+	shader->Draw(0, isContactHasOccured ? 1 : 0, 5);
 }
 
 bool Line::CheckCollapse(Sprite * input)
