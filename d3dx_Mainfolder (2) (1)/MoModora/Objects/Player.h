@@ -2,6 +2,13 @@
 #include "Viewer/IFollowing.h"
 #include "Renders/Line.h"
 
+#define LRMove 0
+#define BreakMove 1
+
+#define LEFT true
+#define RIGHT false
+
+
 class Player : public IFollowing
 {
 public:
@@ -35,7 +42,9 @@ private:
 
 	PlayerAct status;
 
-	bool triggers[1] = {false};
+	bool triggers[2] = {false, false};
+
+	bool playerVec = LEFT;
 
 	float val;
 };

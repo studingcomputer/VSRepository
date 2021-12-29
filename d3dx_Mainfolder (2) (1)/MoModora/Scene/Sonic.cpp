@@ -63,7 +63,7 @@ void Sonic::Render()
 	ImGui::LabelText("Position", "%.0f, %.0f", mPos.x, mPos.y);
 	ImGui::LabelText("P_Position", "%.2f, %.2f", player->GetSprite()->Position().x, player->GetSprite()->Position().y);
 	ImGui::LabelText("P_OnGround", "%s", player->RtOng() ? "true" : "false");
-	ImGui::LabelText("P_Status", "%d", player->RtStatus());
+	ImGui::LabelText("P_Status", "%d", (PlayerAct)player->RtStatus());
 
 	backGround->Render();
 	player->Render();

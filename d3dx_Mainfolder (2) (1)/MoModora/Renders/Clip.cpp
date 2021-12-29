@@ -189,7 +189,7 @@ bool Clip::IsStopped()
 {
 	if (mode == PlayMode::End)
 	{
-		if (currentFrame >= frames.size())
+		if (currentFrame >= frames.size() - 1)
 			return true;
 	}
 	return false;
