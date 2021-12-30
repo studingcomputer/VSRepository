@@ -76,10 +76,10 @@ enum class PlayerAct
 	MovingLeft,
 	Turning,
 	Breaking,
-	rising,
+	Rising,
 	Falling,
 	Crouching,
-	Rising,
-	Rolling
+	Rolling,
+	Jumping
 	//나중에 추가예정
 };

@@ -127,7 +127,7 @@ void Clip::Play(UINT startFrame)
 void Clip::Stop()
 {
 	bPlay = false;
-	currentFrame = 0;
+	currentFrame -= 1;
 
 }
 
@@ -149,7 +149,7 @@ void Clip::Update(D3DXMATRIX & V, D3DXMATRIX & P)
 				{
 					currentFrame++;
 
-					if (currentFrame >= frames.size())
+					if (currentFrame % frames.size() == 0 && currentFrame != 0)
 						Stop();
 				}
 				break;
@@ -177,6 +177,8 @@ void Clip::Render()
 {
 	Frame* frame = frames[currentFrame];
 	frame->Image->Render();
+
+	ImGui::LabelText("currentFrame", "%d", currentFrame);
 }
 
 void Clip::DrawBound(bool val)

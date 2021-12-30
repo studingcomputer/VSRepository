@@ -170,6 +170,48 @@ Player::Player(D3DXVECTOR2 position, D3DXVECTOR2 scale)
 		animation->AddClip(clip);
 	}
 
+	//Crouch, 5번째
+	{
+		clip = new Clip(PlayMode::End);
+		a = 17;
+		b = 1052;
+		c = 18;
+		d = 28;
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+		a = 66;
+		b = 1055;
+		c = 18;
+		d = 25;
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+		a = 115;
+		b = 1056;
+		c = 19;
+		d = 24;
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+		a = 164;
+		b = 1056;
+		c = 19;
+		d = 24;
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+		animation->AddClip(clip);
+	}
+
+	//Rise, 6번째
+	{
+		clip = new Clip(PlayMode::End);
+		a = 15;
+		b = 1112;
+		c = 20;
+		d = 31;
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+		a = 65;
+		b = 1108;
+		c = 19;
+		d = 35;
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+		animation->AddClip(clip);
+	}
+
 	animation->Position(position);
 	animation->Scale(scale);
 	animation->Play(0);
@@ -196,38 +238,58 @@ void Player::Update(D3DXMATRIX & V, D3DXMATRIX & P)
 	{
 		animation->DrawCollision(true);
 	}
-	bool _key = (Key->Press('A') && Key->Press('D'));
-	if (Key->Press('A') && !_key)
+	Run_key = (Key->Press('A') && Key->Press('D'));
+	C_key = (status == PlayerAct::Falling || status == PlayerAct::Jumping || status == PlayerAct::Rolling);
+	Else_key = (status == PlayerAct::Crouching || status == PlayerAct::Rising);
+	if (Key->Down('C') && !C_key)//뭘 누르던지간에 c가 먼저 확인됨(현재로선)
 	{
-		if (status == PlayerAct::Turning || (playerVec != RIGHT))
+		if (status == PlayerAct::Crouching)
 		{
-			playerVec = RIGHT;
-			animation->RotationDegree(0, 0, 0);
+			status = PlayerAct::Rising;
+		}
+		else
+		{
+			status = PlayerAct::Crouching;
+			velocity.x = 0.0f;
+		}
+	}
+	else if (Key->Down(VK_SHIFT) && !Else_key)
+	{
+		
+		status = PlayerAct::Rolling;
+		velocity.x = (moveSpeed * 1.3 * Timer->Elapsed());//방향지정 필요함
+	}
+	else if (Key->Press('A') && !Run_key && !Else_key && !C_key)
+	{
+		if (status == PlayerAct::Turning || (playerVec != LEFT))
+		{
+			playerVec = LEFT;
 			status = PlayerAct::Turning;
+			velocity.x = 0.0f;
 		}
 		else
 		{
 			status = PlayerAct::MovingRight;
 			velocity.x = -(moveSpeed * Timer->Elapsed());
-			animation->RotationDegree(0, 180, 0);
 		}
+		animation->RotationDegree(0, 180, 0);
 	}
-	else if (Key->Press('D') && !_key)
+	else if (Key->Press('D') && !Run_key && !Else_key && !C_key)
 	{
-		if (status == PlayerAct::Turning || (playerVec != LEFT))
+		if (status == PlayerAct::Turning || (playerVec != RIGHT))
 		{
-			playerVec = LEFT;
-			animation->RotationDegree(0, 180, 0);
+			playerVec = RIGHT;
 			status = PlayerAct::Turning;
+			velocity.x = 0.0f;
 		}
 		else
 		{
 			status = PlayerAct::MovingLeft;
-			animation->RotationDegree(0, 0, 0);
 			velocity.x = moveSpeed * Timer->Elapsed();
 		}
+		animation->RotationDegree(0, 0, 0);
 	}
-	else
+	else if(!Else_key)
 	{
 		if (velocity.x != 0.0f)
 		{
@@ -259,13 +321,9 @@ void Player::Render()
 	ImGui::LabelText("val", "%.2f", val);
 	ImGui::LabelText("playerVec", "%s", playerVec ? "Left" : "Right");
 
-	ImGui::LabelText("TurnCheck", "%s", (status == PlayerAct::Turning) ? "true" : "false");
-	ImGui::LabelText("A_Check", "%s", (status == PlayerAct::Turning || (playerVec != RIGHT)) ? "true" : "false");
-	ImGui::LabelText("D_Check", "%s", (status == PlayerAct::Turning || (playerVec != LEFT)) ? "true" : "false");
+	ImGui::LabelText("BASIC_KEY", "%s", Basic_key ? "true" : "false");
+	ImGui::LabelText("ELSE_KEY", "%s", Else_key ? "true" : "false");
 
-
-	ImGui::LabelText("first", "%s", (val < animation->Position().y - animation->TextureSize().y * 0.5f + 10.0f) ? "true" : "false");
-	ImGui::LabelText("second", "%s", (val > animation->Position().y - animation->TextureSize().y * 0.5f - 2.0f) ? "true" : "false");
 	animation->Render();
 
 }
@@ -322,12 +380,15 @@ void Player::Animation_Playing()
 	{
 		if (animation->RtCurrentClip() == 1 && animation->Clip_Check_IfEnd())
 		{
-			animation->Play(2);
 			triggers[LRMove] = true;
 		}
 		if (!triggers[LRMove])
 		{
 			animation->Play(1);
+		}
+		else
+		{
+			animation->Play(2);
 		}
 	}
 	else if (status == PlayerAct::Turning)
@@ -348,6 +409,22 @@ void Player::Animation_Playing()
 			triggers[BreakMove] = false;
 		}
 		triggers[LRMove] = false;
+	}
+	else if (status == PlayerAct::Crouching)
+	{
+		animation->Play(5);
+		triggers[LRMove] = false;
+		triggers[BreakMove] = false;
+	}
+	else if (status == PlayerAct::Rising)
+	{
+		animation->Play(6);
+		if (animation->Clip_Check_IfEnd())
+		{
+			status = PlayerAct::Nothing;
+		}
+		triggers[LRMove] = false;
+		triggers[BreakMove] = false;
 	}
 	else
 	{

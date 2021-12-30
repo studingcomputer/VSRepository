@@ -45,6 +45,9 @@ private:
 	bool triggers[2] = {false, false};
 
 	bool playerVec = LEFT;
+	bool Run_key;
+	bool C_key;
+	bool Else_key;
 
 	float val;
 };
