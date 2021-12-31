@@ -9,7 +9,7 @@ Sonic::Sonic(SceneValues * values)
 {
 	wstring shaderFile = Shaders + L"009_Sprite.fx";
 
-	player = new Player(D3DXVECTOR2(-50, 200), D3DXVECTOR2(2.0f, 2.0f));
+	player = new Player(D3DXVECTOR2(-50, 100), D3DXVECTOR2(2.0f, 2.0f));
 
 	backGround = new Sprite(Textures + L"Stage3.png", shaderFile);
 	backGround->Position(0, 0);

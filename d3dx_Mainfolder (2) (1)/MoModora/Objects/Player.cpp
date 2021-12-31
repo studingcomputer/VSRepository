@@ -212,6 +212,53 @@ Player::Player(D3DXVECTOR2 position, D3DXVECTOR2 scale)
 		animation->AddClip(clip);
 	}
 
+	//Roll, 7번째
+	{
+		clip = new Clip(PlayMode::End);
+		a = 15;
+		b = 3550;
+		c = 23;
+		d = 34;
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+		a = 60;
+		b = 3550;
+		c = 32;
+		d = 34;
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+		a = 111;
+		b = 3550;
+		c = 24;
+		d = 34;
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+		a = 160;
+		b = 3550;
+		c = 25;
+		d = 34;
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+		a = 206;
+		b = 3550;
+		c = 30;
+		d = 34;
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+		a = 258;
+		b = 3550;
+		c = 23;
+		d = 34;
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+		a = 307;
+		b = 3550;
+		c = 20;
+		d = 34;
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+		a = 357;
+		b = 3550;
+		c = 21;
+		d = 34;
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+
+		animation->AddClip(clip);
+	}
+
 	animation->Position(position);
 	animation->Scale(scale);
 	animation->Play(0);
@@ -231,7 +278,7 @@ void Player::Update(D3DXMATRIX & V, D3DXMATRIX & P)
 	
 	if (!onGround)
 	{
-		velocity.y -= 9.8f * 0.00002f;
+		velocity.y -= 9.8f * Timer->Elapsed() * 0.005f;//조정 심하게 필요(wndml)
 		animation->DrawCollision(false);
 	}
 	else
@@ -240,7 +287,7 @@ void Player::Update(D3DXMATRIX & V, D3DXMATRIX & P)
 	}
 	Run_key = (Key->Press('A') && Key->Press('D'));
 	C_key = (status == PlayerAct::Falling || status == PlayerAct::Jumping || status == PlayerAct::Rolling);
-	Else_key = (status == PlayerAct::Crouching || status == PlayerAct::Rising);
+	Else_key = (status == PlayerAct::Crouching || status == PlayerAct::Rising || status == PlayerAct::Turning);
 	if (Key->Down('C') && !C_key)//뭘 누르던지간에 c가 먼저 확인됨(현재로선)
 	{
 		if (status == PlayerAct::Crouching)
@@ -253,11 +300,17 @@ void Player::Update(D3DXMATRIX & V, D3DXMATRIX & P)
 			velocity.x = 0.0f;
 		}
 	}
-	else if (Key->Down(VK_SHIFT) && !Else_key)
+	else if (Key->Down(VK_SHIFT) && !Else_key && !C_key)
 	{
-		
 		status = PlayerAct::Rolling;
-		velocity.x = (moveSpeed * 1.3 * Timer->Elapsed());//방향지정 필요함
+		//velocity.x = (velocity.x / Math::Round(velocity.x)) * (moveSpeed * 1.3 * Timer->Elapsed());//방향지정 필요함
+		isCharacterInvincibility = true;
+	}
+	else if (Key->Down(VK_SPACE) && !Else_key)
+	{
+		status = PlayerAct::Jumping;
+		velocity.y = moveSpeed * Timer->Elapsed();
+		
 	}
 	else if (Key->Press('A') && !Run_key && !Else_key && !C_key)
 	{
@@ -289,7 +342,7 @@ void Player::Update(D3DXMATRIX & V, D3DXMATRIX & P)
 		}
 		animation->RotationDegree(0, 0, 0);
 	}
-	else if(!Else_key)
+	else if(!Else_key && !C_key)
 	{
 		if (velocity.x != 0.0f)
 		{
@@ -320,6 +373,7 @@ void Player::Render()
 	ImGui::SliderFloat("Move Speed", &moveSpeed, 50, 400);
 	ImGui::LabelText("val", "%.2f", val);
 	ImGui::LabelText("playerVec", "%s", playerVec ? "Left" : "Right");
+	ImGui::LabelText("Velocity_X", "%.2f", velocity.x);
 
 	ImGui::LabelText("BASIC_KEY", "%s", C_key ? "true" : "false");
 	ImGui::LabelText("ELSE_KEY", "%s", Else_key ? "true" : "false");
@@ -375,60 +429,86 @@ bool Player::CheckCollapse_justforsprite(Sprite * spr)
 
 void Player::Animation_Playing()
 {
-	//animation->Play(bMove ? 1 : 0);
-	if (status == PlayerAct::MovingRight || status == PlayerAct::MovingLeft)
+	switch (status)
 	{
-		if (animation->RtCurrentClip() == 1 && animation->Clip_Check_IfEnd())
-		{
+		case PlayerAct::Nothing:
+			triggers[LRMove] = false;
+			triggers[BreakMove] = false;
+			animation->Play(0);
+			break;
+
+		case PlayerAct::MovingRight:
+		case PlayerAct::MovingLeft:
+			if (animation->RtCurrentClip() == 1 && animation->Clip_Check_IfEnd())
+			{
+				triggers[LRMove] = true;
+			}
+			if (!triggers[LRMove])
+			{
+				animation->Play(1);
+			}
+			else
+			{
+				animation->Play(2);
+			}
+			break;
+
+		case PlayerAct::Turning:
+			animation->Play(4);
+			if (animation->Clip_Check_IfEnd())
+			{
+				triggers[BreakMove] = false;
+				status = PlayerAct::Nothing;
+			}
 			triggers[LRMove] = true;
-		}
-		if (!triggers[LRMove])
-		{
-			animation->Play(1);
-		}
-		else
-		{
-			animation->Play(2);
-		}
-	}
-	else if (status == PlayerAct::Turning)
-	{
-		animation->Play(4);
-		if (animation->Clip_Check_IfEnd())
-		{
+			break;
+
+		case PlayerAct::Breaking:
+			animation->Play(3);
+			if (animation->Clip_Check_IfEnd())
+			{
+				triggers[BreakMove] = false;
+			}
+			triggers[LRMove] = false;
+			break;
+
+		case PlayerAct::Rising:
+			animation->Play(6);
+			if (animation->Clip_Check_IfEnd())
+			{
+				status = PlayerAct::Nothing;
+			}
+			triggers[LRMove] = false;
 			triggers[BreakMove] = false;
-			status = PlayerAct::Nothing;
-		}
-		triggers[LRMove] = true;
-	}
-	else if (status == PlayerAct::Breaking)
-	{
-		animation->Play(3);
-		if (animation->Clip_Check_IfEnd())
-		{
+			break;
+
+		case PlayerAct::Falling:
+			break;
+
+		case PlayerAct::Crouching:
+			animation->Play(5);
+			triggers[LRMove] = false;
 			triggers[BreakMove] = false;
-		}
-		triggers[LRMove] = false;
-	}
-	else if (status == PlayerAct::Crouching)
-	{
-		animation->Play(5);
-		triggers[LRMove] = false;
-		triggers[BreakMove] = false;
-	}
-	else if (status == PlayerAct::Rising)
-	{
-		animation->Play(6);
-		if (animation->Clip_Check_IfEnd())
-		{
-			status = PlayerAct::Nothing;
-		}
-		triggers[LRMove] = false;
-		triggers[BreakMove] = false;
-	}
-	else
-	{
-		triggers[LRMove] = false;
-		animation->Play(0);
+			break;
+
+		case PlayerAct::Rolling:
+			animation->Play(7);
+			if (playerVec == LEFT)
+				velocity.x = -(moveSpeed * 1.3f * Timer->Elapsed());
+			else
+				velocity.x = moveSpeed * 1.3f * Timer->Elapsed();
+			if (animation->Clip_Check_IfEnd())
+			{
+				status = PlayerAct::Nothing;
+				isCharacterInvincibility = false;
+				velocity.x = 0.0f;
+			}
+			triggers[LRMove] = false;
+			triggers[BreakMove] = false;
+			break;
+
+		case PlayerAct::Jumping:
+			break;
+
 	}
 }

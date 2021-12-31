@@ -31,6 +31,8 @@ public:
 
 	PlayerAct RtStatus() { return status; }
 
+	bool RtCharacterInvincibility() { return isCharacterInvincibility; }
+
 private:
 	float moveSpeed;
 	Animation* animation;
@@ -44,10 +46,15 @@ private:
 
 	bool triggers[2] = {false, false};
 
-	bool playerVec = LEFT;
+	bool playerVec = RIGHT;
 	bool Run_key;
 	bool C_key;
 	bool Else_key;
+
+	bool isCharacterInvincibility = false; // 무적판정
+
+	int jumpStack = 0;
+	float jumpAn = 0.0f;
 
 	float val;
 };
