@@ -321,7 +321,7 @@ void Player::Render()
 	ImGui::LabelText("val", "%.2f", val);
 	ImGui::LabelText("playerVec", "%s", playerVec ? "Left" : "Right");
 
-	ImGui::LabelText("BASIC_KEY", "%s", Basic_key ? "true" : "false");
+	ImGui::LabelText("BASIC_KEY", "%s", C_key ? "true" : "false");
 	ImGui::LabelText("ELSE_KEY", "%s", Else_key ? "true" : "false");
 
 	animation->Render();
