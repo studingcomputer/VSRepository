@@ -259,6 +259,60 @@ Player::Player(D3DXVECTOR2 position, D3DXVECTOR2 scale)
 		animation->AddClip(clip);
 	}
 
+	//Jump, 8번째
+	{
+		clip = new Clip(PlayMode::End);
+		a = 11;
+		b = 1704;
+		c = 24;
+		d = 37;
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+		a = 61;
+		b = 1704;
+		c = 23;
+		d = 37;
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+		a = 110;
+		b = 1704;
+		c = 23;
+		d = 37;
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+
+		animation->AddClip(clip);
+	}
+
+	//Fall, 9번째
+	{
+		clip = new Clip(PlayMode::End);
+		a = 12;
+		b = 1766;
+		c = 24;
+		d = 39;
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+		a = 61;
+		b = 1766;
+		c = 25;
+		d = 39;
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+		a = 112;
+		b = 1765;
+		c = 24;
+		d = 40;
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+		a = 161;
+		b = 1765;
+		c = 24;
+		d = 40;
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+		a = 210;
+		b = 1765;
+		c = 24;
+		d = 40;
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+
+		animation->AddClip(clip);
+	}
+	
 	animation->Position(position);
 	animation->Scale(scale);
 	animation->Play(0);
@@ -278,12 +332,14 @@ void Player::Update(D3DXMATRIX & V, D3DXMATRIX & P)
 	
 	if (!onGround)
 	{
-		velocity.y -= 9.8f * 0.00002;//조정 심하게 필요(wndml)
-		animation->DrawCollision(false);
+		velocity.y -= 9.8f * 0.00002;//조정 심하게 필요(wndml) 
+		if(velocity.y < -0.05)
+			status = PlayerAct::Falling;
 	}
 	else
 	{
-		animation->DrawCollision(true);
+		if (status == PlayerAct::Jumping)
+			status = PlayerAct::Nothing;
 	}
 	Run_key = (Key->Press('A') && Key->Press('D'));
 	C_key = (status == PlayerAct::Falling || status == PlayerAct::Jumping || status == PlayerAct::Rolling);
@@ -308,9 +364,9 @@ void Player::Update(D3DXMATRIX & V, D3DXMATRIX & P)
 	}
 	else if (Key->Down(VK_SPACE) && !Else_key)
 	{
+		onGround = false;
 		status = PlayerAct::Jumping;
-		velocity.y = moveSpeed * Timer->Elapsed();
-		
+		velocity.y = moveSpeed * 0.0005;
 	}
 	else if (Key->Press('A') && !Run_key && !Else_key && !C_key)
 	{
@@ -373,7 +429,7 @@ void Player::Render()
 	ImGui::SliderFloat("Move Speed", &moveSpeed, 50, 400);
 	ImGui::LabelText("val", "%.2f", val);
 	ImGui::LabelText("playerVec", "%s", playerVec ? "Left" : "Right");
-	ImGui::LabelText("Velocity_X", "%.2f", velocity.x);
+	ImGui::LabelText("Velocity", "%.2f, %.2f", velocity.x, velocity.y);
 
 	ImGui::LabelText("BASIC_KEY", "%s", C_key ? "true" : "false");
 	ImGui::LabelText("ELSE_KEY", "%s", Else_key ? "true" : "false");
@@ -391,24 +447,27 @@ void Player::Focus(D3DXVECTOR2 * position, D3DXVECTOR2 * size)
 
 int Player::CheckCollapse_justforfloor(Line * line)
 {
-	if (line->CheckCollapse(animation->GetSprite()))
+	if (status != PlayerAct::Jumping)
 	{
-		val = line->GetYAxisWhereXIs(animation->Position().x);
-		velocity.y = 0.0f;
-		onGround = true;
-		return 1;
-	}
-	else
-	{
-		val = line->GetYAxisWhereXIs(animation->Position().x);
-		if ((val < animation->Position().y - animation->TextureSize().y * 0.5f + 10.0f) && (val > animation->Position().y - animation->TextureSize().y * 0.5f - 2.0f))
+		if (line->CheckCollapse(animation->GetSprite()))
 		{
+			val = line->GetYAxisWhereXIs(animation->Position().x);
 			velocity.y = 0.0f;
-			animation->Position(animation->Position().x, val + animation->TextureSize().y * 0.5f);
 			onGround = true;
-			return 2;
+			return 1;
 		}
-		onGround = false;
+		else
+		{
+			val = line->GetYAxisWhereXIs(animation->Position().x);
+			if ((val < animation->Position().y - animation->TextureSize().y * 0.5f + 10.0f) && (val > animation->Position().y - animation->TextureSize().y * 0.5f - 2.0f))
+			{
+				velocity.y = 0.0f;
+				animation->Position(animation->Position().x, val + animation->TextureSize().y * 0.5f);
+				onGround = true;
+				return 2;
+			}
+			onGround = false;
+		}
 	}
 	return -1;
 }
@@ -483,6 +542,9 @@ void Player::Animation_Playing()
 			break;
 
 		case PlayerAct::Falling:
+			animation->Play(9);
+			if (velocity.y == 0)
+				status = PlayerAct::Nothing;
 			break;
 
 		case PlayerAct::Crouching:
@@ -508,6 +570,7 @@ void Player::Animation_Playing()
 			break;
 
 		case PlayerAct::Jumping:
+			animation->Play(8);
 			break;
 
 	}
