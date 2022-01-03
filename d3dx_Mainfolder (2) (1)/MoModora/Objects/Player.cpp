@@ -278,7 +278,7 @@ void Player::Update(D3DXMATRIX & V, D3DXMATRIX & P)
 	
 	if (!onGround)
 	{
-		velocity.y -= 9.8f * Timer->Elapsed() * 0.005f;//조정 심하게 필요(wndml)
+		velocity.y -= 9.8f * 0.00002;//조정 심하게 필요(wndml)
 		animation->DrawCollision(false);
 	}
 	else
