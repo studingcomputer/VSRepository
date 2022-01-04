@@ -13,7 +13,7 @@ Player::Player(D3DXVECTOR2 position, D3DXVECTOR2 scale)
 	//Idle
 	{
 		clip = new Clip(PlayMode::Loop);
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, 74, 10, 74+41, 10 + 72), 1.0f);
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, 74, 10, 74 + 41, 10 + 72), 1.0f);
 		animation->AddClip(clip);
 	}
 
