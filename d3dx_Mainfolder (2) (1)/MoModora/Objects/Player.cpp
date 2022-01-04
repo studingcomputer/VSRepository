@@ -332,7 +332,7 @@ void Player::Update(D3DXMATRIX & V, D3DXMATRIX & P)
 	
 	if (!onGround)
 	{
-		velocity.y -= 9.8f * 0.00002;//조정 심하게 필요(wndml) 
+		velocity.y -= 9.8f * 0.00002;//조정 심하게 필요(wndml) (완료)
 		if(velocity.y < -0.05)
 			status = PlayerAct::Falling;
 	}
@@ -340,6 +340,8 @@ void Player::Update(D3DXMATRIX & V, D3DXMATRIX & P)
 	{
 		if (status == PlayerAct::Jumping)
 			status = PlayerAct::Nothing;
+		if (jumpStack != 0)
+			jumpStack = 0;
 	}
 	Run_key = (Key->Press('A') && Key->Press('D'));
 	C_key = (status == PlayerAct::Falling || status == PlayerAct::Jumping || status == PlayerAct::Rolling);
@@ -366,7 +368,7 @@ void Player::Update(D3DXMATRIX & V, D3DXMATRIX & P)
 	{
 		onGround = false;
 		status = PlayerAct::Jumping;
-		velocity.y = moveSpeed * 0.0005;
+		velocity.y = moveSpeed * 0.001;
 	}
 	else if (Key->Press('A') && !Run_key && !Else_key && !C_key)
 	{
