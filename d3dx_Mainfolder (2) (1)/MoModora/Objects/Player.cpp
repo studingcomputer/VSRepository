@@ -312,6 +312,95 @@ Player::Player(D3DXVECTOR2 position, D3DXVECTOR2 scale)
 
 		animation->AddClip(clip);
 	}
+
+	//LandHard, 10번째
+	{
+		clip = new Clip(PlayMode::End);
+		a = 14;
+		b = 3115;
+		c = 21;
+		d = 28;
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+		a = 63;
+		b = 3118;
+		c = 21;
+		d = 25;
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+		a = 112;
+		b = 3119;
+		c = 22;
+		d = 24;
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+		a = 161;
+		b = 3119;
+		c = 22;
+		d = 24;
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+		a = 210;
+		b = 3119;
+		c = 22;
+		d = 24;
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+		a = 259;
+		b = 3119;
+		c = 22;
+		d = 24;
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+		a = 308;
+		b = 3119;
+		c = 22;
+		d = 24;
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+		a = 357;
+		b = 3119;
+		c = 22;
+		d = 24;
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+		a = 406;
+		b = 3119;
+		c = 22;
+		d = 24;
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+		a = 454;
+		b = 3111;
+		c = 22;
+		d = 31;
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+		a = 506;
+		b = 3108;
+		c = 19;
+		d = 35;
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+
+		animation->AddClip(clip);
+	}
+
+	//LandSoft, 11번째
+	{
+		clip = new Clip(PlayMode::End);
+		a = 14;
+		b = 3177;
+		c = 24;
+		d = 29;
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+		a = 63;
+		b = 3178;
+		c = 24;
+		d = 28;
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+		a = 111;
+		b = 3175;
+		c = 24;
+		d = 28;
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+		a = 162;
+		b = 3171;
+		c = 19;
+		d = 35;
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+
+		animation->AddClip(clip);
+	}
 	
 	animation->Position(position);
 	animation->Scale(scale);
@@ -333,8 +422,11 @@ void Player::Update(D3DXMATRIX & V, D3DXMATRIX & P)
 	if (!onGround)
 	{
 		velocity.y -= 9.8f * 0.00002;//조정 심하게 필요(wndml) (완료)
-		if(velocity.y < -0.05)
+		if (velocity.y < -0.05 && status != PlayerAct::Falling)
+		{
 			status = PlayerAct::Falling;
+			WhereBegin_Fall = animation->Position().y;
+		}
 	}
 	else
 	{
@@ -343,77 +435,9 @@ void Player::Update(D3DXMATRIX & V, D3DXMATRIX & P)
 		if (jumpStack != 0)
 			jumpStack = 0;
 	}
-	Run_key = (Key->Press('A') && Key->Press('D'));
-	C_key = (status == PlayerAct::Falling || status == PlayerAct::Jumping || status == PlayerAct::Rolling);
-	Else_key = (status == PlayerAct::Crouching || status == PlayerAct::Rising || status == PlayerAct::Turning);
-	if (Key->Down('C') && !C_key)//뭘 누르던지간에 c가 먼저 확인됨(현재로선)
-	{
-		if (status == PlayerAct::Crouching)
-		{
-			status = PlayerAct::Rising;
-		}
-		else
-		{
-			status = PlayerAct::Crouching;
-			velocity.x = 0.0f;
-		}
-	}
-	else if (Key->Down(VK_SHIFT) && !Else_key && !C_key)
-	{
-		status = PlayerAct::Rolling;
-		//velocity.x = (velocity.x / Math::Round(velocity.x)) * (moveSpeed * 1.3 * Timer->Elapsed());//방향지정 필요함
-		isCharacterInvincibility = true;
-	}
-	else if (Key->Down(VK_SPACE) && !Else_key)
-	{
-		onGround = false;
-		status = PlayerAct::Jumping;
-		velocity.y = moveSpeed * 0.001;
-	}
-	else if (Key->Press('A') && !Run_key && !Else_key && !C_key)
-	{
-		if (status == PlayerAct::Turning || (playerVec != LEFT))
-		{
-			playerVec = LEFT;
-			status = PlayerAct::Turning;
-			velocity.x = 0.0f;
-		}
-		else
-		{
-			status = PlayerAct::MovingRight;
-			velocity.x = -(moveSpeed * Timer->Elapsed());
-		}
-		animation->RotationDegree(0, 180, 0);
-	}
-	else if (Key->Press('D') && !Run_key && !Else_key && !C_key)
-	{
-		if (status == PlayerAct::Turning || (playerVec != RIGHT))
-		{
-			playerVec = RIGHT;
-			status = PlayerAct::Turning;
-			velocity.x = 0.0f;
-		}
-		else
-		{
-			status = PlayerAct::MovingLeft;
-			velocity.x = moveSpeed * Timer->Elapsed();
-		}
-		animation->RotationDegree(0, 0, 0);
-	}
-	else if(!Else_key && !C_key)
-	{
-		if (velocity.x != 0.0f)
-		{
-			velocity.x = 0.0f;
-			status = PlayerAct::Breaking;
-			triggers[BreakMove] = true;
-		}
-		if (!triggers[BreakMove])
-		{
-			status = PlayerAct::Nothing;
-			velocity.x = 0.0f;
-		}
-	}
+
+	Key_Check();
+	
 
 	position.x += velocity.x;
 	position.y += velocity.y;
@@ -546,7 +570,13 @@ void Player::Animation_Playing()
 		case PlayerAct::Falling:
 			animation->Play(9);
 			if (velocity.y == 0)
-				status = PlayerAct::Nothing;
+			{
+				if (WhereBegin_Fall - animation->Position().y <= 100)
+					status = PlayerAct::LandSoft;
+				else
+					status = PlayerAct::LandHard;
+				onGround = true;
+			}
 			break;
 
 		case PlayerAct::Crouching:
@@ -575,5 +605,108 @@ void Player::Animation_Playing()
 			animation->Play(8);
 			break;
 
+		case PlayerAct::LandHard:
+			animation->Play(10);
+			if (animation->Clip_Check_IfEnd())
+			{
+				status = PlayerAct::Nothing;
+			}
+			break;
+
+		case PlayerAct::LandSoft:
+			animation->Play(11);
+			if (animation->Clip_Check_IfEnd())
+			{
+				status = PlayerAct::Nothing;
+			}
+			break;
+
+	}
+}
+
+void Player::Key_Check()
+{
+	Run_key = (Key->Press('A') && Key->Press('D'));
+	C_key = (status == PlayerAct::Falling || status == PlayerAct::Jumping || status == PlayerAct::Rolling);
+	Else_key = (status == PlayerAct::Crouching || status == PlayerAct::Rising || status == PlayerAct::Turning || status == PlayerAct::LandHard || status == PlayerAct::LandSoft);
+	if (Key->Down('C') && !C_key)//뭘 누르던지간에 c가 먼저 확인됨(현재로선)
+	{
+		if (status == PlayerAct::Crouching)
+		{
+			status = PlayerAct::Rising;
+		}
+		else
+		{
+			status = PlayerAct::Crouching;
+			velocity.x = 0.0f;
+		}
+	}
+	else if (Key->Down(VK_SHIFT) && !Else_key && !C_key)
+	{
+		status = PlayerAct::Rolling;
+		//velocity.x = (velocity.x / Math::Round(velocity.x)) * (moveSpeed * 1.3 * Timer->Elapsed());//방향지정 필요함
+		isCharacterInvincibility = true;
+	}
+	else if (Key->Down(VK_SPACE) && !Else_key)
+	{
+		onGround = false;
+		if (jumpStack < 2)
+		{
+			if (jumpStack == 1)
+			{
+				status = PlayerAct::Jumping;
+				velocity.y = moveSpeed * 0.0008;
+			}
+			else
+			{
+				status = PlayerAct::Jumping;
+				velocity.y = moveSpeed * 0.001;
+			}
+			jumpStack++;
+		}
+	}
+	else if (Key->Press('A') && !Run_key && !Else_key && !C_key)
+	{
+		if (status == PlayerAct::Turning || (playerVec != LEFT))
+		{
+			playerVec = LEFT;
+			status = PlayerAct::Turning;
+			velocity.x = 0.0f;
+		}
+		else
+		{
+			status = PlayerAct::MovingRight;
+			velocity.x = -(moveSpeed * Timer->Elapsed());
+		}
+		animation->RotationDegree(0, 180, 0);
+	}
+	else if (Key->Press('D') && !Run_key && !Else_key && !C_key)
+	{
+		if (status == PlayerAct::Turning || (playerVec != RIGHT))
+		{
+			playerVec = RIGHT;
+			status = PlayerAct::Turning;
+			velocity.x = 0.0f;
+		}
+		else
+		{
+			status = PlayerAct::MovingLeft;
+			velocity.x = moveSpeed * Timer->Elapsed();
+		}
+		animation->RotationDegree(0, 0, 0);
+	}
+	else if (!Else_key && !C_key)
+	{
+		if (velocity.x != 0.0f)
+		{
+			velocity.x = 0.0f;
+			status = PlayerAct::Breaking;
+			triggers[BreakMove] = true;
+		}
+		if (!triggers[BreakMove])
+		{
+			status = PlayerAct::Nothing;
+			velocity.x = 0.0f;
+		}
 	}
 }

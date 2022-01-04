@@ -26,6 +26,7 @@ public:
 	bool CheckCollapse_justforsprite(Sprite* spr);
 
 	void Animation_Playing();
+	void Key_Check();
 
 	bool RtOng() { return onGround; }
 
@@ -47,6 +48,7 @@ private:
 	bool triggers[2] = {false, false};
 
 	bool playerVec = RIGHT;
+
 	bool Run_key;
 	bool C_key;
 	bool Else_key;
@@ -54,7 +56,8 @@ private:
 	bool isCharacterInvincibility = false; // 무적판정
 
 	int jumpStack = 0;
-	float jumpAn = 0.0f;
+
+	float WhereBegin_Fall = 0.0f;
 
 	float val;
 };

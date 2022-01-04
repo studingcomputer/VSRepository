@@ -80,6 +80,8 @@ enum class PlayerAct
 	Falling,
 	Crouching,
 	Rolling,
-	Jumping
+	Jumping,
+	LandHard,
+	LandSoft
 	//나중에 추가예정
 };
