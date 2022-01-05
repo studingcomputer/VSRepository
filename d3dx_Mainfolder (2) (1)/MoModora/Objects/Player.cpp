@@ -14,6 +14,9 @@ Player::Player(D3DXVECTOR2 position, D3DXVECTOR2 scale)
 	Clip* clip;
 	float clipSpeed1 = 0.1f;
 	float clipSpeed2 = 0.13f;//idle
+	float clipSpeed3 = 0.03f;//landhard
+	float clipSpeed4 = 0.05f;//landsoft
+
 	//Idle, 0번째
 	{
 		clip = new Clip(PlayMode::Loop);
@@ -320,57 +323,57 @@ Player::Player(D3DXVECTOR2 position, D3DXVECTOR2 scale)
 		b = 3115;
 		c = 21;
 		d = 28;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed3);
 		a = 63;
 		b = 3118;
 		c = 21;
 		d = 25;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed3);
 		a = 112;
 		b = 3119;
 		c = 22;
 		d = 24;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed3);
 		a = 161;
 		b = 3119;
 		c = 22;
 		d = 24;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed3);
 		a = 210;
 		b = 3119;
 		c = 22;
 		d = 24;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed3);
 		a = 259;
 		b = 3119;
 		c = 22;
 		d = 24;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed3);
 		a = 308;
 		b = 3119;
 		c = 22;
 		d = 24;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed3);
 		a = 357;
 		b = 3119;
 		c = 22;
 		d = 24;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed3);
 		a = 406;
 		b = 3119;
 		c = 22;
 		d = 24;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed3);
 		a = 454;
 		b = 3111;
 		c = 22;
 		d = 31;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed3);
 		a = 506;
 		b = 3108;
 		c = 19;
 		d = 35;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed3);
 
 		animation->AddClip(clip);
 	}
@@ -382,22 +385,22 @@ Player::Player(D3DXVECTOR2 position, D3DXVECTOR2 scale)
 		b = 3177;
 		c = 24;
 		d = 29;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed4);
 		a = 63;
 		b = 3178;
 		c = 24;
 		d = 28;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed4);
 		a = 111;
 		b = 3175;
 		c = 24;
 		d = 28;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed4);
 		a = 162;
 		b = 3171;
 		c = 19;
 		d = 35;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed4);
 
 		animation->AddClip(clip);
 	}
@@ -422,6 +425,7 @@ void Player::Update(D3DXMATRIX & V, D3DXMATRIX & P)
 	if (!onGround)
 	{
 		velocity.y -= 9.8f * 0.00002;//조정 심하게 필요(wndml) (완료)
+		//velocity.y -= 9.8f * 0.000002;
 		if (velocity.y < -0.05 && status != PlayerAct::Falling)
 		{
 			status = PlayerAct::Falling;
@@ -485,7 +489,7 @@ int Player::CheckCollapse_justforfloor(Line * line)
 		else
 		{
 			val = line->GetYAxisWhereXIs(animation->Position().x);
-			if ((val < animation->Position().y - animation->TextureSize().y * 0.5f + 10.0f) && (val > animation->Position().y - animation->TextureSize().y * 0.5f - 2.0f))
+			if ((val < animation->Position().y - animation->TextureSize().y * 0.5f + 10.0f) && (val > animation->Position().y - animation->TextureSize().y * 0.5f - 10.0f))// +- 10 오차범위까지 처리
 			{
 				velocity.y = 0.0f;
 				animation->Position(animation->Position().x, val + animation->TextureSize().y * 0.5f);
@@ -605,7 +609,21 @@ void Player::Animation_Playing()
 			animation->Play(8);
 			break;
 
+			//land 알고리즘
+			/*
+			1. 바닥에 닿으면, 일단 10애니메이션으로 초기화시켜주는 과정에서 10이 아니었다면 좌푯값을 재설정(바닥에 붙도록)
+			2. 그 뒤는 앉았다 일어나는 건데, 그 과정에서 선에 빠지지 않도록 잘 조정해주어야 함.(제작중)
+			3. 서는 모션까지 전부 완료시 idle 상태로 전환
+			*/
 		case PlayerAct::LandHard:
+			velocity.x = 0.0f;
+			velocity.y = 0.0f;
+			if (animation->RtCurrentClip() != 10)
+			{
+				S = animation->GetSprite()->TextureSize().y;
+				animation->Play(10);
+				animation->Position(animation->Position().x, animation->Position().y - (S - 2 * animation->GetSprite()->TextureSize().y) * 0.5f);
+			}
 			animation->Play(10);
 			if (animation->Clip_Check_IfEnd())
 			{
@@ -614,6 +632,14 @@ void Player::Animation_Playing()
 			break;
 
 		case PlayerAct::LandSoft:
+			velocity.x = 0.0f;
+			velocity.y = 0.0f;
+			if (animation->RtCurrentClip() != 11)
+			{
+				S = animation->GetSprite()->TextureSize().y;//이전 y크기
+				animation->Play(11);
+				animation->Position(animation->Position().x, animation->Position().y - (S - 2 * animation->GetSprite()->TextureSize().y) * 0.5f);//이전 y 크기에 현재 y 크기를 빼면 변화량이 나옴, 이를 반으로 나누어 빼면 변화량 완성
+			}
 			animation->Play(11);
 			if (animation->Clip_Check_IfEnd())
 			{

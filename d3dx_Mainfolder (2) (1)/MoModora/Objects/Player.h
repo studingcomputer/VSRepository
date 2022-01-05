@@ -60,4 +60,6 @@ private:
 	float WhereBegin_Fall = 0.0f;
 
 	float val;
+
+	float S;
 };
