@@ -38,6 +38,8 @@ private:
 	float moveSpeed;
 	Animation* animation;
 
+	void SetClip(wstring shaderFile, wstring textureFile, Clip* clip, int x, int y, int width, int height, float speed);
+
 	D3DXVECTOR2 focusOffset;
 
 	D3DXVECTOR2 velocity;

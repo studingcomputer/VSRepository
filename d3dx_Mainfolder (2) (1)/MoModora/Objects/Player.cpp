@@ -9,255 +9,93 @@ Player::Player(D3DXVECTOR2 position, D3DXVECTOR2 scale)
 	wstring spriteFile = Textures + L"Momodora/86754.png";
 	wstring shaderFile = Shaders + L"009_Sprite.fx";
 
-	int a, b, c, d;
-
 	Clip* clip;
 	float clipSpeed1 = 0.1f;
 	float clipSpeed2 = 0.13f;//idle
 	float clipSpeed3 = 0.03f;//landhard
-	float clipSpeed4 = 0.05f;//landsoft
+	float clipSpeed4 = 0.08f;//landsoft
 
 	//Idle, 0번째
 	{
 		clip = new Clip(PlayMode::Loop);
-		a = 16;
-		b = 2209;
-		c = 18;
-		d = 37;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a+c, b+d), clipSpeed2);
-		a = 65;
-		b = 2209;
-		c = 18;
-		d = 37;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed2);
-		a = 113;
-		b = 2209;
-		c = 21;
-		d = 37;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed2);
-		a = 161;
-		b = 2209;
-		c = 23;
-		d = 37;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed2);
-		a = 210;
-		b = 2209;
-		c = 22;
-		d = 37;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed2);
-		a = 260;
-		b = 2209;
-		c = 20;
-		d = 37;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed2);
+		SetClip(shaderFile, spriteFile, clip, 16, 2209, 18, 37, clipSpeed2);
+		SetClip(shaderFile, spriteFile, clip, 65, 2209, 18, 37, clipSpeed2);
+		SetClip(shaderFile, spriteFile, clip, 113, 2209, 21, 37, clipSpeed2);
+		SetClip(shaderFile, spriteFile, clip, 161, 2209, 23, 37, clipSpeed2);
+		SetClip(shaderFile, spriteFile, clip, 210, 2209, 22, 37, clipSpeed2);
+		SetClip(shaderFile, spriteFile, clip, 260, 2209, 20, 37, clipSpeed2);
 		animation->AddClip(clip);
 	}
 
 	//Run, 1은 end, 2는 loop
 	{
 		clip = new Clip(PlayMode::End);
-		a = 16;
-		b = 854;
-		c = 19;
-		d = 37;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
-		a = 66;
-		b = 854;
-		c = 21;
-		d = 37;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+		SetClip(shaderFile, spriteFile, clip, 16, 854, 19, 37, clipSpeed1);
+		SetClip(shaderFile, spriteFile, clip, 66, 854, 21, 37, clipSpeed1);
 		animation->AddClip(clip);
 		clip = new Clip(PlayMode::Loop);
-		a = 110;
-		b = 854;
-		c = 28;
-		d = 35;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
-		a = 161;
-		b = 854;
-		c = 26;
-		d = 37;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
-		a = 213;
-		b = 855;
-		c = 19;
-		d = 36;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
-		a = 261;
-		b = 856;
-		c = 23;
-		d = 35;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
-		a = 306;
-		b = 854;
-		c = 27;
-		d = 35;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
-		a = 357;
-		b = 854;
-		c = 26;
-		d = 37;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
-		a = 408;
-		b = 854;
-		c = 26;
-		d = 37;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
-		a = 457;
-		b = 856;
-		c = 24;
-		d = 35;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+		SetClip(shaderFile, spriteFile, clip, 110, 854, 28, 35, clipSpeed1);
+		SetClip(shaderFile, spriteFile, clip, 161, 854, 26, 37, clipSpeed1);
+		SetClip(shaderFile, spriteFile, clip, 213, 855, 19, 36, clipSpeed1);
+		SetClip(shaderFile, spriteFile, clip, 261, 856, 23, 35, clipSpeed1);
+		SetClip(shaderFile, spriteFile, clip, 306, 854, 27, 35, clipSpeed1);
+		SetClip(shaderFile, spriteFile, clip, 357, 854, 26, 37, clipSpeed1);
+		SetClip(shaderFile, spriteFile, clip, 408, 854, 26, 37, clipSpeed1);
+		SetClip(shaderFile, spriteFile, clip, 457, 856, 24, 35, clipSpeed1);
 		animation->AddClip(clip);
 	}
 
 	//Break, 3번째
 	{
 		clip = new Clip(PlayMode::End);
-		a = 12;
-		b = 915;
-		c = 20;
-		d = 39;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
-		a = 60;
-		b = 916;
-		c = 20;
-		d = 38;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
-		a = 110;
-		b = 917;
-		c = 20;
-		d = 37;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
-		a = 160;
-		b = 918;
-		c = 22;
-		d = 36;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
-		a = 207;
-		b = 918;
-		c = 25;
-		d = 36;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
-		a = 258;
-		b = 920;
-		c = 20;
-		d = 34;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
-		a = 309;
-		b = 919;
-		c = 19;
-		d = 35;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+		SetClip(shaderFile, spriteFile, clip, 12, 915, 20, 39, clipSpeed1);
+		SetClip(shaderFile, spriteFile, clip, 60, 916, 20, 38, clipSpeed1);
+		SetClip(shaderFile, spriteFile, clip, 110, 917, 20, 37, clipSpeed1);
+		SetClip(shaderFile, spriteFile, clip, 160, 918, 22, 36, clipSpeed1);
+		SetClip(shaderFile, spriteFile, clip, 207, 918, 25, 36, clipSpeed1);
+		SetClip(shaderFile, spriteFile, clip, 258, 920, 20, 34, clipSpeed1);
+		SetClip(shaderFile, spriteFile, clip, 309, 919, 19, 35, clipSpeed1);
 		animation->AddClip(clip);
 	}
 
 	//Turn, 4번째
 	{
 		clip = new Clip(PlayMode::End);
-		a = 19;
-		b = 979;
-		c = 20;
-		d = 38;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
-		a = 64;
-		b = 981;
-		c = 22;
-		d = 36;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
-		a = 112;
-		b = 981;
-		c = 22;
-		d = 36;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+		SetClip(shaderFile, spriteFile, clip, 19, 979, 20, 38, clipSpeed1);
+		SetClip(shaderFile, spriteFile, clip, 64, 981, 22, 36, clipSpeed1);
+		SetClip(shaderFile, spriteFile, clip, 112, 981, 22, 36, clipSpeed1);
 		animation->AddClip(clip);
 	}
 
 	//Crouch, 5번째
 	{
 		clip = new Clip(PlayMode::End);
-		a = 17;
-		b = 1052;
-		c = 18;
-		d = 28;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
-		a = 66;
-		b = 1055;
-		c = 18;
-		d = 25;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
-		a = 115;
-		b = 1056;
-		c = 19;
-		d = 24;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
-		a = 164;
-		b = 1056;
-		c = 19;
-		d = 24;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+		SetClip(shaderFile, spriteFile, clip, 17, 1052, 18, 28, clipSpeed1);
+		SetClip(shaderFile, spriteFile, clip, 66, 1055, 18, 25, clipSpeed1);
+		SetClip(shaderFile, spriteFile, clip, 115, 1056, 19, 24, clipSpeed1);
+		SetClip(shaderFile, spriteFile, clip, 164, 1056, 19, 24, clipSpeed1);
 		animation->AddClip(clip);
 	}
 
 	//Rise, 6번째
 	{
 		clip = new Clip(PlayMode::End);
-		a = 15;
-		b = 1112;
-		c = 20;
-		d = 31;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
-		a = 65;
-		b = 1108;
-		c = 19;
-		d = 35;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+		SetClip(shaderFile, spriteFile, clip, 15, 1112, 20, 31, clipSpeed1);
+		SetClip(shaderFile, spriteFile, clip, 65, 1108, 19, 35, clipSpeed1);
 		animation->AddClip(clip);
 	}
 
 	//Roll, 7번째
 	{
 		clip = new Clip(PlayMode::End);
-		a = 15;
-		b = 3550;
-		c = 23;
-		d = 34;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
-		a = 60;
-		b = 3550;
-		c = 32;
-		d = 34;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
-		a = 111;
-		b = 3550;
-		c = 24;
-		d = 34;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
-		a = 160;
-		b = 3550;
-		c = 25;
-		d = 34;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
-		a = 206;
-		b = 3550;
-		c = 30;
-		d = 34;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
-		a = 258;
-		b = 3550;
-		c = 23;
-		d = 34;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
-		a = 307;
-		b = 3550;
-		c = 20;
-		d = 34;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
-		a = 357;
-		b = 3550;
-		c = 21;
-		d = 34;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+		SetClip(shaderFile, spriteFile, clip, 15, 3550, 23, 34, clipSpeed1);
+		SetClip(shaderFile, spriteFile, clip, 60, 3550, 32, 34, clipSpeed1);
+		SetClip(shaderFile, spriteFile, clip, 111, 3550, 24, 34, clipSpeed1);
+		SetClip(shaderFile, spriteFile, clip, 160, 3550, 25, 34, clipSpeed1);
+		SetClip(shaderFile, spriteFile, clip, 206, 3550, 30, 34, clipSpeed1);
+		SetClip(shaderFile, spriteFile, clip, 258, 3550, 23, 34, clipSpeed1);
+		SetClip(shaderFile, spriteFile, clip, 307, 3550, 20, 34, clipSpeed1);
+		SetClip(shaderFile, spriteFile, clip, 357, 3550, 21, 34, clipSpeed1);
 
 		animation->AddClip(clip);
 	}
@@ -265,21 +103,9 @@ Player::Player(D3DXVECTOR2 position, D3DXVECTOR2 scale)
 	//Jump, 8번째
 	{
 		clip = new Clip(PlayMode::End);
-		a = 11;
-		b = 1704;
-		c = 24;
-		d = 37;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
-		a = 61;
-		b = 1704;
-		c = 23;
-		d = 37;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
-		a = 110;
-		b = 1704;
-		c = 23;
-		d = 37;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+		SetClip(shaderFile, spriteFile, clip, 11, 1704, 24, 37, clipSpeed1);
+		SetClip(shaderFile, spriteFile, clip, 61, 1704, 23, 37, clipSpeed1);
+		SetClip(shaderFile, spriteFile, clip, 110, 1704, 23, 37, clipSpeed1);
 
 		animation->AddClip(clip);
 	}
@@ -287,31 +113,11 @@ Player::Player(D3DXVECTOR2 position, D3DXVECTOR2 scale)
 	//Fall, 9번째
 	{
 		clip = new Clip(PlayMode::End);
-		a = 12;
-		b = 1766;
-		c = 24;
-		d = 39;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
-		a = 61;
-		b = 1766;
-		c = 25;
-		d = 39;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
-		a = 112;
-		b = 1765;
-		c = 24;
-		d = 40;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
-		a = 161;
-		b = 1765;
-		c = 24;
-		d = 40;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
-		a = 210;
-		b = 1765;
-		c = 24;
-		d = 40;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed1);
+		SetClip(shaderFile, spriteFile, clip, 12, 1766, 24, 39, clipSpeed1);
+		SetClip(shaderFile, spriteFile, clip, 61, 1766, 25, 39, clipSpeed1);
+		SetClip(shaderFile, spriteFile, clip, 112, 1765, 24, 40, clipSpeed1);
+		SetClip(shaderFile, spriteFile, clip, 161, 1765, 24, 40, clipSpeed1);
+		SetClip(shaderFile, spriteFile, clip, 210, 1765, 24, 40, clipSpeed1);
 
 		animation->AddClip(clip);
 	}
@@ -319,61 +125,17 @@ Player::Player(D3DXVECTOR2 position, D3DXVECTOR2 scale)
 	//LandHard, 10번째
 	{
 		clip = new Clip(PlayMode::End);
-		a = 14;
-		b = 3115;
-		c = 21;
-		d = 28;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed3);
-		a = 63;
-		b = 3118;
-		c = 21;
-		d = 25;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed3);
-		a = 112;
-		b = 3119;
-		c = 22;
-		d = 24;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed3);
-		a = 161;
-		b = 3119;
-		c = 22;
-		d = 24;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed3);
-		a = 210;
-		b = 3119;
-		c = 22;
-		d = 24;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed3);
-		a = 259;
-		b = 3119;
-		c = 22;
-		d = 24;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed3);
-		a = 308;
-		b = 3119;
-		c = 22;
-		d = 24;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed3);
-		a = 357;
-		b = 3119;
-		c = 22;
-		d = 24;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed3);
-		a = 406;
-		b = 3119;
-		c = 22;
-		d = 24;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed3);
-		a = 454;
-		b = 3111;
-		c = 22;
-		d = 31;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed3);
-		a = 506;
-		b = 3108;
-		c = 19;
-		d = 35;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed3);
+		SetClip(shaderFile, spriteFile, clip, 14, 3115, 21, 28, clipSpeed3);
+		SetClip(shaderFile, spriteFile, clip, 63, 3118, 21, 25, clipSpeed3);
+		SetClip(shaderFile, spriteFile, clip, 112, 3119, 22, 24, clipSpeed3);
+		SetClip(shaderFile, spriteFile, clip, 161, 3119, 22, 24, clipSpeed3);
+		SetClip(shaderFile, spriteFile, clip, 210, 3119, 22, 24, clipSpeed3);
+		SetClip(shaderFile, spriteFile, clip, 259, 3119, 22, 24, clipSpeed3);
+		SetClip(shaderFile, spriteFile, clip, 308, 3119, 22, 24, clipSpeed3);
+		SetClip(shaderFile, spriteFile, clip, 357, 3119, 22, 24, clipSpeed3);
+		SetClip(shaderFile, spriteFile, clip, 406, 3119, 22, 24, clipSpeed3);
+		SetClip(shaderFile, spriteFile, clip, 454, 3111, 22, 31, clipSpeed3);
+		SetClip(shaderFile, spriteFile, clip, 506, 3108, 19, 35, clipSpeed3);
 
 		animation->AddClip(clip);
 	}
@@ -381,26 +143,10 @@ Player::Player(D3DXVECTOR2 position, D3DXVECTOR2 scale)
 	//LandSoft, 11번째
 	{
 		clip = new Clip(PlayMode::End);
-		a = 14;
-		b = 3177;
-		c = 24;
-		d = 29;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed4);
-		a = 63;
-		b = 3178;
-		c = 24;
-		d = 28;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed4);
-		a = 111;
-		b = 3175;
-		c = 24;
-		d = 28;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed4);
-		a = 162;
-		b = 3171;
-		c = 19;
-		d = 35;
-		clip->AddFrame(new Sprite(spriteFile, shaderFile, a, b, a + c, b + d), clipSpeed4);
+		SetClip(shaderFile, spriteFile, clip, 14, 3177, 24, 29, clipSpeed4);
+		SetClip(shaderFile, spriteFile, clip, 63, 3178, 24, 28, clipSpeed4);
+		SetClip(shaderFile, spriteFile, clip, 111, 3175, 24, 28, clipSpeed4);
+		SetClip(shaderFile, spriteFile, clip, 162, 3171, 19, 35, clipSpeed4);
 
 		animation->AddClip(clip);
 	}
@@ -638,7 +384,7 @@ void Player::Animation_Playing()
 			{
 				S = animation->GetSprite()->TextureSize().y;//이전 y크기
 				animation->Play(11);
-				animation->Position(animation->Position().x, animation->Position().y - (S - 2 * animation->GetSprite()->TextureSize().y) * 0.5f);//이전 y 크기에 현재 y 크기를 빼면 변화량이 나옴, 이를 반으로 나누어 빼면 변화량 완성
+				animation->Position(animation->Position().x, animation->Position().y - (S * 0.5f - animation->GetSprite()->TextureSize().y * 0.5f) );//이전 y 크기에 현재 y 크기를 빼면 변화량이 나옴, 이를 반으로 나누어 빼면 변화량 완성
 			}
 			animation->Play(11);
 			if (animation->Clip_Check_IfEnd())
@@ -735,4 +481,9 @@ void Player::Key_Check()
 			velocity.x = 0.0f;
 		}
 	}
+}
+
+void Player::SetClip(wstring shaderFile, wstring textureFile, Clip * clip, int x, int y, int width, int height, float speed)
+{
+	clip->AddFrame(new Sprite(textureFile, shaderFile, x, y, x + width, y + height), speed);
 }
