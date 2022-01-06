@@ -319,13 +319,12 @@ void Player::Animation_Playing()
 
 		case PlayerAct::Falling:
 			animation->Play(9);
-			if (velocity.y == 0)
+			if (onGround)
 			{
 				if (WhereBegin_Fall - animation->Position().y <= 100)
 					status = PlayerAct::LandSoft;
 				else
 					status = PlayerAct::LandHard;
-				onGround = true;
 			}
 			break;
 
@@ -363,7 +362,6 @@ void Player::Animation_Playing()
 			*/
 		case PlayerAct::LandHard:
 			velocity.x = 0.0f;
-			velocity.y = 0.0f;
 			if (animation->RtCurrentClip() != 10)
 			{
 				S = animation->GetSprite()->TextureSize().y;
@@ -379,12 +377,11 @@ void Player::Animation_Playing()
 
 		case PlayerAct::LandSoft:
 			velocity.x = 0.0f;
-			velocity.y = 0.0f;
 			if (animation->RtCurrentClip() != 11)
 			{
 				S = animation->GetSprite()->TextureSize().y;//이전 y크기
 				animation->Play(11);
-				animation->Position(animation->Position().x, animation->Position().y - (S * 0.5f - animation->GetSprite()->TextureSize().y * 0.5f) );//이전 y 크기에 현재 y 크기를 빼면 변화량이 나옴, 이를 반으로 나누어 빼면 변화량 완성
+				animation->Position(animation->Position().x, animation->Position().y - (S * 0.5f - animation->GetSprite()->TextureSize().y) );//이전 y 크기에 현재 y 크기를 빼면 변화량이 나옴, 이를 반으로 나누어 빼면 변화량 완성
 			}
 			animation->Play(11);
 			if (animation->Clip_Check_IfEnd())
