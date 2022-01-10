@@ -2,7 +2,7 @@
 #include "Player.h"
 
 Player::Player(D3DXVECTOR2 position, D3DXVECTOR2 scale)
-	:moveSpeed(200.0f), focusOffset(-180,-120), velocity(D3DXVECTOR2(0.0f,0.0f)), status(PlayerAct::Nothing)
+	:moveSpeed(200.0f), focusOffset(-180,-120), velocity(D3DXVECTOR2(0.0f,0.0f)), status(PlayerAct::Nothing), attackStatus(_Attack::Nothing)
 {
 	animation = new Animation;
 
@@ -15,145 +15,192 @@ Player::Player(D3DXVECTOR2 position, D3DXVECTOR2 scale)
 	float clipSpeed3 = 0.03f;//landhard
 	float clipSpeed4 = 0.08f;//landsoft
 
-	//Idle, 0번째
+	//player animation setting
 	{
-		clip = new Clip(PlayMode::Loop);
-		SetClip(shaderFile, spriteFile, clip, 16, 2209, 18, 37, clipSpeed2);
-		SetClip(shaderFile, spriteFile, clip, 65, 2209, 18, 37, clipSpeed2);
-		SetClip(shaderFile, spriteFile, clip, 113, 2209, 21, 37, clipSpeed2);
-		SetClip(shaderFile, spriteFile, clip, 161, 2209, 23, 37, clipSpeed2);
-		SetClip(shaderFile, spriteFile, clip, 210, 2209, 22, 37, clipSpeed2);
-		SetClip(shaderFile, spriteFile, clip, 260, 2209, 20, 37, clipSpeed2);
-		animation->AddClip(clip);
-	}
+		//Idle, 0번째
+		{
+			clip = new Clip(PlayMode::Loop);
+			SetClip(shaderFile, spriteFile, clip, 16, 2209, 18, 37, clipSpeed2);
+			SetClip(shaderFile, spriteFile, clip, 65, 2209, 18, 37, clipSpeed2);
+			SetClip(shaderFile, spriteFile, clip, 113, 2209, 21, 37, clipSpeed2);
+			SetClip(shaderFile, spriteFile, clip, 161, 2209, 23, 37, clipSpeed2);
+			SetClip(shaderFile, spriteFile, clip, 210, 2209, 22, 37, clipSpeed2);
+			SetClip(shaderFile, spriteFile, clip, 260, 2209, 20, 37, clipSpeed2);
+			animation->AddClip(clip);
+		}
 
-	//Run, 1은 end, 2는 loop
-	{
-		clip = new Clip(PlayMode::End);
-		SetClip(shaderFile, spriteFile, clip, 16, 854, 19, 37, clipSpeed1);
-		SetClip(shaderFile, spriteFile, clip, 66, 854, 21, 37, clipSpeed1);
-		animation->AddClip(clip);
-		clip = new Clip(PlayMode::Loop);
-		SetClip(shaderFile, spriteFile, clip, 110, 854, 28, 35, clipSpeed1);
-		SetClip(shaderFile, spriteFile, clip, 161, 854, 26, 37, clipSpeed1);
-		SetClip(shaderFile, spriteFile, clip, 213, 855, 19, 36, clipSpeed1);
-		SetClip(shaderFile, spriteFile, clip, 261, 856, 23, 35, clipSpeed1);
-		SetClip(shaderFile, spriteFile, clip, 306, 854, 27, 35, clipSpeed1);
-		SetClip(shaderFile, spriteFile, clip, 357, 854, 26, 37, clipSpeed1);
-		SetClip(shaderFile, spriteFile, clip, 408, 854, 26, 37, clipSpeed1);
-		SetClip(shaderFile, spriteFile, clip, 457, 856, 24, 35, clipSpeed1);
-		animation->AddClip(clip);
-	}
+		//Run, 1은 end, 2는 loop
+		{
+			clip = new Clip(PlayMode::End);
+			SetClip(shaderFile, spriteFile, clip, 16, 854, 19, 37, clipSpeed1);
+			SetClip(shaderFile, spriteFile, clip, 66, 854, 21, 37, clipSpeed1);
+			animation->AddClip(clip);
+			clip = new Clip(PlayMode::Loop);
+			SetClip(shaderFile, spriteFile, clip, 110, 854, 28, 35, clipSpeed1);
+			SetClip(shaderFile, spriteFile, clip, 161, 854, 26, 37, clipSpeed1);
+			SetClip(shaderFile, spriteFile, clip, 213, 855, 19, 36, clipSpeed1);
+			SetClip(shaderFile, spriteFile, clip, 261, 856, 23, 35, clipSpeed1);
+			SetClip(shaderFile, spriteFile, clip, 306, 854, 27, 35, clipSpeed1);
+			SetClip(shaderFile, spriteFile, clip, 357, 854, 26, 37, clipSpeed1);
+			SetClip(shaderFile, spriteFile, clip, 408, 854, 26, 37, clipSpeed1);
+			SetClip(shaderFile, spriteFile, clip, 457, 856, 24, 35, clipSpeed1);
+			animation->AddClip(clip);
+		}
 
-	//Break, 3번째
-	{
-		clip = new Clip(PlayMode::End);
-		SetClip(shaderFile, spriteFile, clip, 12, 915, 20, 39, clipSpeed1);
-		SetClip(shaderFile, spriteFile, clip, 60, 916, 20, 38, clipSpeed1);
-		SetClip(shaderFile, spriteFile, clip, 110, 917, 20, 37, clipSpeed1);
-		SetClip(shaderFile, spriteFile, clip, 160, 918, 22, 36, clipSpeed1);
-		SetClip(shaderFile, spriteFile, clip, 207, 918, 25, 36, clipSpeed1);
-		SetClip(shaderFile, spriteFile, clip, 258, 920, 20, 34, clipSpeed1);
-		SetClip(shaderFile, spriteFile, clip, 309, 919, 19, 35, clipSpeed1);
-		animation->AddClip(clip);
-	}
+		//Break, 3번째
+		{
+			clip = new Clip(PlayMode::End);
+			SetClip(shaderFile, spriteFile, clip, 12, 915, 20, 39, clipSpeed1);
+			SetClip(shaderFile, spriteFile, clip, 60, 916, 20, 38, clipSpeed1);
+			SetClip(shaderFile, spriteFile, clip, 110, 917, 20, 37, clipSpeed1);
+			SetClip(shaderFile, spriteFile, clip, 160, 918, 22, 36, clipSpeed1);
+			SetClip(shaderFile, spriteFile, clip, 207, 918, 25, 36, clipSpeed1);
+			SetClip(shaderFile, spriteFile, clip, 258, 920, 20, 34, clipSpeed1);
+			SetClip(shaderFile, spriteFile, clip, 309, 919, 19, 35, clipSpeed1);
+			animation->AddClip(clip);
+		}
 
-	//Turn, 4번째
-	{
-		clip = new Clip(PlayMode::End);
-		SetClip(shaderFile, spriteFile, clip, 19, 979, 20, 38, clipSpeed1);
-		SetClip(shaderFile, spriteFile, clip, 64, 981, 22, 36, clipSpeed1);
-		SetClip(shaderFile, spriteFile, clip, 112, 981, 22, 36, clipSpeed1);
-		animation->AddClip(clip);
-	}
+		//Turn, 4번째
+		{
+			clip = new Clip(PlayMode::End);
+			SetClip(shaderFile, spriteFile, clip, 19, 979, 20, 38, clipSpeed1);
+			SetClip(shaderFile, spriteFile, clip, 64, 981, 22, 36, clipSpeed1);
+			SetClip(shaderFile, spriteFile, clip, 112, 981, 22, 36, clipSpeed1);
+			animation->AddClip(clip);
+		}
 
-	//Crouch, 5번째
-	{
+		//Crouch, 5번째
+		{
 		clip = new Clip(PlayMode::End);
 		SetClip(shaderFile, spriteFile, clip, 17, 1052, 18, 28, clipSpeed1);
 		SetClip(shaderFile, spriteFile, clip, 66, 1055, 18, 25, clipSpeed1);
 		SetClip(shaderFile, spriteFile, clip, 115, 1056, 19, 24, clipSpeed1);
 		SetClip(shaderFile, spriteFile, clip, 164, 1056, 19, 24, clipSpeed1);
 		animation->AddClip(clip);
+		}
+
+		//Rise, 6번째
+		{
+			clip = new Clip(PlayMode::End);
+			SetClip(shaderFile, spriteFile, clip, 15, 1112, 20, 31, clipSpeed1);
+			SetClip(shaderFile, spriteFile, clip, 65, 1108, 19, 35, clipSpeed1);
+			animation->AddClip(clip);
+		}
+
+		//Roll, 7번째
+		{
+			clip = new Clip(PlayMode::End);
+			SetClip(shaderFile, spriteFile, clip, 15, 3550, 23, 34, clipSpeed1);
+			SetClip(shaderFile, spriteFile, clip, 60, 3550, 32, 34, clipSpeed1);
+			SetClip(shaderFile, spriteFile, clip, 111, 3550, 24, 34, clipSpeed1);
+			SetClip(shaderFile, spriteFile, clip, 160, 3550, 25, 34, clipSpeed1);
+			SetClip(shaderFile, spriteFile, clip, 206, 3550, 30, 34, clipSpeed1);
+			SetClip(shaderFile, spriteFile, clip, 258, 3550, 23, 34, clipSpeed1);
+			SetClip(shaderFile, spriteFile, clip, 307, 3550, 20, 34, clipSpeed1);
+			SetClip(shaderFile, spriteFile, clip, 357, 3550, 21, 34, clipSpeed1);
+
+			animation->AddClip(clip);
+		}
+
+		//Jump, 8번째
+		{
+			clip = new Clip(PlayMode::End);
+			SetClip(shaderFile, spriteFile, clip, 11, 1704, 24, 37, clipSpeed1);
+			SetClip(shaderFile, spriteFile, clip, 61, 1704, 23, 37, clipSpeed1);
+			SetClip(shaderFile, spriteFile, clip, 110, 1704, 23, 37, clipSpeed1);
+
+			animation->AddClip(clip);
+		}
+
+		//Fall, 9번째
+		{
+			clip = new Clip(PlayMode::End);
+			SetClip(shaderFile, spriteFile, clip, 12, 1766, 24, 39, clipSpeed1);
+			SetClip(shaderFile, spriteFile, clip, 61, 1766, 25, 39, clipSpeed1);
+			SetClip(shaderFile, spriteFile, clip, 112, 1765, 24, 40, clipSpeed1);
+			SetClip(shaderFile, spriteFile, clip, 161, 1765, 24, 40, clipSpeed1);
+			SetClip(shaderFile, spriteFile, clip, 210, 1765, 24, 40, clipSpeed1);
+
+			animation->AddClip(clip);
+		}
+
+		//LandHard, 10번째
+		{
+			clip = new Clip(PlayMode::End);
+			SetClip(shaderFile, spriteFile, clip, 14, 3115, 21, 28, clipSpeed3);
+			SetClip(shaderFile, spriteFile, clip, 63, 3118, 21, 25, clipSpeed3);
+			SetClip(shaderFile, spriteFile, clip, 112, 3119, 22, 24, clipSpeed3);
+			SetClip(shaderFile, spriteFile, clip, 161, 3119, 22, 24, clipSpeed3);
+			SetClip(shaderFile, spriteFile, clip, 210, 3119, 22, 24, clipSpeed3);
+			SetClip(shaderFile, spriteFile, clip, 259, 3119, 22, 24, clipSpeed3);
+			SetClip(shaderFile, spriteFile, clip, 308, 3119, 22, 24, clipSpeed3);
+			SetClip(shaderFile, spriteFile, clip, 357, 3119, 22, 24, clipSpeed3);
+			SetClip(shaderFile, spriteFile, clip, 406, 3119, 22, 24, clipSpeed3);
+			SetClip(shaderFile, spriteFile, clip, 454, 3111, 22, 31, clipSpeed3);
+			SetClip(shaderFile, spriteFile, clip, 506, 3108, 19, 35, clipSpeed3);
+
+			animation->AddClip(clip);
+		}
+
+		//LandSoft, 11번째
+		{
+			clip = new Clip(PlayMode::End);
+			SetClip(shaderFile, spriteFile, clip, 14, 3177, 24, 29, clipSpeed4);
+			SetClip(shaderFile, spriteFile, clip, 63, 3178, 24, 28, clipSpeed4);
+			SetClip(shaderFile, spriteFile, clip, 111, 3175, 24, 28, clipSpeed4);
+			SetClip(shaderFile, spriteFile, clip, 162, 3171, 19, 35, clipSpeed4);
+
+			animation->AddClip(clip);
+		}
+
+		//Attack1, 12번째
+		{
+			clip = new Clip(PlayMode::End);
+			SetClip(shaderFile, spriteFile, clip, 11, 87, 24, 36, clipSpeed4);
+			SetClip(shaderFile, spriteFile, clip, 58, 87, 26, 36, clipSpeed4);
+			SetClip(shaderFile, spriteFile, clip, 109, 91, 26, 36, clipSpeed4);
+			SetClip(shaderFile, spriteFile, clip, 163, 89, 27, 34, clipSpeed4);
+			SetClip(shaderFile, spriteFile, clip, 212, 89, 27, 34, clipSpeed4);
+			SetClip(shaderFile, spriteFile, clip, 261, 89, 27, 34, clipSpeed4);
+			SetClip(shaderFile, spriteFile, clip, 310, 89, 27, 34, clipSpeed4);
+
+			animation->AddClip(clip);
+		}
 	}
 
-	//Rise, 6번째
+	//attack animation setting
 	{
-		clip = new Clip(PlayMode::End);
-		SetClip(shaderFile, spriteFile, clip, 15, 1112, 20, 31, clipSpeed1);
-		SetClip(shaderFile, spriteFile, clip, 65, 1108, 19, 35, clipSpeed1);
-		animation->AddClip(clip);
-	}
+		//Nothing, 0번째
+		{
+			clip = new Clip(PlayMode::End);
+			SetClip(shaderFile, spriteFile, clip, 1, 390, 1, 1, clipSpeed4);
 
-	//Roll, 7번째
-	{
-		clip = new Clip(PlayMode::End);
-		SetClip(shaderFile, spriteFile, clip, 15, 3550, 23, 34, clipSpeed1);
-		SetClip(shaderFile, spriteFile, clip, 60, 3550, 32, 34, clipSpeed1);
-		SetClip(shaderFile, spriteFile, clip, 111, 3550, 24, 34, clipSpeed1);
-		SetClip(shaderFile, spriteFile, clip, 160, 3550, 25, 34, clipSpeed1);
-		SetClip(shaderFile, spriteFile, clip, 206, 3550, 30, 34, clipSpeed1);
-		SetClip(shaderFile, spriteFile, clip, 258, 3550, 23, 34, clipSpeed1);
-		SetClip(shaderFile, spriteFile, clip, 307, 3550, 20, 34, clipSpeed1);
-		SetClip(shaderFile, spriteFile, clip, 357, 3550, 21, 34, clipSpeed1);
+			animation->AddClip(clip);
+		}
 
-		animation->AddClip(clip);
-	}
+		//leaf1, 1번째
+		{
+			clip = new Clip(PlayMode::End);
+			SetClip(shaderFile, spriteFile, clip, 1, 390, 1, 1, clipSpeed4);
+			SetClip(shaderFile, spriteFile, clip, 98, 390, 1, 1, clipSpeed4);
+			SetClip(shaderFile, spriteFile, clip, 195, 390, 1, 1, clipSpeed4);
+			SetClip(shaderFile, spriteFile, clip, 305, 404, 58, 30, clipSpeed4);
+			SetClip(shaderFile, spriteFile, clip, 429, 404, 31, 29, clipSpeed4);
+			SetClip(shaderFile, spriteFile, clip, 511, 404, 44, 29, clipSpeed4);
+			SetClip(shaderFile, spriteFile, clip, 625, 404, 27, 19, clipSpeed4);
 
-	//Jump, 8번째
-	{
-		clip = new Clip(PlayMode::End);
-		SetClip(shaderFile, spriteFile, clip, 11, 1704, 24, 37, clipSpeed1);
-		SetClip(shaderFile, spriteFile, clip, 61, 1704, 23, 37, clipSpeed1);
-		SetClip(shaderFile, spriteFile, clip, 110, 1704, 23, 37, clipSpeed1);
-
-		animation->AddClip(clip);
-	}
-
-	//Fall, 9번째
-	{
-		clip = new Clip(PlayMode::End);
-		SetClip(shaderFile, spriteFile, clip, 12, 1766, 24, 39, clipSpeed1);
-		SetClip(shaderFile, spriteFile, clip, 61, 1766, 25, 39, clipSpeed1);
-		SetClip(shaderFile, spriteFile, clip, 112, 1765, 24, 40, clipSpeed1);
-		SetClip(shaderFile, spriteFile, clip, 161, 1765, 24, 40, clipSpeed1);
-		SetClip(shaderFile, spriteFile, clip, 210, 1765, 24, 40, clipSpeed1);
-
-		animation->AddClip(clip);
-	}
-
-	//LandHard, 10번째
-	{
-		clip = new Clip(PlayMode::End);
-		SetClip(shaderFile, spriteFile, clip, 14, 3115, 21, 28, clipSpeed3);
-		SetClip(shaderFile, spriteFile, clip, 63, 3118, 21, 25, clipSpeed3);
-		SetClip(shaderFile, spriteFile, clip, 112, 3119, 22, 24, clipSpeed3);
-		SetClip(shaderFile, spriteFile, clip, 161, 3119, 22, 24, clipSpeed3);
-		SetClip(shaderFile, spriteFile, clip, 210, 3119, 22, 24, clipSpeed3);
-		SetClip(shaderFile, spriteFile, clip, 259, 3119, 22, 24, clipSpeed3);
-		SetClip(shaderFile, spriteFile, clip, 308, 3119, 22, 24, clipSpeed3);
-		SetClip(shaderFile, spriteFile, clip, 357, 3119, 22, 24, clipSpeed3);
-		SetClip(shaderFile, spriteFile, clip, 406, 3119, 22, 24, clipSpeed3);
-		SetClip(shaderFile, spriteFile, clip, 454, 3111, 22, 31, clipSpeed3);
-		SetClip(shaderFile, spriteFile, clip, 506, 3108, 19, 35, clipSpeed3);
-
-		animation->AddClip(clip);
-	}
-
-	//LandSoft, 11번째
-	{
-		clip = new Clip(PlayMode::End);
-		SetClip(shaderFile, spriteFile, clip, 14, 3177, 24, 29, clipSpeed4);
-		SetClip(shaderFile, spriteFile, clip, 63, 3178, 24, 28, clipSpeed4);
-		SetClip(shaderFile, spriteFile, clip, 111, 3175, 24, 28, clipSpeed4);
-		SetClip(shaderFile, spriteFile, clip, 162, 3171, 19, 35, clipSpeed4);
-
-		animation->AddClip(clip);
+			animation->AddClip(clip);
+		}
 	}
 	
 	animation->Position(position);
 	animation->Scale(scale);
 	animation->Play(0);
+
+	attack->Position(position);
+	attack->Scale(scale);
+	attack->Play(0);
+
 
 	animation->DrawBound(false);
 }
@@ -180,6 +227,8 @@ void Player::Update(D3DXMATRIX & V, D3DXMATRIX & P)
 	}
 	else
 	{
+		if (attackStatus == _Attack::Nothing)//땅에 닿았으면서, 아무 공격도 하고 있지 않는다면
+			attackStack = 0;
 		if (status == PlayerAct::Jumping)
 			status = PlayerAct::Nothing;
 		if (jumpStack != 0)
@@ -193,17 +242,19 @@ void Player::Update(D3DXMATRIX & V, D3DXMATRIX & P)
 	position.y += velocity.y;
 
 	animation->Position(position);
+	attack->Position(position);
 	
 	Animation_Playing();
 
 	animation->Update(V, P);
+	attack->Update(V, P);
 
 }
 
 void Player::Render()
 {
 	ImGui::SliderFloat("Move Speed", &moveSpeed, 50, 400);
-	ImGui::LabelText("val", "%.2f", val);
+	ImGui::LabelText("val", "%.2f", FloorFall);
 	ImGui::LabelText("playerVec", "%s", playerVec ? "Left" : "Right");
 	ImGui::LabelText("Velocity", "%.2f, %.2f", velocity.x, velocity.y);
 
@@ -211,6 +262,7 @@ void Player::Render()
 	ImGui::LabelText("ELSE_KEY", "%s", Else_key ? "true" : "false");
 
 	animation->Render();
+	attack->Render();
 
 }
 
@@ -227,18 +279,18 @@ int Player::CheckCollapse_justforfloor(Line * line)
 	{
 		if (line->CheckCollapse(animation->GetSprite()))
 		{
-			val = line->GetYAxisWhereXIs(animation->Position().x);
+			FloorFall = line->GetYAxisWhereXIs(animation->Position().x);
 			velocity.y = 0.0f;
 			onGround = true;
 			return 1;
 		}
 		else
 		{
-			val = line->GetYAxisWhereXIs(animation->Position().x);
-			if ((val < animation->Position().y - animation->TextureSize().y * 0.5f + 10.0f) && (val > animation->Position().y - animation->TextureSize().y * 0.5f - 10.0f))// +- 10 오차범위까지 처리
+			FloorFall = line->GetYAxisWhereXIs(animation->Position().x);
+			if ((FloorFall < animation->Position().y - animation->TextureSize().y * 0.5f + 1.0f) && (FloorFall > animation->Position().y - animation->TextureSize().y * 0.5f - 1.0f))// +- 10 오차범위까지 처리
 			{
 				velocity.y = 0.0f;
-				animation->Position(animation->Position().x, val + animation->TextureSize().y * 0.5f);
+				animation->Position(animation->Position().x, FloorFall + animation->TextureSize().y * 0.5f);
 				onGround = true;
 				return 2;
 			}
@@ -356,18 +408,12 @@ void Player::Animation_Playing()
 
 			//land 알고리즘
 			/*
-			1. 바닥에 닿으면, 일단 10애니메이션으로 초기화시켜주는 과정에서 10이 아니었다면 좌푯값을 재설정(바닥에 붙도록)
-			2. 그 뒤는 앉았다 일어나는 건데, 그 과정에서 선에 빠지지 않도록 잘 조정해주어야 함.(제작중)
+			1. 바닥에 닿으면, 일단 10애니메이션으로 초기화시켜주는 과정에서 10이 아니었다면 좌푯값을 재설정(바닥에 붙도록) * 이 부분 쓸모없는 부분으로 판단되어, 삭제됨
+			2. 그 뒤는 앉았다 일어나는 건데, 그 과정에서 선에 빠지지 않도록 잘 조정해주어야 함.(제작완료)
 			3. 서는 모션까지 전부 완료시 idle 상태로 전환
 			*/
 		case PlayerAct::LandHard:
 			velocity.x = 0.0f;
-			if (animation->RtCurrentClip() != 10)
-			{
-				S = animation->GetSprite()->TextureSize().y;
-				animation->Play(10);
-				animation->Position(animation->Position().x, animation->Position().y - (S - 2 * animation->GetSprite()->TextureSize().y) * 0.5f);
-			}
 			animation->Play(10);
 			if (animation->Clip_Check_IfEnd())
 			{
@@ -377,12 +423,6 @@ void Player::Animation_Playing()
 
 		case PlayerAct::LandSoft:
 			velocity.x = 0.0f;
-			if (animation->RtCurrentClip() != 11)
-			{
-				S = animation->GetSprite()->TextureSize().y;//이전 y크기
-				animation->Play(11);
-				animation->Position(animation->Position().x, animation->Position().y - (S * 0.5f - animation->GetSprite()->TextureSize().y) );//이전 y 크기에 현재 y 크기를 빼면 변화량이 나옴, 이를 반으로 나누어 빼면 변화량 완성
-			}
 			animation->Play(11);
 			if (animation->Clip_Check_IfEnd())
 			{
@@ -390,14 +430,41 @@ void Player::Animation_Playing()
 			}
 			break;
 
+		//다음은 공격 스택 및 공격 방법에 대해 설명하는 주석.
+		/*
+			처음은 그냥 공격.
+			마우스 클릭으로 공격하는데 만약 띄엄띄엄 클릭한다면 Attack1만 반복.
+
+			그러나 공격하는 도중 마우스가 다시 클릭되었을 경우,
+			attackStack가 쌓이면서 다음 애니메이션으로 실행됨(물론 현재 실행 애니메이션 다음까지밖에 스택은 쌓이지 않는다. *Attack1 -> Attack3은 불가능하다는 뜻).
+
+			또한 스택이 2 이상인 상태(처음 애니메이션과 다른 애니메이션이 나오고 있는 상태)에서 마우스 클릭을 그만한다면 스택은 0이 되고, 바로 IDLE로 들어간다.
+
+			뛰는 경우는 위의 설명을 무시한다. 그냥 공격하며, 스택을 바닥에 닿았을 때 초기화한다. 또한 스택이 있는 경우 실행하지 않는다.(공중에 있는 경우 두번 공격하지 못한다.)
+		*/
+
+		case PlayerAct::Attack1:
+			break;
+
+		case PlayerAct::Attack2:
+			break;
+
+		case PlayerAct::Attack3:
+			break;
+
+		case PlayerAct::AirAttack_falling:
+			break;
+
+		case PlayerAct::AirAttack_jumping:
+			break;
 	}
 }
 
 void Player::Key_Check()
 {
 	Run_key = (Key->Press('A') && Key->Press('D'));
-	C_key = (status == PlayerAct::Falling || status == PlayerAct::Jumping || status == PlayerAct::Rolling);
-	Else_key = (status == PlayerAct::Crouching || status == PlayerAct::Rising || status == PlayerAct::Turning || status == PlayerAct::LandHard || status == PlayerAct::LandSoft);
+	C_key = (status == PlayerAct::Falling || status == PlayerAct::Jumping);
+	Else_key = (status == PlayerAct::Crouching || status == PlayerAct::Rising || status == PlayerAct::Turning || status == PlayerAct::LandHard || status == PlayerAct::LandSoft || status == PlayerAct::Rolling);
 	if (Key->Down('C') && !C_key)//뭘 누르던지간에 c가 먼저 확인됨(현재로선)
 	{
 		if (status == PlayerAct::Crouching)
@@ -413,7 +480,7 @@ void Player::Key_Check()
 	else if (Key->Down(VK_SHIFT) && !Else_key && !C_key)
 	{
 		status = PlayerAct::Rolling;
-		//velocity.x = (velocity.x / Math::Round(velocity.x)) * (moveSpeed * 1.3 * Timer->Elapsed());//방향지정 필요함
+		//velocity.x = (velocity.x / Math::Round(velocity.x)) * (moveSpeed * 1.3 * Timer->Elapsed());//방향지정 필요함(필요하지 않기에 삭제됨)
 		isCharacterInvincibility = true;
 	}
 	else if (Key->Down(VK_SPACE) && !Else_key)
@@ -463,6 +530,59 @@ void Player::Key_Check()
 			velocity.x = moveSpeed * Timer->Elapsed();
 		}
 		animation->RotationDegree(0, 0, 0);
+	}
+	else if (Mouse->Down(0) && !Else_key)
+	{
+		//다음은 공격 스택 및 공격 방법에 대해 설명하는 주석.
+		/*
+			처음은 그냥 공격.
+			마우스 클릭으로 공격하는데 만약 띄엄띄엄 클릭한다면 Attack1만 반복.
+
+			그러나 공격하는 도중 마우스가 다시 클릭되었을 경우,
+			attackStack가 쌓이면서 다음 애니메이션으로 실행됨(물론 현재 실행 애니메이션 다음까지밖에 스택은 쌓이지 않는다. *Attack1 -> Attack3은 불가능하다는 뜻).
+
+			또한 스택이 2 이상인 상태(처음 애니메이션과 다른 애니메이션이 나오고 있는 상태)에서 마우스 클릭을 그만한다면 스택은 0이 되고, 바로 IDLE로 들어간다.
+
+			뛰는 경우는 위의 설명을 무시한다. 그냥 공격하며, 스택을 바닥에 닿았을 때 초기화한다. 또한 스택이 있는 경우 실행하지 않는다.(공중에 있는 경우 두번 공격하지 못한다.)
+		*/
+		if (!C_key)//뛰고 있거나 떨어지고 있는 게 아니라면(땅에 있음)
+		{
+			switch (attackStack)
+			{
+				case 0:
+					attackStack++;//공격 스택: 1, 한번 마우스 클릭함.
+					attackStatus = _Attack::Leaf1;
+					status = PlayerAct::Attack1;
+					break;
+
+				case 1:
+					attackStack++;//공격 스택: 2, 첫번째 공격 도중에 마우스 클릭함.
+					break;
+
+				case 2:
+					if(attackStatus == _Attack::Leaf2)//첫번째 공격 도중에 복수 클릭이 감지되면 스택이 중복으로 쌓일 수 있으므로, 다음 애니메이션이 재생 중인 것을 확인한 뒤 증가.
+						attackStack++;//공격 스택: 3, 두번째 공격 도중에 마우스 클릭함.
+					break;
+			}
+			velocity.x = 0.0f;
+		}
+		else//위의 조건이 아니라면(뛰거나 떨어지고 있음)
+		{
+			if (attackStack == 0)
+			{
+				attackStack = 1;//일종의 트리거
+				attackStatus = _Attack::AirLeaf;
+				switch (status)
+				{
+					case PlayerAct::Falling:
+						status = PlayerAct::AirAttack_falling;
+						break;
+					case PlayerAct::Jumping:
+						status = PlayerAct::AirAttack_jumping;
+						break;
+				}
+			}
+		}
 	}
 	else if (!Else_key && !C_key)
 	{

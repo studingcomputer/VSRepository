@@ -82,6 +82,11 @@ enum class PlayerAct
 	Rolling,
 	Jumping,
 	LandHard,
-	LandSoft
+	LandSoft,
+	Attack1,
+	Attack2,
+	Attack3,
+	AirAttack_jumping,
+	AirAttack_falling
 	//나중에 추가예정
 };

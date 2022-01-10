@@ -87,8 +87,9 @@ void Sonic::CheckLines()
 		else if (val == 2)
 			main = l;
 	}
-	for (Line* l : database)
-		player->CheckCollapse_justforfloor(l);
 	if (main != nullptr)
 		player->CheckCollapse_justforfloor(main);
+	else
+		for (Line* l : database)
+			player->CheckCollapse_justforfloor(l);
 }

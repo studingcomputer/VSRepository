@@ -2,8 +2,6 @@
 #include "Systems/Device.h"
 #include "Scene/Scene.h"
 #include "Viewer/Freedom.h"
-#include "Scene/Stage1.h"
-#include "Scene/Stage2.h"
 #include "Scene/Sonic.h"
 
 

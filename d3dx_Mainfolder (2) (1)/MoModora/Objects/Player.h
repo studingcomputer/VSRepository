@@ -11,6 +11,17 @@
 
 class Player : public IFollowing
 {
+private:
+
+	enum class _Attack
+	{
+		Leaf1 = 0,
+		Leaf2,
+		Leaf3,
+		AirLeaf,
+		Nothing
+	};
+
 public:
 	Player(D3DXVECTOR2 position, D3DXVECTOR2 scale);
 	~Player();
@@ -21,6 +32,7 @@ public:
 	void Focus(D3DXVECTOR2* position, D3DXVECTOR2* size);
 
 	Sprite* GetSprite() { return animation->GetSprite(); }
+	Sprite* GetAttack_Crash() { return attack->GetSprite(); }
 
 	int CheckCollapse_justforfloor(Line* line);
 	bool CheckCollapse_justforsprite(Sprite* spr);
@@ -37,6 +49,7 @@ public:
 private:
 	float moveSpeed;
 	Animation* animation;
+	Animation* attack;
 
 	void SetClip(wstring shaderFile, wstring textureFile, Clip* clip, int x, int y, int width, int height, float speed);
 
@@ -46,6 +59,7 @@ private:
 	bool onGround = false;
 
 	PlayerAct status;
+	_Attack attackStatus;
 
 	bool triggers[2] = {false, false};
 
@@ -58,10 +72,9 @@ private:
 	bool isCharacterInvincibility = false; // 무적판정
 
 	int jumpStack = 0;
+	int attackStack = 0;
 
 	float WhereBegin_Fall = 0.0f;
+	float FloorFall;
 
-	float val;
-
-	float S;
 };
