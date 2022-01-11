@@ -577,6 +577,7 @@ void Player::Key_Check()
 					case PlayerAct::Falling:
 						status = PlayerAct::AirAttack_falling;
 						break;
+
 					case PlayerAct::Jumping:
 						status = PlayerAct::AirAttack_jumping;
 						break;
