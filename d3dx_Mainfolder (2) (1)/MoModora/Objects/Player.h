@@ -15,11 +15,11 @@ private:
 
 	enum class _Attack
 	{
-		Leaf1 = 0,
+		Nothing = 0,
+		Leaf1,
 		Leaf2,
 		Leaf3,
-		AirLeaf,
-		Nothing
+		AirLeaf
 	};
 
 public:
@@ -65,9 +65,7 @@ private:
 
 	bool playerVec = RIGHT;
 
-	bool Run_key;
-	bool C_key;
-	bool Else_key;
+	bool Run_key, C_key, Else_key, Attack_key;
 
 	bool isCharacterInvincibility = false; // 무적판정
 

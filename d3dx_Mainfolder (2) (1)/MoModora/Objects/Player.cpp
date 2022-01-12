@@ -5,6 +5,7 @@ Player::Player(D3DXVECTOR2 position, D3DXVECTOR2 scale)
 	:moveSpeed(200.0f), focusOffset(-180,-120), velocity(D3DXVECTOR2(0.0f,0.0f)), status(PlayerAct::Nothing), attackStatus(_Attack::Nothing)
 {
 	animation = new Animation;
+	attack = new Animation;
 
 	wstring spriteFile = Textures + L"Momodora/86754.png";
 	wstring shaderFile = Shaders + L"009_Sprite.fx";
@@ -158,11 +159,44 @@ Player::Player(D3DXVECTOR2 position, D3DXVECTOR2 scale)
 			clip = new Clip(PlayMode::End);
 			SetClip(shaderFile, spriteFile, clip, 11, 87, 24, 36, clipSpeed4);
 			SetClip(shaderFile, spriteFile, clip, 58, 87, 26, 36, clipSpeed4);
-			SetClip(shaderFile, spriteFile, clip, 109, 91, 26, 36, clipSpeed4);
+			SetClip(shaderFile, spriteFile, clip, 109, 91, 26, 32, clipSpeed4);
 			SetClip(shaderFile, spriteFile, clip, 163, 89, 27, 34, clipSpeed4);
 			SetClip(shaderFile, spriteFile, clip, 212, 89, 27, 34, clipSpeed4);
 			SetClip(shaderFile, spriteFile, clip, 261, 89, 27, 34, clipSpeed4);
 			SetClip(shaderFile, spriteFile, clip, 310, 89, 27, 34, clipSpeed4);
+
+			animation->AddClip(clip);
+		}
+
+		//Attack2, 13번째
+		{
+			clip = new Clip(PlayMode::End);
+			SetClip(shaderFile, spriteFile, clip, 12, 129, 21, 37, clipSpeed4);
+			SetClip(shaderFile, spriteFile, clip, 61, 149, 22, 37, clipSpeed4);
+			SetClip(shaderFile, spriteFile, clip, 113, 151, 26, 35, clipSpeed4);
+			SetClip(shaderFile, spriteFile, clip, 158, 152, 29, 34, clipSpeed4);
+			SetClip(shaderFile, spriteFile, clip, 209, 152, 26, 34, clipSpeed4);
+			SetClip(shaderFile, spriteFile, clip, 258, 152, 25, 34, clipSpeed4);
+			SetClip(shaderFile, spriteFile, clip, 306, 152, 25, 34, clipSpeed4);
+
+			animation->AddClip(clip);
+		}
+
+		//Attack3, 14번째
+		{
+			clip = new Clip(PlayMode::End);
+			SetClip(shaderFile, spriteFile, clip, 6, 215, 31, 34, clipSpeed4);
+			SetClip(shaderFile, spriteFile, clip, 51, 213, 34, 36, clipSpeed4);
+			SetClip(shaderFile, spriteFile, clip, 99, 213, 35, 36, clipSpeed4);
+			SetClip(shaderFile, spriteFile, clip, 148, 212, 32, 37, clipSpeed4);
+			SetClip(shaderFile, spriteFile, clip, 207, 212, 30, 37, clipSpeed4);
+			SetClip(shaderFile, spriteFile, clip, 207, 212, 30, 37, clipSpeed4);
+			SetClip(shaderFile, spriteFile, clip, 263, 221, 23, 28, clipSpeed4);
+			SetClip(shaderFile, spriteFile, clip, 263, 221, 23, 28, clipSpeed4);//----fromhere----
+			SetClip(shaderFile, spriteFile, clip, 263, 221, 23, 28, clipSpeed4);
+			SetClip(shaderFile, spriteFile, clip, 263, 221, 23, 28, clipSpeed4);
+			SetClip(shaderFile, spriteFile, clip, 263, 221, 23, 28, clipSpeed4);
+			SetClip(shaderFile, spriteFile, clip, 263, 221, 23, 28, clipSpeed4);
 
 			animation->AddClip(clip);
 		}
@@ -175,7 +209,7 @@ Player::Player(D3DXVECTOR2 position, D3DXVECTOR2 scale)
 			clip = new Clip(PlayMode::End);
 			SetClip(shaderFile, spriteFile, clip, 1, 390, 1, 1, clipSpeed4);
 
-			animation->AddClip(clip);
+			attack->AddClip(clip);
 		}
 
 		//leaf1, 1번째
@@ -189,7 +223,7 @@ Player::Player(D3DXVECTOR2 position, D3DXVECTOR2 scale)
 			SetClip(shaderFile, spriteFile, clip, 499, 404, 58, 30, clipSpeed4);
 			SetClip(shaderFile, spriteFile, clip, 596, 404, 58, 30, clipSpeed4);
 
-			animation->AddClip(clip);
+			attack->AddClip(clip);
 		}
 	}
 	
@@ -242,7 +276,13 @@ void Player::Update(D3DXMATRIX & V, D3DXMATRIX & P)
 	position.y += velocity.y;
 
 	animation->Position(position);
-	attack->Position(position);
+	float x_;
+	if (!playerVec)
+		x_ = position.x + attack->GetSprite()->TextureSize().x * 0.3f;
+	else
+		x_ = position.x - attack->GetSprite()->TextureSize().x * 0.3f;
+
+	attack->Position(x_, position.y);
 	
 	Animation_Playing();
 
@@ -260,6 +300,8 @@ void Player::Render()
 
 	ImGui::LabelText("BASIC_KEY", "%s", C_key ? "true" : "false");
 	ImGui::LabelText("ELSE_KEY", "%s", Else_key ? "true" : "false");
+
+	ImGui::LabelText("attackStack", "%d", attackStack);
 
 	animation->Render();
 	attack->Render();
@@ -287,7 +329,7 @@ int Player::CheckCollapse_justforfloor(Line * line)
 		else
 		{
 			FloorFall = line->GetYAxisWhereXIs(animation->Position().x);
-			if ((FloorFall < animation->Position().y - animation->TextureSize().y * 0.5f + 1.0f) && (FloorFall > animation->Position().y - animation->TextureSize().y * 0.5f - 1.0f))// +- 10 오차범위까지 처리
+			if ((FloorFall < animation->Position().y - animation->TextureSize().y * 0.5f + 10.0f) && (FloorFall > animation->Position().y - animation->TextureSize().y * 0.5f - 10.0f))// +- 10 오차범위까지 처리
 			{
 				velocity.y = 0.0f;
 				animation->Position(animation->Position().x, FloorFall + animation->TextureSize().y * 0.5f);
@@ -444,6 +486,15 @@ void Player::Animation_Playing()
 		*/
 
 		case PlayerAct::Attack1:
+			animation->Play(12);
+			velocity.x = 0;
+			if (animation->Clip_Check_IfEnd())
+			{
+				status = PlayerAct::Nothing;
+				attackStatus = _Attack::Nothing;
+			}
+			triggers[LRMove] = false;
+			triggers[BreakMove] = false;
 			break;
 
 		case PlayerAct::Attack2:
@@ -458,6 +509,7 @@ void Player::Animation_Playing()
 		case PlayerAct::AirAttack_jumping:
 			break;
 	}
+	attack->Play((int)attackStatus);
 }
 
 void Player::Key_Check()
@@ -465,7 +517,8 @@ void Player::Key_Check()
 	Run_key = (Key->Press('A') && Key->Press('D'));
 	C_key = (status == PlayerAct::Falling || status == PlayerAct::Jumping);
 	Else_key = (status == PlayerAct::Crouching || status == PlayerAct::Rising || status == PlayerAct::Turning || status == PlayerAct::LandHard || status == PlayerAct::LandSoft || status == PlayerAct::Rolling);
-	if (Key->Down('C') && !C_key)//뭘 누르던지간에 c가 먼저 확인됨(현재로선)
+	Attack_key = (status == PlayerAct::Attack1 || status == PlayerAct::Attack2 || status == PlayerAct::Attack3 || status == PlayerAct::AirAttack_falling || status == PlayerAct::AirAttack_jumping);
+	if (Key->Down('C') && !C_key && !Attack_key)//뭘 누르던지간에 c가 먼저 확인됨(현재로선)
 	{
 		if (status == PlayerAct::Crouching)
 		{
@@ -477,13 +530,13 @@ void Player::Key_Check()
 			velocity.x = 0.0f;
 		}
 	}
-	else if (Key->Down(VK_SHIFT) && !Else_key && !C_key)
+	else if (Key->Down(VK_SHIFT) && !Else_key && !C_key && !Attack_key)
 	{
 		status = PlayerAct::Rolling;
 		//velocity.x = (velocity.x / Math::Round(velocity.x)) * (moveSpeed * 1.3 * Timer->Elapsed());//방향지정 필요함(필요하지 않기에 삭제됨)
 		isCharacterInvincibility = true;
 	}
-	else if (Key->Down(VK_SPACE) && !Else_key)
+	else if (Key->Down(VK_SPACE) && !Else_key && !Attack_key)
 	{
 		onGround = false;
 		if (jumpStack < 2)
@@ -501,7 +554,7 @@ void Player::Key_Check()
 			jumpStack++;
 		}
 	}
-	else if (Key->Press('A') && !Run_key && !Else_key && !C_key)
+	else if (Key->Press('A') && !Run_key && !Else_key && !C_key && !Attack_key)
 	{
 		if (status == PlayerAct::Turning || (playerVec != LEFT))
 		{
@@ -515,8 +568,9 @@ void Player::Key_Check()
 			velocity.x = -(moveSpeed * Timer->Elapsed());
 		}
 		animation->RotationDegree(0, 180, 0);
+		attack->RotationDegree(0, 180, 0);
 	}
-	else if (Key->Press('D') && !Run_key && !Else_key && !C_key)
+	else if (Key->Press('D') && !Run_key && !Else_key && !C_key && !Attack_key)
 	{
 		if (status == PlayerAct::Turning || (playerVec != RIGHT))
 		{
@@ -530,6 +584,7 @@ void Player::Key_Check()
 			velocity.x = moveSpeed * Timer->Elapsed();
 		}
 		animation->RotationDegree(0, 0, 0);
+		attack->RotationDegree(0, 0, 0);
 	}
 	else if (Mouse->Down(0) && !Else_key)
 	{
@@ -585,7 +640,7 @@ void Player::Key_Check()
 			}
 		}
 	}
-	else if (!Else_key && !C_key)
+	else if (!Else_key && !C_key && !Attack_key)
 	{
 		if (velocity.x != 0.0f)
 		{
