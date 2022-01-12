@@ -185,9 +185,9 @@ Player::Player(D3DXVECTOR2 position, D3DXVECTOR2 scale)
 			SetClip(shaderFile, spriteFile, clip, 98, 390, 1, 1, clipSpeed4);
 			SetClip(shaderFile, spriteFile, clip, 195, 390, 1, 1, clipSpeed4);
 			SetClip(shaderFile, spriteFile, clip, 305, 404, 58, 30, clipSpeed4);
-			SetClip(shaderFile, spriteFile, clip, 429, 404, 31, 29, clipSpeed4);
-			SetClip(shaderFile, spriteFile, clip, 511, 404, 44, 29, clipSpeed4);
-			SetClip(shaderFile, spriteFile, clip, 625, 404, 27, 19, clipSpeed4);
+			SetClip(shaderFile, spriteFile, clip, 402, 404, 58, 30, clipSpeed4);
+			SetClip(shaderFile, spriteFile, clip, 499, 404, 58, 30, clipSpeed4);
+			SetClip(shaderFile, spriteFile, clip, 596, 404, 58, 30, clipSpeed4);
 
 			animation->AddClip(clip);
 		}
