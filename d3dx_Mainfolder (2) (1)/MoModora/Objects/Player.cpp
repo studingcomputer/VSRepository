@@ -192,11 +192,11 @@ Player::Player(D3DXVECTOR2 position, D3DXVECTOR2 scale)
 			SetClip(shaderFile, spriteFile, clip, 207, 212, 30, 37, clipSpeed4);
 			SetClip(shaderFile, spriteFile, clip, 207, 212, 30, 37, clipSpeed4);
 			SetClip(shaderFile, spriteFile, clip, 263, 221, 23, 28, clipSpeed4);
-			SetClip(shaderFile, spriteFile, clip, 263, 221, 23, 28, clipSpeed4);//----fromhere----
-			SetClip(shaderFile, spriteFile, clip, 263, 221, 23, 28, clipSpeed4);
-			SetClip(shaderFile, spriteFile, clip, 263, 221, 23, 28, clipSpeed4);
-			SetClip(shaderFile, spriteFile, clip, 263, 221, 23, 28, clipSpeed4);
-			SetClip(shaderFile, spriteFile, clip, 263, 221, 23, 28, clipSpeed4);
+			SetClip(shaderFile, spriteFile, clip, 303, 220, 29, 29, clipSpeed4);//----fromhere----
+			SetClip(shaderFile, spriteFile, clip, 351, 220, 30, 29, clipSpeed4);
+			SetClip(shaderFile, spriteFile, clip, 400, 220, 30, 29, clipSpeed4);
+			SetClip(shaderFile, spriteFile, clip, 455, 220, 23, 29, clipSpeed4);
+			SetClip(shaderFile, spriteFile, clip, 506, 214, 19, 35, clipSpeed4);
 
 			animation->AddClip(clip);
 		}
@@ -213,6 +213,34 @@ Player::Player(D3DXVECTOR2 position, D3DXVECTOR2 scale)
 		}
 
 		//leaf1, 1번째
+		{
+			clip = new Clip(PlayMode::End);
+			SetClip(shaderFile, spriteFile, clip, 1, 390, 1, 1, clipSpeed4);
+			SetClip(shaderFile, spriteFile, clip, 98, 390, 1, 1, clipSpeed4);
+			SetClip(shaderFile, spriteFile, clip, 195, 390, 1, 1, clipSpeed4);
+			SetClip(shaderFile, spriteFile, clip, 305, 404, 58, 30, clipSpeed4);
+			SetClip(shaderFile, spriteFile, clip, 402, 404, 58, 30, clipSpeed4);
+			SetClip(shaderFile, spriteFile, clip, 499, 404, 58, 30, clipSpeed4);
+			SetClip(shaderFile, spriteFile, clip, 596, 404, 58, 30, clipSpeed4);
+
+			attack->AddClip(clip);
+		}
+
+		//leaf2, 2번째
+		{
+			clip = new Clip(PlayMode::End);
+			SetClip(shaderFile, spriteFile, clip, 1, 390, 1, 1, clipSpeed4);
+			SetClip(shaderFile, spriteFile, clip, 98, 390, 1, 1, clipSpeed4);
+			SetClip(shaderFile, spriteFile, clip, 195, 390, 1, 1, clipSpeed4);
+			SetClip(shaderFile, spriteFile, clip, 305, 404, 58, 30, clipSpeed4);
+			SetClip(shaderFile, spriteFile, clip, 402, 404, 58, 30, clipSpeed4);
+			SetClip(shaderFile, spriteFile, clip, 499, 404, 58, 30, clipSpeed4);
+			SetClip(shaderFile, spriteFile, clip, 596, 404, 58, 30, clipSpeed4);
+
+			attack->AddClip(clip);
+		}
+
+		//leaf3, 3번째
 		{
 			clip = new Clip(PlayMode::End);
 			SetClip(shaderFile, spriteFile, clip, 1, 390, 1, 1, clipSpeed4);
@@ -262,11 +290,24 @@ void Player::Update(D3DXMATRIX & V, D3DXMATRIX & P)
 	else
 	{
 		if (attackStatus == _Attack::Nothing)//땅에 닿았으면서, 아무 공격도 하고 있지 않는다면
-			attackStack = 0;
+		{
+			if (triggers[StatusSensor])
+			{
+				status = (PlayerAct)((int)status + 1);
+				attackStatus = (_Attack)((int)attackStatus + 1);
+				triggers[StatusSensor] = false;
+			}
+			else
+			{
+				attackStack = 0;
+			}
+		}
 		if (status == PlayerAct::Jumping)
 			status = PlayerAct::Nothing;
 		if (jumpStack != 0)
+		{
 			jumpStack = 0;
+		}
 	}
 
 	Key_Check();
@@ -498,9 +539,29 @@ void Player::Animation_Playing()
 			break;
 
 		case PlayerAct::Attack2:
+			animation->Play(13);
+			attackStatus = _Attack::Leaf2;
+			velocity.x = 0;
+			if (animation->Clip_Check_IfEnd())
+			{
+				status = PlayerAct::Nothing;
+				attackStatus = _Attack::Nothing;
+			}
+			triggers[LRMove] = false;
+			triggers[BreakMove] = false;
 			break;
 
 		case PlayerAct::Attack3:
+			animation->Play(13);
+			attackStatus = _Attack::Leaf2;
+			velocity.x = 0;
+			if (animation->Clip_Check_IfEnd())
+			{
+				status = PlayerAct::Nothing;
+				attackStatus = _Attack::Nothing;
+			}
+			triggers[LRMove] = false;
+			triggers[BreakMove] = false;
 			break;
 
 		case PlayerAct::AirAttack_falling:
@@ -509,6 +570,7 @@ void Player::Animation_Playing()
 		case PlayerAct::AirAttack_jumping:
 			break;
 	}
+
 	attack->Play((int)attackStatus);
 }
 
@@ -612,11 +674,15 @@ void Player::Key_Check()
 
 				case 1:
 					attackStack++;//공격 스택: 2, 첫번째 공격 도중에 마우스 클릭함.
+					triggers[StatusSensor] = true;
 					break;
 
 				case 2:
-					if(attackStatus == _Attack::Leaf2)//첫번째 공격 도중에 복수 클릭이 감지되면 스택이 중복으로 쌓일 수 있으므로, 다음 애니메이션이 재생 중인 것을 확인한 뒤 증가.
+					if (attackStatus == _Attack::Leaf2)//첫번째 공격 도중에 복수 클릭이 감지되면 스택이 중복으로 쌓일 수 있으므로, 다음 애니메이션이 재생 중인 것을 확인한 뒤 증가.
+					{
+						triggers[StatusSensor] = true;
 						attackStack++;//공격 스택: 3, 두번째 공격 도중에 마우스 클릭함.
+					}
 					break;
 			}
 			velocity.x = 0.0f;

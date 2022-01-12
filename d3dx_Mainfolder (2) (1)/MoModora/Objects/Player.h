@@ -4,6 +4,7 @@
 
 #define LRMove 0
 #define BreakMove 1
+#define StatusSensor 2
 
 #define LEFT true
 #define RIGHT false
@@ -61,7 +62,7 @@ private:
 	PlayerAct status;
 	_Attack attackStatus;
 
-	bool triggers[2] = {false, false};
+	bool triggers[3] = {false, false, false};
 
 	bool playerVec = RIGHT;
 
