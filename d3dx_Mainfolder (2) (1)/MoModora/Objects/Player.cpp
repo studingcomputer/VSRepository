@@ -14,247 +14,250 @@ Player::Player(D3DXVECTOR2 position, D3DXVECTOR2 scale)
 	float clipSpeed1 = 0.1f;
 	float clipSpeed2 = 0.13f;//idle
 	float clipSpeed3 = 0.03f;//landhard
-	float clipSpeed4 = 0.08f;//landsoft
+	float clipSpeed4 = 0.07f;
 
-	//player animation setting
 	{
-		//Idle, 0번째
+		//player animation setting
 		{
-			clip = new Clip(PlayMode::Loop);
-			SetClip(shaderFile, spriteFile, clip, 16, 2209, 18, 37, clipSpeed2);
-			SetClip(shaderFile, spriteFile, clip, 65, 2209, 18, 37, clipSpeed2);
-			SetClip(shaderFile, spriteFile, clip, 113, 2209, 21, 37, clipSpeed2);
-			SetClip(shaderFile, spriteFile, clip, 161, 2209, 23, 37, clipSpeed2);
-			SetClip(shaderFile, spriteFile, clip, 210, 2209, 22, 37, clipSpeed2);
-			SetClip(shaderFile, spriteFile, clip, 260, 2209, 20, 37, clipSpeed2);
-			animation->AddClip(clip);
+			//Idle, 0번째
+			{
+				clip = new Clip(PlayMode::Loop);
+				SetClip(shaderFile, spriteFile, clip, 16, 2209, 18, 37, clipSpeed2);
+				SetClip(shaderFile, spriteFile, clip, 65, 2209, 18, 37, clipSpeed2);
+				SetClip(shaderFile, spriteFile, clip, 113, 2209, 21, 37, clipSpeed2);
+				SetClip(shaderFile, spriteFile, clip, 161, 2209, 23, 37, clipSpeed2);
+				SetClip(shaderFile, spriteFile, clip, 210, 2209, 22, 37, clipSpeed2);
+				SetClip(shaderFile, spriteFile, clip, 260, 2209, 20, 37, clipSpeed2);
+				animation->AddClip(clip);
+			}
+
+			//Run, 1은 end, 2는 loop
+			{
+				clip = new Clip(PlayMode::End);
+				SetClip(shaderFile, spriteFile, clip, 16, 854, 19, 37, clipSpeed1);
+				SetClip(shaderFile, spriteFile, clip, 66, 854, 21, 37, clipSpeed1);
+				animation->AddClip(clip);
+				clip = new Clip(PlayMode::Loop);
+				SetClip(shaderFile, spriteFile, clip, 110, 854, 28, 35, clipSpeed1);
+				SetClip(shaderFile, spriteFile, clip, 161, 854, 26, 37, clipSpeed1);
+				SetClip(shaderFile, spriteFile, clip, 213, 855, 19, 36, clipSpeed1);
+				SetClip(shaderFile, spriteFile, clip, 261, 856, 23, 35, clipSpeed1);
+				SetClip(shaderFile, spriteFile, clip, 306, 854, 27, 35, clipSpeed1);
+				SetClip(shaderFile, spriteFile, clip, 357, 854, 26, 37, clipSpeed1);
+				SetClip(shaderFile, spriteFile, clip, 408, 854, 26, 37, clipSpeed1);
+				SetClip(shaderFile, spriteFile, clip, 457, 856, 24, 35, clipSpeed1);
+				animation->AddClip(clip);
+			}
+
+			//Break, 3번째
+			{
+				clip = new Clip(PlayMode::End);
+				SetClip(shaderFile, spriteFile, clip, 12, 915, 20, 39, clipSpeed1);
+				SetClip(shaderFile, spriteFile, clip, 60, 916, 20, 38, clipSpeed1);
+				SetClip(shaderFile, spriteFile, clip, 110, 917, 20, 37, clipSpeed1);
+				SetClip(shaderFile, spriteFile, clip, 160, 918, 22, 36, clipSpeed1);
+				SetClip(shaderFile, spriteFile, clip, 207, 918, 25, 36, clipSpeed1);
+				SetClip(shaderFile, spriteFile, clip, 258, 920, 20, 34, clipSpeed1);
+				SetClip(shaderFile, spriteFile, clip, 309, 919, 19, 35, clipSpeed1);
+				animation->AddClip(clip);
+			}
+
+			//Turn, 4번째
+			{
+				clip = new Clip(PlayMode::End);
+				SetClip(shaderFile, spriteFile, clip, 19, 979, 20, 38, clipSpeed1);
+				SetClip(shaderFile, spriteFile, clip, 64, 981, 22, 36, clipSpeed1);
+				SetClip(shaderFile, spriteFile, clip, 112, 981, 22, 36, clipSpeed1);
+				animation->AddClip(clip);
+			}
+
+			//Crouch, 5번째
+			{
+				clip = new Clip(PlayMode::End);
+				SetClip(shaderFile, spriteFile, clip, 17, 1052, 18, 28, clipSpeed1);
+				SetClip(shaderFile, spriteFile, clip, 66, 1055, 18, 25, clipSpeed1);
+				SetClip(shaderFile, spriteFile, clip, 115, 1056, 19, 24, clipSpeed1);
+				SetClip(shaderFile, spriteFile, clip, 164, 1056, 19, 24, clipSpeed1);
+				animation->AddClip(clip);
+			}
+
+			//Rise, 6번째
+			{
+				clip = new Clip(PlayMode::End);
+				SetClip(shaderFile, spriteFile, clip, 15, 1112, 20, 31, clipSpeed1);
+				SetClip(shaderFile, spriteFile, clip, 65, 1108, 19, 35, clipSpeed1);
+				animation->AddClip(clip);
+			}
+
+			//Roll, 7번째
+			{
+				clip = new Clip(PlayMode::End);
+				SetClip(shaderFile, spriteFile, clip, 15, 3550, 23, 34, clipSpeed1);
+				SetClip(shaderFile, spriteFile, clip, 60, 3550, 32, 34, clipSpeed1);
+				SetClip(shaderFile, spriteFile, clip, 111, 3550, 24, 34, clipSpeed1);
+				SetClip(shaderFile, spriteFile, clip, 160, 3550, 25, 34, clipSpeed1);
+				SetClip(shaderFile, spriteFile, clip, 206, 3550, 30, 34, clipSpeed1);
+				SetClip(shaderFile, spriteFile, clip, 258, 3550, 23, 34, clipSpeed1);
+				SetClip(shaderFile, spriteFile, clip, 307, 3550, 20, 34, clipSpeed1);
+				SetClip(shaderFile, spriteFile, clip, 357, 3550, 21, 34, clipSpeed1);
+
+				animation->AddClip(clip);
+			}
+
+			//Jump, 8번째
+			{
+				clip = new Clip(PlayMode::End);
+				SetClip(shaderFile, spriteFile, clip, 11, 1704, 24, 37, clipSpeed1);
+				SetClip(shaderFile, spriteFile, clip, 61, 1704, 23, 37, clipSpeed1);
+				SetClip(shaderFile, spriteFile, clip, 110, 1704, 23, 37, clipSpeed1);
+
+				animation->AddClip(clip);
+			}
+
+			//Fall, 9번째
+			{
+				clip = new Clip(PlayMode::End);
+				SetClip(shaderFile, spriteFile, clip, 12, 1766, 24, 39, clipSpeed1);
+				SetClip(shaderFile, spriteFile, clip, 61, 1766, 25, 39, clipSpeed1);
+				SetClip(shaderFile, spriteFile, clip, 112, 1765, 24, 40, clipSpeed1);
+				SetClip(shaderFile, spriteFile, clip, 161, 1765, 24, 40, clipSpeed1);
+				SetClip(shaderFile, spriteFile, clip, 210, 1765, 24, 40, clipSpeed1);
+
+				animation->AddClip(clip);
+			}
+
+			//LandHard, 10번째
+			{
+				clip = new Clip(PlayMode::End);
+				SetClip(shaderFile, spriteFile, clip, 14, 3115, 21, 28, clipSpeed3);
+				SetClip(shaderFile, spriteFile, clip, 63, 3118, 21, 25, clipSpeed3);
+				SetClip(shaderFile, spriteFile, clip, 112, 3119, 22, 24, clipSpeed3);
+				SetClip(shaderFile, spriteFile, clip, 161, 3119, 22, 24, clipSpeed3);
+				SetClip(shaderFile, spriteFile, clip, 210, 3119, 22, 24, clipSpeed3);
+				SetClip(shaderFile, spriteFile, clip, 259, 3119, 22, 24, clipSpeed3);
+				SetClip(shaderFile, spriteFile, clip, 308, 3119, 22, 24, clipSpeed3);
+				SetClip(shaderFile, spriteFile, clip, 357, 3119, 22, 24, clipSpeed3);
+				SetClip(shaderFile, spriteFile, clip, 406, 3119, 22, 24, clipSpeed3);
+				SetClip(shaderFile, spriteFile, clip, 454, 3111, 22, 31, clipSpeed3);
+				SetClip(shaderFile, spriteFile, clip, 506, 3108, 19, 35, clipSpeed3);
+
+				animation->AddClip(clip);
+			}
+
+			//LandSoft, 11번째
+			{
+				clip = new Clip(PlayMode::End);
+				SetClip(shaderFile, spriteFile, clip, 14, 3177, 24, 29, clipSpeed1);
+				SetClip(shaderFile, spriteFile, clip, 63, 3178, 24, 28, clipSpeed1);
+				SetClip(shaderFile, spriteFile, clip, 111, 3175, 24, 28, clipSpeed1);
+				SetClip(shaderFile, spriteFile, clip, 162, 3171, 19, 35, clipSpeed1);
+
+				animation->AddClip(clip);
+			}
+
+			//Attack1, 12번째
+			{
+				clip = new Clip(PlayMode::End);
+				SetClip(shaderFile, spriteFile, clip, 11, 87, 24, 36, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 58, 87, 26, 36, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 109, 91, 26, 32, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 163, 89, 27, 34, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 212, 89, 27, 34, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 261, 89, 27, 34, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 310, 89, 27, 34, clipSpeed4);
+
+				animation->AddClip(clip);
+			}
+
+			//Attack2, 13번째
+			{
+				clip = new Clip(PlayMode::End);
+				SetClip(shaderFile, spriteFile, clip, 12, 149, 21, 37, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 61, 149, 22, 37, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 113, 151, 26, 35, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 158, 152, 29, 34, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 209, 152, 26, 34, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 258, 152, 25, 34, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 306, 152, 25, 34, clipSpeed4);
+
+				animation->AddClip(clip);
+			}
+
+			//Attack3, 14번째
+			{
+				clip = new Clip(PlayMode::End);
+				SetClip(shaderFile, spriteFile, clip, 6, 215, 31, 34, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 51, 213, 34, 36, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 99, 213, 35, 36, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 148, 212, 32, 37, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 207, 212, 30, 37, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 207, 212, 30, 37, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 263, 221, 23, 28, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 303, 220, 29, 29, clipSpeed4);//----fromhere----
+				SetClip(shaderFile, spriteFile, clip, 351, 220, 30, 29, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 400, 220, 30, 29, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 455, 220, 23, 29, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 506, 214, 19, 35, clipSpeed4);
+
+				animation->AddClip(clip);
+			}
 		}
 
-		//Run, 1은 end, 2는 loop
+		//attack animation setting
 		{
-			clip = new Clip(PlayMode::End);
-			SetClip(shaderFile, spriteFile, clip, 16, 854, 19, 37, clipSpeed1);
-			SetClip(shaderFile, spriteFile, clip, 66, 854, 21, 37, clipSpeed1);
-			animation->AddClip(clip);
-			clip = new Clip(PlayMode::Loop);
-			SetClip(shaderFile, spriteFile, clip, 110, 854, 28, 35, clipSpeed1);
-			SetClip(shaderFile, spriteFile, clip, 161, 854, 26, 37, clipSpeed1);
-			SetClip(shaderFile, spriteFile, clip, 213, 855, 19, 36, clipSpeed1);
-			SetClip(shaderFile, spriteFile, clip, 261, 856, 23, 35, clipSpeed1);
-			SetClip(shaderFile, spriteFile, clip, 306, 854, 27, 35, clipSpeed1);
-			SetClip(shaderFile, spriteFile, clip, 357, 854, 26, 37, clipSpeed1);
-			SetClip(shaderFile, spriteFile, clip, 408, 854, 26, 37, clipSpeed1);
-			SetClip(shaderFile, spriteFile, clip, 457, 856, 24, 35, clipSpeed1);
-			animation->AddClip(clip);
-		}
+			//Nothing, 0번째
+			{
+				clip = new Clip(PlayMode::End);
+				SetClip(shaderFile, spriteFile, clip, 1, 390, 1, 1, clipSpeed4);
 
-		//Break, 3번째
-		{
-			clip = new Clip(PlayMode::End);
-			SetClip(shaderFile, spriteFile, clip, 12, 915, 20, 39, clipSpeed1);
-			SetClip(shaderFile, spriteFile, clip, 60, 916, 20, 38, clipSpeed1);
-			SetClip(shaderFile, spriteFile, clip, 110, 917, 20, 37, clipSpeed1);
-			SetClip(shaderFile, spriteFile, clip, 160, 918, 22, 36, clipSpeed1);
-			SetClip(shaderFile, spriteFile, clip, 207, 918, 25, 36, clipSpeed1);
-			SetClip(shaderFile, spriteFile, clip, 258, 920, 20, 34, clipSpeed1);
-			SetClip(shaderFile, spriteFile, clip, 309, 919, 19, 35, clipSpeed1);
-			animation->AddClip(clip);
-		}
+				attack->AddClip(clip);
+			}
 
-		//Turn, 4번째
-		{
-			clip = new Clip(PlayMode::End);
-			SetClip(shaderFile, spriteFile, clip, 19, 979, 20, 38, clipSpeed1);
-			SetClip(shaderFile, spriteFile, clip, 64, 981, 22, 36, clipSpeed1);
-			SetClip(shaderFile, spriteFile, clip, 112, 981, 22, 36, clipSpeed1);
-			animation->AddClip(clip);
-		}
+			//leaf1, 1번째
+			{
+				clip = new Clip(PlayMode::End);
+				SetClip(shaderFile, spriteFile, clip, 1, 390, 1, 1, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 98, 390, 1, 1, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 195, 390, 1, 1, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 305, 404, 58, 30, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 402, 404, 58, 30, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 499, 404, 58, 30, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 596, 404, 58, 30, clipSpeed4);
 
-		//Crouch, 5번째
-		{
-		clip = new Clip(PlayMode::End);
-		SetClip(shaderFile, spriteFile, clip, 17, 1052, 18, 28, clipSpeed1);
-		SetClip(shaderFile, spriteFile, clip, 66, 1055, 18, 25, clipSpeed1);
-		SetClip(shaderFile, spriteFile, clip, 115, 1056, 19, 24, clipSpeed1);
-		SetClip(shaderFile, spriteFile, clip, 164, 1056, 19, 24, clipSpeed1);
-		animation->AddClip(clip);
-		}
+				attack->AddClip(clip);
+			}
 
-		//Rise, 6번째
-		{
-			clip = new Clip(PlayMode::End);
-			SetClip(shaderFile, spriteFile, clip, 15, 1112, 20, 31, clipSpeed1);
-			SetClip(shaderFile, spriteFile, clip, 65, 1108, 19, 35, clipSpeed1);
-			animation->AddClip(clip);
-		}
+			//leaf2, 2번째
+			{
+				clip = new Clip(PlayMode::End);
+				SetClip(shaderFile, spriteFile, clip, 1, 390, 1, 1, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 98, 390, 1, 1, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 195, 390, 1, 1, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 306, 463, 56, 38, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 403, 463, 56, 38, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 500, 463, 56, 38, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 597, 463, 56, 38, clipSpeed4);
 
-		//Roll, 7번째
-		{
-			clip = new Clip(PlayMode::End);
-			SetClip(shaderFile, spriteFile, clip, 15, 3550, 23, 34, clipSpeed1);
-			SetClip(shaderFile, spriteFile, clip, 60, 3550, 32, 34, clipSpeed1);
-			SetClip(shaderFile, spriteFile, clip, 111, 3550, 24, 34, clipSpeed1);
-			SetClip(shaderFile, spriteFile, clip, 160, 3550, 25, 34, clipSpeed1);
-			SetClip(shaderFile, spriteFile, clip, 206, 3550, 30, 34, clipSpeed1);
-			SetClip(shaderFile, spriteFile, clip, 258, 3550, 23, 34, clipSpeed1);
-			SetClip(shaderFile, spriteFile, clip, 307, 3550, 20, 34, clipSpeed1);
-			SetClip(shaderFile, spriteFile, clip, 357, 3550, 21, 34, clipSpeed1);
+				attack->AddClip(clip);
+			}
 
-			animation->AddClip(clip);
-		}
+			//leaf3, 3번째
+			{
+				clip = new Clip(PlayMode::End);
+				SetClip(shaderFile, spriteFile, clip, 1, 390, 1, 1, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 98, 390, 1, 1, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 195, 390, 1, 1, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 399, 521, 65, 43, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 496, 521, 65, 43, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 593, 521, 65, 43, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 690, 521, 65, 43, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 787, 521, 65, 43, clipSpeed4);
 
-		//Jump, 8번째
-		{
-			clip = new Clip(PlayMode::End);
-			SetClip(shaderFile, spriteFile, clip, 11, 1704, 24, 37, clipSpeed1);
-			SetClip(shaderFile, spriteFile, clip, 61, 1704, 23, 37, clipSpeed1);
-			SetClip(shaderFile, spriteFile, clip, 110, 1704, 23, 37, clipSpeed1);
-
-			animation->AddClip(clip);
-		}
-
-		//Fall, 9번째
-		{
-			clip = new Clip(PlayMode::End);
-			SetClip(shaderFile, spriteFile, clip, 12, 1766, 24, 39, clipSpeed1);
-			SetClip(shaderFile, spriteFile, clip, 61, 1766, 25, 39, clipSpeed1);
-			SetClip(shaderFile, spriteFile, clip, 112, 1765, 24, 40, clipSpeed1);
-			SetClip(shaderFile, spriteFile, clip, 161, 1765, 24, 40, clipSpeed1);
-			SetClip(shaderFile, spriteFile, clip, 210, 1765, 24, 40, clipSpeed1);
-
-			animation->AddClip(clip);
-		}
-
-		//LandHard, 10번째
-		{
-			clip = new Clip(PlayMode::End);
-			SetClip(shaderFile, spriteFile, clip, 14, 3115, 21, 28, clipSpeed3);
-			SetClip(shaderFile, spriteFile, clip, 63, 3118, 21, 25, clipSpeed3);
-			SetClip(shaderFile, spriteFile, clip, 112, 3119, 22, 24, clipSpeed3);
-			SetClip(shaderFile, spriteFile, clip, 161, 3119, 22, 24, clipSpeed3);
-			SetClip(shaderFile, spriteFile, clip, 210, 3119, 22, 24, clipSpeed3);
-			SetClip(shaderFile, spriteFile, clip, 259, 3119, 22, 24, clipSpeed3);
-			SetClip(shaderFile, spriteFile, clip, 308, 3119, 22, 24, clipSpeed3);
-			SetClip(shaderFile, spriteFile, clip, 357, 3119, 22, 24, clipSpeed3);
-			SetClip(shaderFile, spriteFile, clip, 406, 3119, 22, 24, clipSpeed3);
-			SetClip(shaderFile, spriteFile, clip, 454, 3111, 22, 31, clipSpeed3);
-			SetClip(shaderFile, spriteFile, clip, 506, 3108, 19, 35, clipSpeed3);
-
-			animation->AddClip(clip);
-		}
-
-		//LandSoft, 11번째
-		{
-			clip = new Clip(PlayMode::End);
-			SetClip(shaderFile, spriteFile, clip, 14, 3177, 24, 29, clipSpeed4);
-			SetClip(shaderFile, spriteFile, clip, 63, 3178, 24, 28, clipSpeed4);
-			SetClip(shaderFile, spriteFile, clip, 111, 3175, 24, 28, clipSpeed4);
-			SetClip(shaderFile, spriteFile, clip, 162, 3171, 19, 35, clipSpeed4);
-
-			animation->AddClip(clip);
-		}
-
-		//Attack1, 12번째
-		{
-			clip = new Clip(PlayMode::End);
-			SetClip(shaderFile, spriteFile, clip, 11, 87, 24, 36, clipSpeed4);
-			SetClip(shaderFile, spriteFile, clip, 58, 87, 26, 36, clipSpeed4);
-			SetClip(shaderFile, spriteFile, clip, 109, 91, 26, 32, clipSpeed4);
-			SetClip(shaderFile, spriteFile, clip, 163, 89, 27, 34, clipSpeed4);
-			SetClip(shaderFile, spriteFile, clip, 212, 89, 27, 34, clipSpeed4);
-			SetClip(shaderFile, spriteFile, clip, 261, 89, 27, 34, clipSpeed4);
-			SetClip(shaderFile, spriteFile, clip, 310, 89, 27, 34, clipSpeed4);
-
-			animation->AddClip(clip);
-		}
-
-		//Attack2, 13번째
-		{
-			clip = new Clip(PlayMode::End);
-			SetClip(shaderFile, spriteFile, clip, 12, 129, 21, 37, clipSpeed4);
-			SetClip(shaderFile, spriteFile, clip, 61, 149, 22, 37, clipSpeed4);
-			SetClip(shaderFile, spriteFile, clip, 113, 151, 26, 35, clipSpeed4);
-			SetClip(shaderFile, spriteFile, clip, 158, 152, 29, 34, clipSpeed4);
-			SetClip(shaderFile, spriteFile, clip, 209, 152, 26, 34, clipSpeed4);
-			SetClip(shaderFile, spriteFile, clip, 258, 152, 25, 34, clipSpeed4);
-			SetClip(shaderFile, spriteFile, clip, 306, 152, 25, 34, clipSpeed4);
-
-			animation->AddClip(clip);
-		}
-
-		//Attack3, 14번째
-		{
-			clip = new Clip(PlayMode::End);
-			SetClip(shaderFile, spriteFile, clip, 6, 215, 31, 34, clipSpeed4);
-			SetClip(shaderFile, spriteFile, clip, 51, 213, 34, 36, clipSpeed4);
-			SetClip(shaderFile, spriteFile, clip, 99, 213, 35, 36, clipSpeed4);
-			SetClip(shaderFile, spriteFile, clip, 148, 212, 32, 37, clipSpeed4);
-			SetClip(shaderFile, spriteFile, clip, 207, 212, 30, 37, clipSpeed4);
-			SetClip(shaderFile, spriteFile, clip, 207, 212, 30, 37, clipSpeed4);
-			SetClip(shaderFile, spriteFile, clip, 263, 221, 23, 28, clipSpeed4);
-			SetClip(shaderFile, spriteFile, clip, 303, 220, 29, 29, clipSpeed4);//----fromhere----
-			SetClip(shaderFile, spriteFile, clip, 351, 220, 30, 29, clipSpeed4);
-			SetClip(shaderFile, spriteFile, clip, 400, 220, 30, 29, clipSpeed4);
-			SetClip(shaderFile, spriteFile, clip, 455, 220, 23, 29, clipSpeed4);
-			SetClip(shaderFile, spriteFile, clip, 506, 214, 19, 35, clipSpeed4);
-
-			animation->AddClip(clip);
+				attack->AddClip(clip);
+			}
 		}
 	}
 
-	//attack animation setting
-	{
-		//Nothing, 0번째
-		{
-			clip = new Clip(PlayMode::End);
-			SetClip(shaderFile, spriteFile, clip, 1, 390, 1, 1, clipSpeed4);
-
-			attack->AddClip(clip);
-		}
-
-		//leaf1, 1번째
-		{
-			clip = new Clip(PlayMode::End);
-			SetClip(shaderFile, spriteFile, clip, 1, 390, 1, 1, clipSpeed4);
-			SetClip(shaderFile, spriteFile, clip, 98, 390, 1, 1, clipSpeed4);
-			SetClip(shaderFile, spriteFile, clip, 195, 390, 1, 1, clipSpeed4);
-			SetClip(shaderFile, spriteFile, clip, 305, 404, 58, 30, clipSpeed4);
-			SetClip(shaderFile, spriteFile, clip, 402, 404, 58, 30, clipSpeed4);
-			SetClip(shaderFile, spriteFile, clip, 499, 404, 58, 30, clipSpeed4);
-			SetClip(shaderFile, spriteFile, clip, 596, 404, 58, 30, clipSpeed4);
-
-			attack->AddClip(clip);
-		}
-
-		//leaf2, 2번째
-		{
-			clip = new Clip(PlayMode::End);
-			SetClip(shaderFile, spriteFile, clip, 1, 390, 1, 1, clipSpeed4);
-			SetClip(shaderFile, spriteFile, clip, 98, 390, 1, 1, clipSpeed4);
-			SetClip(shaderFile, spriteFile, clip, 195, 390, 1, 1, clipSpeed4);
-			SetClip(shaderFile, spriteFile, clip, 305, 404, 58, 30, clipSpeed4);
-			SetClip(shaderFile, spriteFile, clip, 402, 404, 58, 30, clipSpeed4);
-			SetClip(shaderFile, spriteFile, clip, 499, 404, 58, 30, clipSpeed4);
-			SetClip(shaderFile, spriteFile, clip, 596, 404, 58, 30, clipSpeed4);
-
-			attack->AddClip(clip);
-		}
-
-		//leaf3, 3번째
-		{
-			clip = new Clip(PlayMode::End);
-			SetClip(shaderFile, spriteFile, clip, 1, 390, 1, 1, clipSpeed4);
-			SetClip(shaderFile, spriteFile, clip, 98, 390, 1, 1, clipSpeed4);
-			SetClip(shaderFile, spriteFile, clip, 195, 390, 1, 1, clipSpeed4);
-			SetClip(shaderFile, spriteFile, clip, 305, 404, 58, 30, clipSpeed4);
-			SetClip(shaderFile, spriteFile, clip, 402, 404, 58, 30, clipSpeed4);
-			SetClip(shaderFile, spriteFile, clip, 499, 404, 58, 30, clipSpeed4);
-			SetClip(shaderFile, spriteFile, clip, 596, 404, 58, 30, clipSpeed4);
-
-			attack->AddClip(clip);
-		}
-	}
-	
 	animation->Position(position);
 	animation->Scale(scale);
 	animation->Play(0);
@@ -293,8 +296,8 @@ void Player::Update(D3DXMATRIX & V, D3DXMATRIX & P)
 		{
 			if (triggers[StatusSensor])
 			{
-				status = (PlayerAct)((int)status + 1);
-				attackStatus = (_Attack)((int)attackStatus + 1);
+				status = (PlayerAct)((int)PlayerAct::Attack1 + attackStack - 1);
+				attackStatus = (_Attack)((int)_Attack::Leaf1 + attackStack - 1);
 				triggers[StatusSensor] = false;
 			}
 			else
@@ -552,7 +555,7 @@ void Player::Animation_Playing()
 			break;
 
 		case PlayerAct::Attack3:
-			animation->Play(13);
+			animation->Play(14);
 			attackStatus = _Attack::Leaf2;
 			velocity.x = 0;
 			if (animation->Clip_Check_IfEnd())
