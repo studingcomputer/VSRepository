@@ -1,53 +1,51 @@
 #include "stdafx.h"
 #include "Bullet.h"
 
-Bullet::Bullet(wstring shaderFile, D3DXVECTOR2 start, float angle, float speed)
-	:scale(1.0f, 1.0f), rotation(0,0,0)
+Bullet::Bullet(wstring shaderFile, D3DXVECTOR2 start, bool _where)
+	:scale(1.0f, 1.0f), _where(_where)
 {
-	clip = new Clip(PlayMode::Loop);
-	for (UINT i = 0; i < 7; i++)
-	{
-		float x = (float)i * 15 + 173;
-		clip->AddFrame(new Sprite(Textures + L"Bullets.png", shaderFile, x, 155, x + 11, 167), 0.3f);
-	}
+	wstring SpriteFile = Textures + L"Momodora/86754.png";
+	mainSprite = new Sprite(SpriteFile, shaderFile, 92, 3802, 114, 3805);
 
 	position = start;
-	clip->Position(position);
-	clip->Play();
-	clip->DrawBound(true);
+	mainSprite->Position(position);
+
+	mainSprite->RotationDegree(0, _where ? 180 : 0, 0);
 }
 
 Bullet::~Bullet()
 {
-	SAFE_DELETE(clip);
+	SAFE_DELETE(mainSprite);
 }
 
 void Bullet::Update(D3DXMATRIX & V, D3DXMATRIX & P)
 {
-	if (Key->Press('I'))
-		position.y += 200.0f * Timer->Elapsed();
-	else if (Key->Press('K'))
-		position.y -= 200.0f * Timer->Elapsed();
+	if (hittedTrigger)
+	{
+		position = mainSprite->Position();
+		if (_where)
+		{
+			position.x -= 300 * Timer->Elapsed();
+		}
+		else
+		{
+			position.x += 300 * Timer->Elapsed();
+		}
 
-	if (Key->Press('J'))
-		position.x -= 200.0f * Timer->Elapsed();
-	else if (Key->Press('L'))
-		position.x += 200.0f * Timer->Elapsed();
+	}
 
-	clip->Position(position);
-	clip->Update(V, P);
+	mainSprite->Position(position);
+	mainSprite->Update(V, P);
 }
 
 void Bullet::Render()
 {
-	ImGui::Separator();
+	mainSprite->Scale(scale);
+	mainSprite->RotationDegree(rotation);
+	mainSprite->Render();
+}
 
-	ImGui::SliderFloat2("Bullet Scale", (float*)&scale, 1, 5);
-	ImGui::SliderFloat3("Bullet Rotation", (float*)&rotation, 0, 360);	
-	clip->Render();
-
-	clip->Scale(scale);
-	clip->RotationDegree(rotation);
-
-	clip->Render();
+bool Bullet::IsArrowHitAtWall(Sprite * obj)
+{
+	return false;
 }

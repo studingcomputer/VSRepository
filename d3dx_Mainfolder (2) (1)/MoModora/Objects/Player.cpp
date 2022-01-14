@@ -201,6 +201,32 @@ Player::Player(D3DXVECTOR2 position, D3DXVECTOR2 scale)
 
 				animation->AddClip(clip);
 			}
+
+			//jumpattack, 15번째
+			{
+				clip = new Clip(PlayMode::End);
+				SetClip(shaderFile, spriteFile, clip, 14, 274, 18, 36, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 62, 274, 18, 36, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 115, 281, 23, 29, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 164, 282, 23, 30, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 213, 283, 23, 29, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 262, 283, 23, 29, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 311, 282, 23, 30, clipSpeed4);
+				animation->AddClip(clip);
+			}
+
+			//fallattack, 16번째
+			{
+				clip = new Clip(PlayMode::End);
+				SetClip(shaderFile, spriteFile, clip, 14, 339, 18, 36, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 62, 339, 18, 36, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 115, 346, 23, 29, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 165, 347, 22, 28, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 214, 348, 22, 27, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 263, 348, 22, 27, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 312, 348, 22, 27, clipSpeed4);
+				animation->AddClip(clip);
+			}
 		}
 
 		//attack animation setting
@@ -247,11 +273,30 @@ Player::Player(D3DXVECTOR2 position, D3DXVECTOR2 scale)
 				SetClip(shaderFile, spriteFile, clip, 1, 390, 1, 1, clipSpeed4);
 				SetClip(shaderFile, spriteFile, clip, 98, 390, 1, 1, clipSpeed4);
 				SetClip(shaderFile, spriteFile, clip, 195, 390, 1, 1, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 98, 390, 1, 1, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 195, 390, 1, 1, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 195, 390, 1, 1, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 195, 390, 1, 1, clipSpeed4);
 				SetClip(shaderFile, spriteFile, clip, 399, 521, 65, 43, clipSpeed4);
 				SetClip(shaderFile, spriteFile, clip, 496, 521, 65, 43, clipSpeed4);
 				SetClip(shaderFile, spriteFile, clip, 593, 521, 65, 43, clipSpeed4);
 				SetClip(shaderFile, spriteFile, clip, 690, 521, 65, 43, clipSpeed4);
 				SetClip(shaderFile, spriteFile, clip, 787, 521, 65, 43, clipSpeed4);
+
+				attack->AddClip(clip);
+			}
+
+			//airleaf, 4번째
+			{
+				clip = new Clip(PlayMode::End);
+				SetClip(shaderFile, spriteFile, clip, 1, 390, 1, 1, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 98, 390, 1, 1, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 195, 390, 1, 1, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 195, 390, 1, 1, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 225, 581, 38, 48, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 322, 581, 38, 48, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 419, 581, 38, 48, clipSpeed4);
+				SetClip(shaderFile, spriteFile, clip, 516, 581, 38, 48, clipSpeed4);
 
 				attack->AddClip(clip);
 			}
@@ -284,7 +329,7 @@ void Player::Update(D3DXMATRIX & V, D3DXMATRIX & P)
 	{
 		velocity.y -= 9.8f * 0.00002;//조정 심하게 필요(wndml) (완료)
 		//velocity.y -= 9.8f * 0.000002;
-		if (velocity.y < -0.05 && status != PlayerAct::Falling)
+		if (velocity.y < -0.05 && status != PlayerAct::Falling && !(status == PlayerAct::AirAttack_falling || status == PlayerAct::AirAttack_jumping))
 		{
 			status = PlayerAct::Falling;
 			WhereBegin_Fall = animation->Position().y;
@@ -568,9 +613,29 @@ void Player::Animation_Playing()
 			break;
 
 		case PlayerAct::AirAttack_falling:
+			animation->Play(15);
+			attackStatus = _Attack::AirLeaf;
+			velocity.x = 0;
+			if (animation->Clip_Check_IfEnd() || onGround)
+			{
+				status = PlayerAct::Falling;
+				attackStatus = _Attack::Nothing;
+			}
+			triggers[LRMove] = false;
+			triggers[BreakMove] = false;
 			break;
 
 		case PlayerAct::AirAttack_jumping:
+			animation->Play(16);
+			attackStatus = _Attack::AirLeaf;
+			velocity.x = 0;
+			if (animation->Clip_Check_IfEnd() && velocity.y <= 0)
+			{
+				status = PlayerAct::Falling;
+				attackStatus = _Attack::Nothing;
+			}
+			triggers[LRMove] = false;
+			triggers[BreakMove] = false;
 			break;
 	}
 
@@ -695,7 +760,6 @@ void Player::Key_Check()
 			if (attackStack == 0)
 			{
 				attackStack = 1;//일종의 트리거
-				attackStatus = _Attack::AirLeaf;
 				switch (status)
 				{
 					case PlayerAct::Falling:

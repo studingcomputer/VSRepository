@@ -1,20 +1,27 @@
 #pragma once
 
+class Sprite;
+
 class Bullet
 {
 public:
-	Bullet(wstring shaderFile, D3DXVECTOR2 start, float angle, float speed);
+	Bullet(wstring shaderFile, D3DXVECTOR2 start, bool _where);
 	~Bullet();
 
 	void Update(D3DXMATRIX& V, D3DXMATRIX& P);
 	void Render();
 
-	Clip* GetClip() { return clip; }
-	D3DXVECTOR2 Position() { return position; }
+	bool IsArrowHit(Sprite* obj) { return mainSprite->OBB(obj); }
+	bool IsArrowHitAtWall(Sprite* obj);
+
+	Sprite* RtSprite() { return mainSprite; }
 private:
-	Clip* clip;
+	Sprite* mainSprite;
 
 	D3DXVECTOR2 position;
 	D3DXVECTOR2 scale;
 	D3DXVECTOR3 rotation;
+
+	bool hittedTrigger = false;
+	bool _where;
 };
