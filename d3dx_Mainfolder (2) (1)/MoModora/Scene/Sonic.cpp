@@ -3,40 +3,40 @@
 #include "Objects/Player.h"
 #include "Viewer/Freedom.h"
 #include "Renders/Line.h"
+#include "Viewer/Following.h"
 
 Sonic::Sonic(SceneValues * values)
 	:Scene(values)
 {
 	wstring shaderFile = Shaders + L"009_Sprite.fx";
 
-	player = new Player(D3DXVECTOR2(-50, 100), D3DXVECTOR2(2.0f, 2.0f));
 
-	backGround = new Sprite(Textures + L"Stage3.png", shaderFile);
-	backGround->Position(0, 0);
-	((Freedom*)(values->MainCamera))->Position(0, 0);
-	lines.push_back(new Line(shaderFile, a, b));
+	backGround = new Sprite(Textures + L"Momodora/groundmap.png", shaderFile);
+	backGround->Scale(1.05f, 1.05f);
+	backGround->Position(backGround->TextureSize().x * 0.5f - Width * 0.5f, 0.0f);
+	lines.push_back(new Line(shaderFile, D3DXVECTOR2((backGround->Position().x) - (backGround->TextureSize().x * 0.5f), -(Height * 0.35f)), D3DXVECTOR2((backGround->Position().x) + (backGround->TextureSize().x * 0.5f), -(Height * 0.35f))));
 
+	player = new Player(D3DXVECTOR2(-50, 100), D3DXVECTOR2(2.5f, 2.5f), backGround);
+
+	values->MainCamera = new Following(player);
 }
 
 Sonic::~Sonic()
 {
-	for (Marker* marker : markers)
-		SAFE_DELETE(marker);
 	SAFE_DELETE(backGround);
 	for (Line* l : lines)
 		SAFE_DELETE(l);
+	SAFE_DELETE(player);
 	
 }
 
-D3DXVECTOR2 mPos;
-int stack_ = 0;
-bool onMarker = false;
-Marker* onMarked = nullptr;
+
 void Sonic::Update()
 {
+	values->MainCamera->Update();
 	D3DXMATRIX V = values->MainCamera->View();
 	D3DXMATRIX P = values->Projection;
-	backGround->Update(V, P);
+	backGround->Update(values->MainCamera->View(), P);
 
 	D3DXVECTOR2 mouse = Mouse->Position();
 	D3DXVECTOR2 camera = values->MainCamera->Position();
@@ -50,12 +50,12 @@ void Sonic::Update()
 
 	for (Line* l : lines)
 	{
-		l->Update(V, P);
+		l->Update(values->MainCamera->View(), P);
 	}
 
 	CheckLines();
 	
-	player->Update(V, P);
+	player->Update(values->MainCamera->View(), P);
 }
 
 void Sonic::Render()

@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "Player.h"
 
-Player::Player(D3DXVECTOR2 position, D3DXVECTOR2 scale)
-	:moveSpeed(200.0f), focusOffset(-180,-120), velocity(D3DXVECTOR2(0.0f,0.0f)), status(PlayerAct::Nothing), attackStatus(_Attack::Nothing)
+Player::Player(D3DXVECTOR2 position, D3DXVECTOR2 scale, Sprite* worldSprite)
+	:moveSpeed(250.0f), focusOffset(Width * 0.5f, Height * 0.5f), velocity(D3DXVECTOR2(0.0f,0.0f)), status(PlayerAct::Nothing), attackStatus(_Attack::Nothing)
 {
 	animation = new Animation;
 	attack = new Animation;
@@ -311,6 +311,8 @@ Player::Player(D3DXVECTOR2 position, D3DXVECTOR2 scale)
 	attack->Scale(scale);
 	attack->Play(0);
 
+	theEndofWorld_L = worldSprite->Position().x - worldSprite->TextureSize().x * 0.5f;
+	theEndofWorld_R = worldSprite->Position().x + worldSprite->TextureSize().x * 0.5f;
 
 	animation->DrawBound(false);
 }
@@ -394,13 +396,6 @@ void Player::Render()
 
 	animation->Render();
 	attack->Render();
-
-}
-
-void Player::Focus(D3DXVECTOR2 * position, D3DXVECTOR2 * size)
-{
-	*position = animation->Position() - focusOffset;
-	(*size) = D3DXVECTOR2(1, 1);
 
 }
 
@@ -684,7 +679,7 @@ void Player::Key_Check()
 			jumpStack++;
 		}
 	}
-	else if (Key->Press('A') && !Run_key && !Else_key && !C_key && !Attack_key)
+	else if (Key->Press('A') && !Run_key && !Else_key && !C_key && !Attack_key && (animation->Position().x - animation->TextureSize().x * 0.5f) > theEndofWorld_L)
 	{
 		if (status == PlayerAct::Turning || (playerVec != LEFT))
 		{
@@ -700,7 +695,7 @@ void Player::Key_Check()
 		animation->RotationDegree(0, 180, 0);
 		attack->RotationDegree(0, 180, 0);
 	}
-	else if (Key->Press('D') && !Run_key && !Else_key && !C_key && !Attack_key)
+	else if (Key->Press('D') && !Run_key && !Else_key && !C_key && !Attack_key && (animation->TextureSize().x * 0.5f + animation->Position().x) < theEndofWorld_R)
 	{
 		if (status == PlayerAct::Turning || (playerVec != RIGHT))
 		{
@@ -792,4 +787,28 @@ void Player::Key_Check()
 void Player::SetClip(wstring shaderFile, wstring textureFile, Clip * clip, int x, int y, int width, int height, float speed)
 {
 	clip->AddFrame(new Sprite(textureFile, shaderFile, x, y, x + width, y + height), speed);
+}
+
+void Player::Focus(D3DXVECTOR2 * position, D3DXVECTOR2 * size)
+{
+	if (animation->Position().x < theEndofWorld_L + focusOffset.x)
+	{
+		(*position).x = focusOffset.x;
+		(*position).y = focusOffset.y;
+		(*size) = D3DXVECTOR2(1, 1);
+	}
+
+	else if (animation->Position().x > theEndofWorld_R - focusOffset.x)
+	{
+		(*position).x = theEndofWorld_R;
+		(*position).y = focusOffset.y;
+		(*size) = D3DXVECTOR2(1, 1);
+	}
+
+	else
+	{
+		*position = animation->Position() + focusOffset;
+		(*position).y = focusOffset.y;
+		(*size) = D3DXVECTOR2(1, 1);
+	}
 }

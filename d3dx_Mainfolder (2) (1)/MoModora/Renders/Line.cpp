@@ -3,7 +3,6 @@
 
 Line::Line(wstring shaderFile, D3DXVECTOR2 pos1, D3DXVECTOR2 pos2)
 {
-	//굳이 변경작업에 프로세스를 쓰지 않고 애초에 마커랑 포지션 공유
 	if (pos1.x <= pos2.x)
 	{
 
@@ -67,16 +66,16 @@ void Line::Update(D3DXMATRIX & V, D3DXMATRIX & P)
 
 void Line::Render()
 {
-	UINT stride = sizeof(Vertex);
-	UINT offset = 0;
+	//UINT stride = sizeof(Vertex);
+	//UINT offset = 0;
 
-	DeviceContext->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
-	//DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
-	DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+	//DeviceContext->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
+	////DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
+	//DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 
 
 
-	shader->Draw(0, isContactHasOccured ? 1 : 0, 5);
+	//shader->Draw(0, isContactHasOccured ? 1 : 0, 5);
 }
 
 bool Line::CheckCollapse(Sprite * input)

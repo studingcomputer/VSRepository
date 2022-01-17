@@ -24,13 +24,13 @@ private:
 	};
 
 public:
-	Player(D3DXVECTOR2 position, D3DXVECTOR2 scale);
+	Player(D3DXVECTOR2 position, D3DXVECTOR2 scale, Sprite* worldSprite);
 	~Player();
 
 	void Update(D3DXMATRIX& V, D3DXMATRIX& P);
 	void Render();
 
-	void Focus(D3DXVECTOR2* position, D3DXVECTOR2* size);
+	void Focus(D3DXVECTOR2* position, D3DXVECTOR2* size) override;
 
 	Sprite* GetSprite() { return animation->GetSprite(); }
 	Sprite* GetAttack_Crash() { return attack->GetSprite(); }
@@ -75,5 +75,8 @@ private:
 
 	float WhereBegin_Fall = 0.0f;
 	float FloorFall;
+
+	float theEndofWorld_L;
+	float theEndofWorld_R;
 
 };
