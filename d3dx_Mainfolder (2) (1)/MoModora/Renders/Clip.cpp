@@ -178,7 +178,7 @@ void Clip::Render()
 	Frame* frame = frames[currentFrame];
 	frame->Image->Render();
 
-	ImGui::LabelText("currentFrame", "%d", currentFrame);
+	//ImGui::LabelText("currentFrame", "%d", currentFrame);
 }
 
 void Clip::DrawBound(bool val)

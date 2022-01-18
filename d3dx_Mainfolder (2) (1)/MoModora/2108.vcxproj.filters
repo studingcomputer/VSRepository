@@ -66,11 +66,17 @@
     <ClCompile Include="Systems\CMouse.cpp">
       <Filter>Systems</Filter>
     </ClCompile>
-    <ClCompile Include="Scene\Sonic.cpp">
-      <Filter>Scene</Filter>
-    </ClCompile>
     <ClCompile Include="Renders\Line.cpp">
       <Filter>Renders</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\GroundMapScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\IceMapScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\SunSetMap.cpp">
+      <Filter>Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -138,17 +144,23 @@
     <ClInclude Include="Viewer\IFollowing.h">
       <Filter>Viewer</Filter>
     </ClInclude>
-    <ClInclude Include="Scene\Scene.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
     <ClInclude Include="Systems\CMouse.h">
       <Filter>Systems</Filter>
     </ClInclude>
-    <ClInclude Include="Scene\Sonic.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
     <ClInclude Include="Renders\Line.h">
       <Filter>Renders</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\GroundMapScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\IceMapScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SunSetMap.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Scene.h">
+      <Filter>Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

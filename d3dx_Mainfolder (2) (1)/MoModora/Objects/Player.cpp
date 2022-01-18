@@ -384,7 +384,7 @@ void Player::Update(D3DXMATRIX & V, D3DXMATRIX & P)
 
 void Player::Render()
 {
-	ImGui::SliderFloat("Move Speed", &moveSpeed, 50, 400);
+	/*ImGui::SliderFloat("Move Speed", &moveSpeed, 50, 400);
 	ImGui::LabelText("val", "%.2f", FloorFall);
 	ImGui::LabelText("playerVec", "%s", playerVec ? "Left" : "Right");
 	ImGui::LabelText("Velocity", "%.2f, %.2f", velocity.x, velocity.y);
@@ -392,7 +392,7 @@ void Player::Render()
 	ImGui::LabelText("BASIC_KEY", "%s", C_key ? "true" : "false");
 	ImGui::LabelText("ELSE_KEY", "%s", Else_key ? "true" : "false");
 
-	ImGui::LabelText("attackStack", "%d", attackStack);
+	ImGui::LabelText("attackStack", "%d", attackStack);*/
 
 	animation->Render();
 	attack->Render();

@@ -2,7 +2,7 @@
 #include "Systems/Device.h"
 #include "Scene/Scene.h"
 #include "Viewer/Freedom.h"
-#include "Scene/Sonic.h"
+#include "Scene/SunSetMap.h"
 
 
 SceneValues* values;
@@ -14,7 +14,7 @@ void InitScene()
 	values->MainCamera = new Freedom();
 	D3DXMatrixIdentity(&values->Projection);
 
-	scenes.push_back(new Sonic(values));
+	scenes.push_back(new SunSetMap(values));
 }
 
 void DestroyScene()

@@ -158,7 +158,9 @@
     <ClCompile Include="Renders\Shader.cpp" />
     <ClCompile Include="Renders\Sprite.cpp" />
     <ClCompile Include="Program.cpp" />
-    <ClCompile Include="Scene\Sonic.cpp" />
+    <ClCompile Include="Scene\GroundMapScene.cpp" />
+    <ClCompile Include="Scene\IceMapScene.cpp" />
+    <ClCompile Include="Scene\SunSetMap.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
     </ClCompile>
@@ -186,8 +188,10 @@
     <ClInclude Include="Renders\Rect.h" />
     <ClInclude Include="Renders\Shader.h" />
     <ClInclude Include="Renders\Sprite.h" />
+    <ClInclude Include="Scene\GroundMapScene.h" />
+    <ClInclude Include="Scene\IceMapScene.h" />
     <ClInclude Include="Scene\Scene.h" />
-    <ClInclude Include="Scene\Sonic.h" />
+    <ClInclude Include="Scene\SunSetMap.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Systems\Device.h" />
     <ClInclude Include="Systems\DirectWrite.h" />
