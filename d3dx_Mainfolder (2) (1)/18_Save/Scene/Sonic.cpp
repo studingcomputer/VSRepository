@@ -49,7 +49,7 @@ void Sonic::Update()
 
 void Sonic::Render()
 {
-	if (ImGui::Button("Save Text") == true)
+	/*if (ImGui::Button("Save Text") == true)
 	{
 		FILE* fp = fopen("marker.txt", "w");
 
@@ -68,7 +68,10 @@ void Sonic::Render()
 			float start = Timer->Running();
 
 			for (Marker* marker : markers)
+			{
 				SAFE_DELETE(marker);
+			}
+			markers.clear();
 			FILE* fp = fopen("marker.txt", "r");
 			
 			UINT count;
@@ -85,9 +88,62 @@ void Sonic::Render()
 			}
 			fclose(fp);
 		}
+	}*/
+
+	//Binary
+
+	if (ImGui::Button("Save Binary") == true)
+	{
+		BinaryWriter* w = new BinaryWriter;
+		w->Open(L"marker.bin");
+
+		vector<D3DXVECTOR2> v(markers.size());
+		for (Marker* marker : markers)
+			v.push_back(marker->Position());
+
+		w->UInt(v.size());
+		w->Byte(&v[0], sizeof(D3DXVECTOR2) * v.size());
+
+		w->Close();
+		SAFE_DELETE(w);
 	}
 
-	ImGui::LabelText("Posiiton", "%.0f, %.0f", mPos.x, mPos.y);
+	if (ImGui::Button("Load Binery") == true)
+	{
+		if (Path::ExistFile("marker.bin") == true)
+		{
+			float start = Timer->Running();
+
+			for (Marker* marker : markers)
+				SAFE_DELETE(marker);
+			markers.clear();
+
+			BinaryReader* r = new BinaryReader();
+			r->Open(L"marker.bin");
+
+			UINT count;
+			count = r->UInt();
+
+			vector<D3DXVECTOR2> v;
+			v.assign(count, D3DXVECTOR2());
+
+			void* ptr = (void*)&(v[0]);
+			r->Byte(&ptr, sizeof(D3DXVECTOR2) * count);
+
+			for (UINT i = 0; i < count; i++)
+			{
+				markers.push_back(new Marker(Shaders + L"009_Sprite.fx", v[i]));
+			}
+
+			r->Close();
+			SAFE_DELETE(r);
+		}
+	}
+
+
+
+
+	ImGui::LabelText("Position", "%.0f, %.0f", mPos.x, mPos.y);
 
 	for (Marker* marker : markers)
 	{

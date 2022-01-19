@@ -89,6 +89,7 @@ enum class PlayerAct
 	AirAttack_jumping,
 	AirAttack_falling,
 	Attack_Bow,
-	Attack_Bow_Crouching
+	Attack_Bow_Crouching,
+	Attack_Bow_Falling
 	//나중에 추가예정
 };

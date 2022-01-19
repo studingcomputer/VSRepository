@@ -48,7 +48,7 @@ void InitScene()
 	document->SaveFile("test.xml");
 	SAFE_DELETE(document);*/
 
-	Xml::XMLDocument* document = new Xml::XMLDocument();
+	/*Xml::XMLDocument* document = new Xml::XMLDocument();
 	Xml::XMLError error = document->LoadFile("test.xml");
 	assert(error == Xml::XML_SUCCESS);
 
@@ -64,7 +64,7 @@ void InitScene()
 	element = element->NextSiblingElement();
 	float average = element->FloatText();
 
-	SAFE_DELETE(document);
+	SAFE_DELETE(document);*/
 }
 
 void DestroyScene()

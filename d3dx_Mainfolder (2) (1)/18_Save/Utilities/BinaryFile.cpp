@@ -16,7 +16,7 @@ BinaryWriter::~BinaryWriter()
 
 void BinaryWriter::Open(wstring filePath, UINT openOption)
 {
-	assert(filePath.length() > 0);
+	assert(filePath.length() > 0);//파일 이름을 안 적었으면 에러
 	fileHandle = CreateFile
 	(
 		filePath.c_str()

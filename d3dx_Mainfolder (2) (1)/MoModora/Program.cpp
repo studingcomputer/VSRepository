@@ -86,27 +86,5 @@ void Render()
 }
 
 /*
-//idle 0, run 0~5
 
-SetClip(shaderFile, spriteFile, clip, 14, 65, 28, 23, clipSpeed4);
-SetClip(shaderFile, spriteFile, clip, 60, 64, 25, 24, clipSpeed4);
-SetClip(shaderFile, spriteFile, clip, 106, 63, 23, 25, clipSpeed4);
-SetClip(shaderFile, spriteFile, clip, 151, 65, 31, 23, clipSpeed4);
-SetClip(shaderFile, spriteFile, clip, 196, 63, 33, 25, clipSpeed4);
-SetClip(shaderFile, spriteFile, clip, 241, 62, 32, 26, clipSpeed4);
-
-//hit 맞았을 때, 하나만 출력. 이후 유효타를 맞을때마다 번갈아가며 출력
-
-SetClip(shaderFile, spriteFile, clip, 14, 113, 24, 28, clipSpeed4);
-SetClip(shaderFile, spriteFile, clip, 59, 114, 24, 27, clipSpeed4);
-
-//attack
-
-SetClip(shaderFile, spriteFile, clip, 32, 184, 24, 26, clipSpeed4);
-SetClip(shaderFile, spriteFile, clip, 114, 179, 20, 31, clipSpeed4);
-SetClip(shaderFile, spriteFile, clip, 180, 184, 46, 24, clipSpeed4);
-SetClip(shaderFile, spriteFile, clip, 260, 186, 52, 21, clipSpeed4);
-SetClip(shaderFile, spriteFile, clip, 341, 176, 58, 34, clipSpeed4);//여기부터 유효타, 이 전까진 때리는 거로 캔슬 가능
-SetClip(shaderFile, spriteFile, clip, 423, 181, 58, 29, clipSpeed4);
-SetClip(shaderFile, spriteFile, clip, 504, 181, 59, 29, clipSpeed4);
 */
