@@ -2,7 +2,7 @@
 #include "Friuts.h"
 
 Friuts::Friuts(wstring shaderFile, D3DXVECTOR2 position)
-	:Enemy(val)
+	:Enemy(val), moveSpeed(200.0f)
 {
 	val = new MainObject(new Animation(), 8, 2, EnemyStatus::nothing);
 
@@ -35,16 +35,16 @@ Friuts::Friuts(wstring shaderFile, D3DXVECTOR2 position)
 	//hit 맞았을 때, 하나만 출력. 이후 유효타를 맞을때마다 번갈아가며 출력
 	{
 		clip = new Clip(PlayMode::End);
-		SetClip(shaderFile, spriteFile, clip, 14, 113, 24, 28, clipSpeed);
+		SetClip(shaderFile, spriteFile, clip, 14, 113, 24, 28, 0.5f);
 		val->_this->AddClip(clip);
 		clip = new Clip(PlayMode::End);
-		SetClip(shaderFile, spriteFile, clip, 59, 114, 24, 27, clipSpeed);
+		SetClip(shaderFile, spriteFile, clip, 59, 114, 24, 27, 0.5f);
 		val->_this->AddClip(clip);
 	}
 
 	//attack
 	{
-		clip = new Clip(PlayMode::End);
+		clip = new Clip(PlayMode::Loop);
 		SetClip(shaderFile, spriteFile, clip, 32, 184, 24, 26, clipSpeed);
 		SetClip(shaderFile, spriteFile, clip, 114, 179, 20, 31, clipSpeed);
 		SetClip(shaderFile, spriteFile, clip, 180, 184, 46, 24, clipSpeed);
@@ -67,30 +67,105 @@ Friuts::~Friuts()
 	SAFE_DELETE(val);
 }
 
-void Friuts::Update()
+void Friuts::Update(D3DXMATRIX V, D3DXMATRIX P)
 {
-	if (val->act == EnemyStatus::walking)
+	D3DXVECTOR2 ex_Position = val->_this->Position();
+
+
+	StatusSet();
+
+
+	attackAble = true;
+	switch (val->act)
 	{
-		if (vec == left)
-		{
+		case EnemyStatus::walking:
+			if (vec == left)
+			{
+				val->_this->RotationDegree(0, 180, 0);
+				ex_Position.x -= moveSpeed * Timer->Elapsed();
+			}
+			else
+			{
+				val->_this->RotationDegree(0, 0, 0);
+				ex_Position.x += moveSpeed * Timer->Elapsed();
+			}
+			break;
 
-		}
-		else
-		{
-
-		}
+		case EnemyStatus::attacking:
+			if (val->_this->GetClip()->RtCurrentFrame() < 4)
+			{
+				attackAble = true;
+			}
+			else
+			{
+				attackAble = false;
+			}
 	}
+
+	val->_this->Position(ex_Position);
+	val->_this->Update(V, P);
 }
 
 void Friuts::Render()
 {
 }
 
-void Friuts::HitBy_At()
+void Friuts::HitBy_At(int damage)
 {
+	if (attackAble)
+	{
+		val->act = EnemyStatus::hit;
+		val->HP -= damage;
+
+		if (val->HP <= 0)
+		{
+			val->act = EnemyStatus::dead;
+		}
+		else if (currentAnimation == 1)
+		{
+			currentAnimation = 2;
+		}
+		else if (currentAnimation == 2)
+		{
+			currentAnimation = 1;
+		}
+	}
 }
 
 void Friuts::SetClip(wstring shaderFile, wstring textureFile, Clip * clip, int x, int y, int width, int height, float speed)
 {
 	clip->AddFrame(new Sprite(textureFile, shaderFile, x, y, x + width, y + height), speed);
+}
+
+void Friuts::StatusSet()
+{
+	switch (val->act)
+	{
+		case EnemyStatus::nothing:
+			currentAnimation = 0;
+
+		case EnemyStatus::walking:
+			currentAnimation = 3;
+			if (val->_this->Clip_Check_IfEnd())
+			{
+				val->act = EnemyStatus::nothing;
+				currentAnimation = 0;
+			}
+
+		case EnemyStatus::hit:
+			if(val->_this->Clip_Check_IfEnd())
+			{
+				val->act = EnemyStatus::nothing;
+				currentAnimation = 0;
+			}
+
+		case EnemyStatus::attacking:
+			currentAnimation = 4;
+			if (val->_this->Clip_Check_IfEnd())
+			{
+				val->act = EnemyStatus::nothing;
+				currentAnimation = 0;
+			}
+	}
+	val->_this->Play(currentAnimation);
 }

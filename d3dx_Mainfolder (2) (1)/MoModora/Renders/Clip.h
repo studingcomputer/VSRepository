@@ -52,6 +52,8 @@ public:
 
 	Sprite* GetSprite();
 
+	UINT RtCurrentFrame() { return currentFrame; }
+
 private:
 	D3DXVECTOR2 position;
 	D3DXVECTOR2 scale;
