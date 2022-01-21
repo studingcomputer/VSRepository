@@ -4,6 +4,7 @@
 #include "Viewer/Freedom.h"
 #include "Renders/Line.h"
 #include "Viewer/Following.h"
+#include "Objects/Friuts.h"
 
 SunSetMap::SunSetMap(SceneValues * values)
 	:Scene(values)

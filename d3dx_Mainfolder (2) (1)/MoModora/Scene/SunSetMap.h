@@ -17,6 +17,9 @@ private:
 	Sprite* backGround;
 
 	Player* player;
+
+	vector<Friuts> fruitDatabase;
+
 	vector<Line*> lines;
 
 	void CheckLines();

@@ -4,6 +4,7 @@
 Friuts::Friuts(wstring shaderFile, D3DXVECTOR2 position)
 	:Enemy(val), moveSpeed(200.0f)
 {
+	TimePast = 0.0f;
 	val = new MainObject(new Animation(), 8, 2, EnemyStatus::nothing);
 
 	this->position = position;
@@ -71,8 +72,21 @@ void Friuts::Update(D3DXMATRIX V, D3DXMATRIX P)
 {
 	D3DXVECTOR2 ex_Position = val->_this->Position();
 
+	if (timerUpdate)
+		TimePast += Timer->Elapsed();
 
 	StatusSet();
+
+	if (val->act == EnemyStatus::nothing && !metPlayer)
+	{
+		StartTimer();
+		if (RtTimer() >= 10)
+		{
+			ResetTimer();
+			vec = Math::Random(0, 1) ? left : right;
+			val->act = EnemyStatus::walking;
+		}
+	}
 
 
 	attackAble = true;
@@ -108,6 +122,7 @@ void Friuts::Update(D3DXMATRIX V, D3DXMATRIX P)
 
 void Friuts::Render()
 {
+	val->_this->Render();
 }
 
 void Friuts::HitBy_At(int damage)
@@ -168,4 +183,20 @@ void Friuts::StatusSet()
 			}
 	}
 	val->_this->Play(currentAnimation);
+}
+
+void Friuts::StartTimer()
+{
+	timerUpdate = true;
+}
+
+int Friuts::RtTimer()
+{
+	return TimePast;
+}
+
+void Friuts::ResetTimer()
+{
+	TimePast = 0.0f;
+	timerUpdate = false;
 }

@@ -11,6 +11,7 @@ public:
 	void Render() override;
 
 	void HitBy_At(int damage) override;
+	int RtStatus() { return (int)val->act; }
 
 
 private:
@@ -19,8 +20,16 @@ private:
 	void SetClip(wstring shaderFile, wstring textureFile, Clip * clip, int x, int y, int width, int height, float speed);
 
 	bool attackAble = true;
+	bool timerUpdate = false;
+	bool metPlayer = false;
 
 	void StatusSet();
 
 	int currentAnimation;
+
+	float TimePast;
+
+	void StartTimer();
+	int RtTimer();
+	void ResetTimer();
 };
