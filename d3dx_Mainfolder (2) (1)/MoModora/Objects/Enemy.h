@@ -32,11 +32,11 @@ public:
 	}
 	virtual ~Enemy() {}
 
-	virtual void Update(D3DXMATRIX V, D3DXMATRIX P);
-	virtual void Render();
+	virtual void Update(D3DXMATRIX V, D3DXMATRIX P) {}
+	virtual void Render() {}
 
 	EnemyStatus WhatDoesEnemy() { return status->act; }
-	virtual void HitBy_At(int damage);
+	virtual void HitBy_At(int damage) {}
 
 protected:
 

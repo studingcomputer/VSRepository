@@ -1,5 +1,6 @@
 #pragma once
 #include "Enemy.h"
+class Enemy;
 
 class Friuts : public Enemy
 {
@@ -7,10 +8,10 @@ public:
 	Friuts(wstring shaderFile, D3DXVECTOR2 position);
 	~Friuts();
 
-	void Update(D3DXMATRIX V, D3DXMATRIX P) override;
-	void Render() override;
+	virtual void Update(D3DXMATRIX V, D3DXMATRIX P) override;
+	virtual void Render() override;
 
-	void HitBy_At(int damage) override;
+	virtual void HitBy_At(int damage) override;
 	int RtStatus() { return (int)val->act; }
 
 

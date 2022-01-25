@@ -69,17 +69,11 @@
     <ClCompile Include="Renders\Line.cpp">
       <Filter>Renders</Filter>
     </ClCompile>
-    <ClCompile Include="Scene\GroundMapScene.cpp">
-      <Filter>Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene\IceMapScene.cpp">
-      <Filter>Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene\SunSetMap.cpp">
-      <Filter>Scene</Filter>
-    </ClCompile>
     <ClCompile Include="Objects\Friuts.cpp">
       <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\MainScene.cpp">
+      <Filter>Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -153,15 +147,6 @@
     <ClInclude Include="Renders\Line.h">
       <Filter>Renders</Filter>
     </ClInclude>
-    <ClInclude Include="Scene\GroundMapScene.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene\IceMapScene.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene\SunSetMap.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
     <ClInclude Include="Scene\Scene.h">
       <Filter>Scene</Filter>
     </ClInclude>
@@ -170,6 +155,9 @@
     </ClInclude>
     <ClInclude Include="Objects\Friuts.h">
       <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\MainScene.h">
+      <Filter>Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
