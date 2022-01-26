@@ -70,53 +70,55 @@ Friuts::~Friuts()
 
 void Friuts::Update(D3DXMATRIX V, D3DXMATRIX P)
 {
-	D3DXVECTOR2 ex_Position = val->_this->Position();
-
-	if (timerUpdate)
-		TimePast += Timer->Elapsed();
-
-	StatusSet();
-
-	if (val->act == EnemyStatus::nothing && !metPlayer)
+	if (startTrigger)
 	{
-		StartTimer();
-		if (RtTimer() >= 10)
+		D3DXVECTOR2 ex_Position = val->_this->Position();
+
+		if (timerUpdate)
+			TimePast += Timer->Elapsed();
+
+		StatusSet();
+
+		if (val->act == EnemyStatus::nothing && !metPlayer)
 		{
-			ResetTimer();
-			vec = Math::Random(0, 1) ? left : right;
-			val->act = EnemyStatus::walking;
+			StartTimer();
+			if (RtTimer() >= 10)
+			{
+				ResetTimer();
+				vec = Math::Random(0, 1) ? left : right;
+				val->act = EnemyStatus::walking;
+			}
 		}
+
+
+		attackAble = true;
+		switch (val->act)
+		{
+			case EnemyStatus::walking:
+				if (vec == left)
+				{
+					val->_this->RotationDegree(0, 180, 0);
+					ex_Position.x -= moveSpeed * Timer->Elapsed();
+				}
+				else
+				{
+					val->_this->RotationDegree(0, 0, 0);
+					ex_Position.x += moveSpeed * Timer->Elapsed();
+				}
+				break;
+
+			case EnemyStatus::attacking:
+				if (val->_this->GetClip()->RtCurrentFrame() < 4)
+				{
+					attackAble = true;
+				}
+				else
+				{
+					attackAble = false;
+				}
+		}
+		val->_this->Position(ex_Position);
 	}
-
-
-	attackAble = true;
-	switch (val->act)
-	{
-		case EnemyStatus::walking:
-			if (vec == left)
-			{
-				val->_this->RotationDegree(0, 180, 0);
-				ex_Position.x -= moveSpeed * Timer->Elapsed();
-			}
-			else
-			{
-				val->_this->RotationDegree(0, 0, 0);
-				ex_Position.x += moveSpeed * Timer->Elapsed();
-			}
-			break;
-
-		case EnemyStatus::attacking:
-			if (val->_this->GetClip()->RtCurrentFrame() < 4)
-			{
-				attackAble = true;
-			}
-			else
-			{
-				attackAble = false;
-			}
-	}
-
-	val->_this->Position(ex_Position);
 	val->_this->Update(V, P);
 }
 

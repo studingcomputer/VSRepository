@@ -326,57 +326,62 @@ void Player::Update(D3DXMATRIX & V, D3DXMATRIX & P)
 {
 	D3DXVECTOR2 position = animation->Position();
 
-	
-	if (!onGround)
+	if (startTrigger)
 	{
-		velocity.y -= 9.8f * 0.00002;//조정 심하게 필요(wndml) (완료)
-		//velocity.y -= 9.8f * 0.000002;
-		if (velocity.y < -0.05 && status != PlayerAct::Falling && !(status == PlayerAct::AirAttack_falling || status == PlayerAct::AirAttack_jumping))
+		if (!onGround)
 		{
-			status = PlayerAct::Falling;
-			WhereBegin_Fall = animation->Position().y;
-		}
-	}
-	else
-	{
-		if (attackStatus == _Attack::Nothing)//땅에 닿았으면서, 아무 공격도 하고 있지 않는다면
-		{
-			if (triggers[StatusSensor])
+			velocity.y -= 9.8f * 0.00002;//조정 심하게 필요(wndml) (완료)
+			//velocity.y -= 9.8f * 0.000002;
+			if (velocity.y < -0.05 && status != PlayerAct::Falling && !(status == PlayerAct::AirAttack_falling || status == PlayerAct::AirAttack_jumping))
 			{
-				status = (PlayerAct)((int)PlayerAct::Attack1 + attackStack - 1);
-				attackStatus = (_Attack)((int)_Attack::Leaf1 + attackStack - 1);
-				triggers[StatusSensor] = false;
-			}
-			else
-			{
-				attackStack = 0;
+				status = PlayerAct::Falling;
+				WhereBegin_Fall = animation->Position().y;
 			}
 		}
-		if (status == PlayerAct::Jumping)
-			status = PlayerAct::Nothing;
-		if (jumpStack != 0)
+		else
 		{
-			jumpStack = 0;
+			if (attackStatus == _Attack::Nothing)//땅에 닿았으면서, 아무 공격도 하고 있지 않는다면
+			{
+				if (triggers[StatusSensor])
+				{
+					status = (PlayerAct)((int)PlayerAct::Attack1 + attackStack - 1);
+					attackStatus = (_Attack)((int)_Attack::Leaf1 + attackStack - 1);
+					triggers[StatusSensor] = false;
+				}
+				else
+				{
+					attackStack = 0;
+				}
+			}
+			if (status == PlayerAct::Jumping)
+				status = PlayerAct::Nothing;
+			if (jumpStack != 0)
+			{
+				jumpStack = 0;
+			}
 		}
+		if (((animation->Position().x - animation->TextureSize().x * 0.5f) <= theEndofWorld_L) || (animation->TextureSize().x * 0.5f + animation->Position().x) >= theEndofWorld_R)
+		{
+			velocity.x = 0.0f;
+		}
+
+		Key_Check();
+
+
+		position.x += velocity.x;
+		position.y += velocity.y;
+
+		animation->Position(position);
+		float x_;
+		if (!playerVec)
+			x_ = position.x + attack->GetSprite()->TextureSize().x * 0.3f;
+		else
+			x_ = position.x - attack->GetSprite()->TextureSize().x * 0.3f;
+
+		attack->Position(x_, position.y);
+
+		Animation_Playing();
 	}
-
-	Key_Check();
-	
-
-	position.x += velocity.x;
-	position.y += velocity.y;
-
-	animation->Position(position);
-	float x_;
-	if (!playerVec)
-		x_ = position.x + attack->GetSprite()->TextureSize().x * 0.3f;
-	else
-		x_ = position.x - attack->GetSprite()->TextureSize().x * 0.3f;
-
-	attack->Position(x_, position.y);
-	
-	Animation_Playing();
-
 	animation->Update(V, P);
 	attack->Update(V, P);
 

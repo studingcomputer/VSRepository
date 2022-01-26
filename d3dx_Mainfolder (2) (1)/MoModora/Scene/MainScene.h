@@ -15,7 +15,7 @@ public:
 	void Render() override;
 private:
 
-	Sprite* backGround;
+	Sprite* backGround[3];
 
 	Player* player;
 
@@ -28,5 +28,7 @@ private:
 	D3DXVECTOR2 mPos;
 
 	int mapSelect = 0;
+
+	bool isPlay = false;
 };
 

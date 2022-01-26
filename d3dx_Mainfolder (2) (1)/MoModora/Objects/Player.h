@@ -47,6 +47,8 @@ public:
 
 	bool RtCharacterInvincibility() { return isCharacterInvincibility; }
 
+	void SetStart(bool val) { startTrigger = val; }
+
 private:
 	float moveSpeed;
 	Animation* animation;
@@ -63,6 +65,7 @@ private:
 	_Attack attackStatus;
 
 	bool triggers[3] = {false, false, false};
+	bool startTrigger = false;
 
 	bool playerVec = RIGHT;
 

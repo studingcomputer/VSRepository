@@ -14,7 +14,7 @@ public:
 	virtual void HitBy_At(int damage) override;
 	int RtStatus() { return (int)val->act; }
 
-
+	void SetStart(bool val) { startTrigger = val; }
 private:
 	MainObject* val;
 	float moveSpeed;
@@ -23,6 +23,7 @@ private:
 	bool attackAble = true;
 	bool timerUpdate = false;
 	bool metPlayer = false;
+	bool startTrigger = false;
 
 	void StatusSet();
 
