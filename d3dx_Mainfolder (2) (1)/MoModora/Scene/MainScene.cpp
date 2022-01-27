@@ -74,6 +74,23 @@ void MainScene::Render()
 	ImGui::Begin("StageEditor", &my_tool_active, ImGuiWindowFlags_MenuBar);
 	if (ImGui::BeginMenuBar())
 	{
+		if (ImGui::BeginMenu("File"))
+		{
+			if (ImGui::MenuItem("Save")) 
+			{ 
+				function<void(wstring)> f = bind(&MainScene::SaveComplete, this, placeholders::_1);
+
+				Path::SaveFileDialog(L"", L"Binary\0*.bin", L".", f, Hwnd);
+			}
+			if (ImGui::MenuItem("Open")) 
+			{
+				function<void(wstring)> f = bind(&MainScene::OpenComplete, this, placeholders::_1);
+
+				Path::OpenFileDialog(L"", L"Binary\0*.bin", L".", f, Hwnd);
+			}
+			ImGui::EndMenu();
+		}
+		ImGui::EndMenuBar();
 		if (ImGui::BeginMenu("Map"))
 		{
 			if (ImGui::MenuItem("SunSet_Map")) { mapSelect = 0; }
@@ -97,13 +114,14 @@ void MainScene::Render()
 			isPlay = false;
 		}
 	}
+	if (ImGui::Button("Reset"))
+	{
+		isPlay = false;
+		Reset_Process();
+	}
 	player->SetStart(isPlay);
 	player->SetStart(isPlay);
 
-	if (ImGui::Button("Save"))
-	{
-		// do stuff
-	}
 
 	ImGui::End();
 
@@ -113,6 +131,64 @@ void MainScene::Render()
 	{
 		l->Render();
 	}
+}
+
+/*
+	세이브 방법
+	
+	위치만 세이브한다.
+
+	맵 종류 | 플레이어 위치 | ((-224, -224), 몬스터 위치) | ((-448, -448), 오브젝트 위치)
+*/
+void MainScene::SaveComplete(wstring name)
+{
+	BinaryWriter* w = new BinaryWriter;
+	w->Open(name);
+
+	vector<D3DXVECTOR2> v;
+	v.push_back(D3DXVECTOR2(0, mapSelect));
+	v.push_back(player->Position());
+	for (Friuts* f : fruitDatabase)
+		v.push_back(f->Position());
+
+	w->UInt(v.size());
+	w->Byte(&v[0], sizeof(D3DXVECTOR2) * v.size());
+
+	w->Close();
+	SAFE_DELETE(w);
+}
+
+void MainScene::OpenComplete(wstring name)
+{
+
+	for (Marker* marker : markers)
+		SAFE_DELETE(marker);
+
+	markers.clear();
+
+	BinaryReader* r = new BinaryReader();
+	r->Open(name);
+
+	UINT count;
+	count = r->UInt();
+
+	vector<D3DXVECTOR2> v;
+	v.assign(count, D3DXVECTOR2());
+
+	void* ptr = (void*)&(v[0]);
+	r->Byte(&ptr, sizeof(D3DXVECTOR2) * count);
+
+	for (UINT i = 0; i < count; i++)
+	{
+		markers.push_back(new Marker(Shaders + L"009_Sprite.fx", v[i]));
+	}
+
+	r->Close();
+	SAFE_DELETE(r);
+}
+
+void MainScene::Reset_Process()
+{
 }
 
 void MainScene::CheckLines()

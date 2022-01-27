@@ -49,6 +49,8 @@ public:
 
 	void SetStart(bool val) { startTrigger = val; }
 
+	D3DXVECTOR2 Position() { return animation->Position(); }
+
 private:
 	float moveSpeed;
 	Animation* animation;

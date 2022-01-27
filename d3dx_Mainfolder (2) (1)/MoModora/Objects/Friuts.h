@@ -14,6 +14,8 @@ public:
 	virtual void HitBy_At(int damage) override;
 	int RtStatus() { return (int)val->act; }
 
+	D3DXVECTOR2 Position() { return val->_this->Position(); }
+
 	void SetStart(bool val) { startTrigger = val; }
 private:
 	MainObject* val;

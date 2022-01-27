@@ -14,13 +14,20 @@ public:
 	void Update() override;
 	void Render() override;
 private:
+	
+	void SaveComplete(wstring name);
+	void OpenComplete(wstring name);
+
+	void Reset_Process();
 
 	Sprite* backGround[3];
 
 	Player* player;
 
-	vector<Friuts> fruitDatabase;
+	vector<Friuts*> fruitDatabase;
 
+	vector<Sprite*> blocks;
+	
 	vector<Line*> lines;
 
 	void CheckLines();
