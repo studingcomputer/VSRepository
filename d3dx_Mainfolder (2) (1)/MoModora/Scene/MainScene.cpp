@@ -6,6 +6,9 @@
 #include "Viewer/Following.h"
 #include "Objects/Friuts.h"
 
+#include <thread>
+using std::thread;
+
 MainScene::MainScene(SceneValues * values)
 	:Scene(values)
 {
@@ -27,6 +30,7 @@ MainScene::MainScene(SceneValues * values)
 	lines.push_back(new Line(shaderFile, D3DXVECTOR2((backGround[mapSelect]->Position().x) - (backGround[mapSelect]->TextureSize().x * 0.5f), -(Height * 0.35f)), D3DXVECTOR2((backGround[mapSelect]->Position().x) + (backGround[mapSelect]->TextureSize().x * 0.5f), -(Height * 0.35f))));
 
 	player = new Player(D3DXVECTOR2(-100, 100), D3DXVECTOR2(2.5f, 2.5f), backGround[mapSelect]);
+	fruitDatabase.push_back(new Friuts(shaderFile, D3DXVECTOR2(500, 100)));
 
 	values->MainCamera = new Following(player);
 }
@@ -55,16 +59,27 @@ void MainScene::Update()
 
 	mPos = mouse + camera;
 
+	vector<thread> threads;
 
-
+	for (Friuts* f : fruitDatabase)
+	{
+		threads.push_back(thread(f->Update, values->MainCamera->View(), P));
+	}
 	for (Line* l : lines)
 	{
 		l->Update(values->MainCamera->View(), P);
 	}
 
-	CheckLines();
+
+
+	thread t1(CheckLines);
 	
-	player->Update(values->MainCamera->View(), P);
+	thread t2(player->Update(values->MainCamera->View(), P));
+
+
+	t1.join();
+	t2.join();
+	t3.join();
 }
 
 void MainScene::Render()
@@ -90,7 +105,6 @@ void MainScene::Render()
 			}
 			ImGui::EndMenu();
 		}
-		ImGui::EndMenuBar();
 		if (ImGui::BeginMenu("Map"))
 		{
 			if (ImGui::MenuItem("SunSet_Map")) { mapSelect = 0; }
@@ -127,6 +141,10 @@ void MainScene::Render()
 
 	backGround[mapSelect]->Render();
 	player->Render();
+	for (Friuts* f : fruitDatabase)
+	{
+		f->Render();
+	}
 	for (Line* l : lines)
 	{
 		l->Render();
@@ -138,7 +156,7 @@ void MainScene::Render()
 	
 	위치만 세이브한다.
 
-	맵 종류 | 플레이어 위치 | ((-224, -224), 몬스터 위치) | ((-448, -448), 오브젝트 위치)
+	맵 종류 | 플레이어 위치 | ((-224, -224), 몬스터 위치)
 */
 void MainScene::SaveComplete(wstring name)
 {
@@ -149,7 +167,10 @@ void MainScene::SaveComplete(wstring name)
 	v.push_back(D3DXVECTOR2(0, mapSelect));
 	v.push_back(player->Position());
 	for (Friuts* f : fruitDatabase)
+	{
 		v.push_back(f->Position());
+		v.push_back(D3DXVECTOR2(-224.0f, -224.0f));
+	}
 
 	w->UInt(v.size());
 	w->Byte(&v[0], sizeof(D3DXVECTOR2) * v.size());
@@ -161,10 +182,11 @@ void MainScene::SaveComplete(wstring name)
 void MainScene::OpenComplete(wstring name)
 {
 
-	for (Marker* marker : markers)
-		SAFE_DELETE(marker);
+	for (Friuts* f : fruitDatabase)
+		SAFE_DELETE(f);
 
-	markers.clear();
+	fruitDatabase.clear();
+
 
 	BinaryReader* r = new BinaryReader();
 	r->Open(name);
@@ -177,10 +199,13 @@ void MainScene::OpenComplete(wstring name)
 
 	void* ptr = (void*)&(v[0]);
 	r->Byte(&ptr, sizeof(D3DXVECTOR2) * count);
+	UINT i = 0;
+	mapSelect = v[i++].y;
+	player->Position(v[i++]);
 
-	for (UINT i = 0; i < count; i++)
+	for (; i < count; i++)
 	{
-		markers.push_back(new Marker(Shaders + L"009_Sprite.fx", v[i]));
+		fruitDatabase.push_back(new Friuts(Shaders + L"009_Sprite.fx", v[i]));
 	}
 
 	r->Close();

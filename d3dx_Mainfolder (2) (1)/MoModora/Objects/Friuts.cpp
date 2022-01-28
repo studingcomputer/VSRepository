@@ -5,7 +5,7 @@ Friuts::Friuts(wstring shaderFile, D3DXVECTOR2 position)
 	:Enemy(val), moveSpeed(200.0f)
 {
 	TimePast = 0.0f;
-	val = new MainObject(new Animation(), 8, 2, EnemyStatus::nothing);
+	val = new MainObject(8, 2, EnemyStatus::nothing);
 
 	this->position = position;
 	wstring spriteFile = Textures + L"Momodora/93769.png";
@@ -58,7 +58,7 @@ Friuts::Friuts(wstring shaderFile, D3DXVECTOR2 position)
 
 	val->_this->Position(position);
 	val->_this->Scale(D3DXVECTOR2(2.5f, 2.5f));
-
+	val->_this->Play(0);
 	vec = left;
 }
 

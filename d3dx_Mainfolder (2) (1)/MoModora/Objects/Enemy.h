@@ -20,7 +20,10 @@ struct MainObject
 	int attack;
 	EnemyStatus act;
 
-	MainObject(Animation* __this, int _HP, int _attack, EnemyStatus _act) : _this(__this), HP(_HP), attack(_attack), act(_act) {}
+	MainObject(int _HP, int _attack, EnemyStatus _act) : HP(_HP), attack(_attack), act(_act) 
+	{
+		_this = new Animation();
+	}
 };
 
 class Enemy

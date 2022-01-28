@@ -50,6 +50,7 @@ public:
 	void SetStart(bool val) { startTrigger = val; }
 
 	D3DXVECTOR2 Position() { return animation->Position(); }
+	void Position(D3DXVECTOR2 val) { animation->Position(val); }
 
 private:
 	float moveSpeed;
