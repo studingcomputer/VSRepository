@@ -4,9 +4,12 @@
 class Player;
 class Line;
 class Friuts;
+class Bullet;
 
 class MainScene : public Scene
 {
+
+
 public:
 	MainScene(SceneValues* values);
 	~MainScene();
@@ -20,15 +23,18 @@ private:
 
 	void Reset_Process();
 
+	static void UpdateThread1(MainScene* main);
+	static void UpdateThread2(MainScene* main);
+	static void UpdateThread3(MainScene* main);
+
 	Sprite* backGround[3];
 
 	Player* player;
 
 	vector<Friuts*> fruitDatabase;
-
 	vector<Sprite*> blocks;
-	
 	vector<Line*> lines;
+	vector<Bullet*> Bullets;
 
 	void CheckLines();
 

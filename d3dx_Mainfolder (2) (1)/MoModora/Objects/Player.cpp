@@ -330,9 +330,9 @@ void Player::Update(D3DXMATRIX & V, D3DXMATRIX & P)
 	{
 		if (!onGround)
 		{
-			velocity.y -= 9.8f * 0.00002;//조정 심하게 필요(wndml) (완료)
+			velocity.y -= 9.8f * 0.0004;//조정 심하게 필요(wndml) (완료)
 			//velocity.y -= 9.8f * 0.000002;
-			if (velocity.y < -0.05 && status != PlayerAct::Falling && !(status == PlayerAct::AirAttack_falling || status == PlayerAct::AirAttack_jumping))
+			if (velocity.y < -0.05 && status != PlayerAct::Falling && !(status == PlayerAct::AirAttack_falling || status == PlayerAct::AirAttack_jumping || status == PlayerAct::Crouching || status == PlayerAct::Attack3 || status == PlayerAct::LandHard || status == PlayerAct::LandSoft))
 			{
 				status = PlayerAct::Falling;
 				WhereBegin_Fall = animation->Position().y;
@@ -546,7 +546,7 @@ void Player::Animation_Playing()
 		case PlayerAct::LandHard:
 			velocity.x = 0.0f;
 			animation->Play(10);
-			if (animation->Clip_Check_IfEnd())
+			if (animation->Clip_Check_IfEnd() && onGround)
 			{
 				status = PlayerAct::Nothing;
 			}
@@ -555,7 +555,7 @@ void Player::Animation_Playing()
 		case PlayerAct::LandSoft:
 			velocity.x = 0.0f;
 			animation->Play(11);
-			if (animation->Clip_Check_IfEnd())
+			if (animation->Clip_Check_IfEnd() && onGround)
 			{
 				status = PlayerAct::Nothing;
 			}
@@ -674,12 +674,12 @@ void Player::Key_Check()
 			if (jumpStack == 1)
 			{
 				status = PlayerAct::Jumping;
-				velocity.y = moveSpeed * 0.0008;
+				velocity.y = moveSpeed * 0.004;
 			}
 			else
 			{
 				status = PlayerAct::Jumping;
-				velocity.y = moveSpeed * 0.001;
+				velocity.y = moveSpeed * 0.005;
 			}
 			jumpStack++;
 		}

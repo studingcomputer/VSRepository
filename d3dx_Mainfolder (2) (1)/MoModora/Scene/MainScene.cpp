@@ -5,9 +5,9 @@
 #include "Renders/Line.h"
 #include "Viewer/Following.h"
 #include "Objects/Friuts.h"
+#include "Objects/Bullet.h"
 
 #include <thread>
-using std::thread;
 
 MainScene::MainScene(SceneValues * values)
 	:Scene(values)
@@ -31,6 +31,11 @@ MainScene::MainScene(SceneValues * values)
 
 	player = new Player(D3DXVECTOR2(-100, 100), D3DXVECTOR2(2.5f, 2.5f), backGround[mapSelect]);
 	fruitDatabase.push_back(new Friuts(shaderFile, D3DXVECTOR2(500, 100)));
+	fruitDatabase.push_back(new Friuts(shaderFile, D3DXVECTOR2(500, 100)));
+	fruitDatabase.push_back(new Friuts(shaderFile, D3DXVECTOR2(500, 100)));
+	fruitDatabase.push_back(new Friuts(shaderFile, D3DXVECTOR2(500, 100)));
+	fruitDatabase.push_back(new Friuts(shaderFile, D3DXVECTOR2(500, 100)));
+	fruitDatabase.push_back(new Friuts(shaderFile, D3DXVECTOR2(500, 100)));
 
 	values->MainCamera = new Following(player);
 }
@@ -42,6 +47,10 @@ MainScene::~MainScene()
 	for (Line* l : lines)
 		SAFE_DELETE(l);
 	SAFE_DELETE(player);
+	for (Friuts* f : fruitDatabase)
+		SAFE_DELETE(f);
+	for (Bullet* b : Bullets)
+		SAFE_DELETE(b);
 }
 
 void MainScene::Update()
@@ -61,25 +70,50 @@ void MainScene::Update()
 
 	vector<thread> threads;
 
-	for (Friuts* f : fruitDatabase)
+	threads.push_back(thread(&UpdateThread1, this));
+	threads.push_back(thread(&UpdateThread2, this));
+	threads.push_back(thread(&UpdateThread3, this));
+
+	for (int i = 0; i< threads.size(); i++)
+		threads[i].join();
+
+}
+
+void MainScene::UpdateThread1(MainScene* main)
+{
+
+	D3DXMATRIX V = main->values->MainCamera->View();
+	D3DXMATRIX P = main->values->Projection;
+
+	for (Friuts* f : main->fruitDatabase)
 	{
-		threads.push_back(thread(f->Update, values->MainCamera->View(), P));
+		f->Update(V, P);
 	}
-	for (Line* l : lines)
+	main->player->Update(V, P);
+}
+
+void MainScene::UpdateThread2(MainScene* main)
+{
+	D3DXMATRIX V = main->values->MainCamera->View();
+	D3DXMATRIX P = main->values->Projection;
+
+
+	for (Line* l : main->lines)
 	{
-		l->Update(values->MainCamera->View(), P);
+		l->Update(V, P);
 	}
+	main->CheckLines();
+}
 
+void MainScene::UpdateThread3(MainScene* main)
+{
+	D3DXMATRIX V = main->values->MainCamera->View();
+	D3DXMATRIX P = main->values->Projection;
 
-
-	thread t1(CheckLines);
-	
-	thread t2(player->Update(values->MainCamera->View(), P));
-
-
-	t1.join();
-	t2.join();
-	t3.join();
+	for (Bullet* b : main->Bullets)
+	{
+		b->Update(V, P);
+	}
 }
 
 void MainScene::Render()
