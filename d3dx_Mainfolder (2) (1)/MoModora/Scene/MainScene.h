@@ -1,5 +1,6 @@
 #pragma once
 #include "Scene/Scene.h"
+#include <thread>
 
 class Player;
 class Line;
@@ -39,6 +40,8 @@ private:
 	void CheckLines();
 
 	D3DXVECTOR2 mPos;
+
+	vector<thread> threads;
 
 	int mapSelect = 0;
 

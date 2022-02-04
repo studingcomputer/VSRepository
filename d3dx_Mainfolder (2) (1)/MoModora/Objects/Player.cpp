@@ -330,8 +330,8 @@ void Player::Update(D3DXMATRIX & V, D3DXMATRIX & P)
 	{
 		if (!onGround)
 		{
-			velocity.y -= 9.8f * 0.0004;//조정 심하게 필요(wndml) (완료)
-			//velocity.y -= 9.8f * 0.000002;
+			velocity.y -= 9.8 * moveSpeed / (int)ImGui::GetIO().Framerate * 0.001;//조정 심하게 필요(wndml) (완료)
+			//velocity.y -= 9.8f * 0.0004;
 			if (velocity.y < -0.05 && status != PlayerAct::Falling && !(status == PlayerAct::AirAttack_falling || status == PlayerAct::AirAttack_jumping || status == PlayerAct::Crouching || status == PlayerAct::Attack3 || status == PlayerAct::LandHard || status == PlayerAct::LandSoft))
 			{
 				status = PlayerAct::Falling;
@@ -674,19 +674,24 @@ void Player::Key_Check()
 			if (jumpStack == 1)
 			{
 				status = PlayerAct::Jumping;
-				velocity.y = moveSpeed * 0.004;
+				velocity.y = moveSpeed / (int)ImGui::GetIO().Framerate * 2;
 			}
 			else
 			{
 				status = PlayerAct::Jumping;
-				velocity.y = moveSpeed * 0.005;
+				velocity.y = moveSpeed / (int)ImGui::GetIO().Framerate * 2.5f;
 			}
 			jumpStack++;
 		}
 	}
-	else if (Key->Press('A') && !Run_key && !Else_key && !C_key && !Attack_key && (animation->Position().x - animation->TextureSize().x * 0.5f) > theEndofWorld_L)
+	else if (Key->Press('A') && !Run_key && !Else_key && !Attack_key && (animation->Position().x - animation->TextureSize().x * 0.5f) > theEndofWorld_L)
 	{
-		if (status == PlayerAct::Turning || (playerVec != LEFT))
+		if (C_key)
+		{
+			playerVec = LEFT;
+			velocity.x = -(moveSpeed * Timer->Elapsed());
+		}
+		else if (status == PlayerAct::Turning || (playerVec != LEFT))
 		{
 			playerVec = LEFT;
 			status = PlayerAct::Turning;
@@ -700,9 +705,14 @@ void Player::Key_Check()
 		animation->RotationDegree(0, 180, 0);
 		attack->RotationDegree(0, 180, 0);
 	}
-	else if (Key->Press('D') && !Run_key && !Else_key && !C_key && !Attack_key && (animation->TextureSize().x * 0.5f + animation->Position().x) < theEndofWorld_R)
+	else if (Key->Press('D') && !Run_key && !Else_key && !Attack_key && (animation->TextureSize().x * 0.5f + animation->Position().x) < theEndofWorld_R)
 	{
-		if (status == PlayerAct::Turning || (playerVec != RIGHT))
+		if (C_key)
+		{
+			playerVec = RIGHT;
+			velocity.x = (moveSpeed * Timer->Elapsed());
+		}
+		else if (status == PlayerAct::Turning || (playerVec != RIGHT))
 		{
 			playerVec = RIGHT;
 			status = PlayerAct::Turning;

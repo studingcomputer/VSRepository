@@ -31,11 +31,6 @@ MainScene::MainScene(SceneValues * values)
 
 	player = new Player(D3DXVECTOR2(-100, 100), D3DXVECTOR2(2.5f, 2.5f), backGround[mapSelect]);
 	fruitDatabase.push_back(new Friuts(shaderFile, D3DXVECTOR2(500, 100)));
-	fruitDatabase.push_back(new Friuts(shaderFile, D3DXVECTOR2(500, 100)));
-	fruitDatabase.push_back(new Friuts(shaderFile, D3DXVECTOR2(500, 100)));
-	fruitDatabase.push_back(new Friuts(shaderFile, D3DXVECTOR2(500, 100)));
-	fruitDatabase.push_back(new Friuts(shaderFile, D3DXVECTOR2(500, 100)));
-	fruitDatabase.push_back(new Friuts(shaderFile, D3DXVECTOR2(500, 100)));
 
 	values->MainCamera = new Following(player);
 }
@@ -68,7 +63,6 @@ void MainScene::Update()
 
 	mPos = mouse + camera;
 
-	vector<thread> threads;
 
 	threads.push_back(thread(&UpdateThread1, this));
 	threads.push_back(thread(&UpdateThread2, this));
@@ -77,6 +71,7 @@ void MainScene::Update()
 	for (int i = 0; i< threads.size(); i++)
 		threads[i].join();
 
+	threads.clear();
 }
 
 void MainScene::UpdateThread1(MainScene* main)
@@ -135,7 +130,7 @@ void MainScene::Render()
 			{
 				function<void(wstring)> f = bind(&MainScene::OpenComplete, this, placeholders::_1);
 
-				Path::OpenFileDialog(L"", L"Binary\0*.bin", L".", f, Hwnd);
+				Path::OpenFileDialog(L"", L".bin", L".", f, Hwnd);
 			}
 			ImGui::EndMenu();
 		}
@@ -202,8 +197,8 @@ void MainScene::SaveComplete(wstring name)
 	v.push_back(player->Position());
 	for (Friuts* f : fruitDatabase)
 	{
-		v.push_back(f->Position());
 		v.push_back(D3DXVECTOR2(-224.0f, -224.0f));
+		v.push_back(f->Position());
 	}
 
 	w->UInt(v.size());
@@ -239,6 +234,7 @@ void MainScene::OpenComplete(wstring name)
 
 	for (; i < count; i++)
 	{
+		if()//여기부터 시작한다: (D3DXVECTOR2(-224.0f, -224.0f)일때만 fruitdatabase에 저장
 		fruitDatabase.push_back(new Friuts(Shaders + L"009_Sprite.fx", v[i]));
 	}
 
@@ -248,6 +244,39 @@ void MainScene::OpenComplete(wstring name)
 
 void MainScene::Reset_Process()
 {
+	for (int i = 0; i < 3; i++)
+		SAFE_DELETE(backGround[i]);
+	for (Line* l : lines)
+		SAFE_DELETE(l);
+	lines.clear();
+	SAFE_DELETE(player);
+	for (Friuts* f : fruitDatabase)
+		SAFE_DELETE(f);
+	fruitDatabase.clear();
+	for (Bullet* b : Bullets)
+		SAFE_DELETE(b);
+	Bullets.clear();
+
+	wstring shaderFile = Shaders + L"009_Sprite.fx";
+
+
+	backGround[0] = new Sprite(Textures + L"Momodora/sunsetmap.png", shaderFile);
+	backGround[0]->Scale(1.05f, 1.05f);
+	backGround[0]->Position(backGround[0]->TextureSize().x * 0.5f - Width * 0.5f, 0.0f);
+
+	backGround[1] = new Sprite(Textures + L"Momodora/groundmap.png", shaderFile);
+	backGround[1]->Scale(1.05f, 1.05f);
+	backGround[1]->Position(backGround[0]->TextureSize().x * 0.5f - Width * 0.5f, 0.0f);
+
+	backGround[2] = new Sprite(Textures + L"Momodora/icemap.png", shaderFile);
+	backGround[2]->Scale(1.05f, 1.05f);
+	backGround[2]->Position(backGround[0]->TextureSize().x * 0.5f - Width * 0.5f, 0.0f);
+
+	lines.push_back(new Line(shaderFile, D3DXVECTOR2((backGround[mapSelect]->Position().x) - (backGround[mapSelect]->TextureSize().x * 0.5f), -(Height * 0.35f)), D3DXVECTOR2((backGround[mapSelect]->Position().x) + (backGround[mapSelect]->TextureSize().x * 0.5f), -(Height * 0.35f))));
+
+	player = new Player(D3DXVECTOR2(-100, 100), D3DXVECTOR2(2.5f, 2.5f), backGround[mapSelect]);
+
+	values->MainCamera = new Following(player);
 }
 
 void MainScene::CheckLines()
