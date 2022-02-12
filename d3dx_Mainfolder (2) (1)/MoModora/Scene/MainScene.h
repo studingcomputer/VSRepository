@@ -27,6 +27,7 @@ private:
 	static void UpdateThread1(MainScene* main);
 	static void UpdateThread2(MainScene* main);
 	static void UpdateThread3(MainScene* main);
+	static void UpdateThread4(MainScene* main);
 
 	Sprite* backGround[3];
 

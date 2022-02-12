@@ -47,8 +47,6 @@ void Render()
 	D3DXCOLOR bgColor = D3DXCOLOR(0, 0, 0, 0);
 	DeviceContext->ClearRenderTargetView(RTV, (float*)bgColor);
 	{
-
-
 		for (Scene* scene : scenes)
 			scene->Render();
 	}

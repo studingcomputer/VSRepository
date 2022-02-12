@@ -1,8 +1,11 @@
 #include "stdafx.h"
 #include "Friuts.h"
 
-Friuts::Friuts(wstring shaderFile, D3DXVECTOR2 position)
-	:Enemy(val), moveSpeed(200.0f)
+#include <cstdlib>
+#include <ctime>
+
+Friuts::Friuts(wstring shaderFile, D3DXVECTOR2 position, Sprite* worldSprite)
+	:Enemy(val), moveSpeed(50.0f), velocity(D3DXVECTOR2(0.0f, 0.0f))
 {
 	TimePast = 0.0f;
 	val = new MainObject(8, 2, EnemyStatus::nothing);
@@ -12,7 +15,10 @@ Friuts::Friuts(wstring shaderFile, D3DXVECTOR2 position)
 
 
 	Clip* clip;
-	float clipSpeed = 0.1f;
+	float clipSpeed = 0.2f;
+
+	theEndofWorld_L = worldSprite->Position().x - worldSprite->TextureSize().x * 0.5f;
+	theEndofWorld_R = worldSprite->Position().x + worldSprite->TextureSize().x * 0.5f;
 
 	//nothing
 	{
@@ -82,25 +88,40 @@ void Friuts::Update(D3DXMATRIX V, D3DXMATRIX P)
 		if (val->act == EnemyStatus::nothing && !metPlayer)
 		{
 			StartTimer();
-			if (RtTimer() >= 10)
+			if (RtTimer() >= 3)
 			{
-				ResetTimer();
-				vec = Math::Random(0, 1) ? left : right;
+				srand((unsigned int)time(NULL));
+				if (rand() % 3 == 0)
+					vec = right;
+				else
+					vec = left;
 				val->act = EnemyStatus::walking;
+				ResetTimer();
+			}
+		}
+		else if (val->act != EnemyStatus::attacking && val->act != EnemyStatus::attacking && val->act != EnemyStatus::dead)
+		{
+			StartTimer();
+			if (RtTimer() >= 5)
+			{
+				val->act = EnemyStatus::nothing;
+				ResetTimer();
 			}
 		}
 
+		StatusSet();
+		val->_this->Play(currentAnimation);
 
 		attackAble = true;
 		switch (val->act)
 		{
 			case EnemyStatus::walking:
-				if (vec == left)
+				if (vec == left && (val->_this->Position().x - val->_this->TextureSize().x * 0.5f) > theEndofWorld_L)
 				{
 					val->_this->RotationDegree(0, 180, 0);
 					ex_Position.x -= moveSpeed * Timer->Elapsed();
 				}
-				else
+				else if (vec == right && (val->_this->TextureSize().x * 0.5f + val->_this->Position().x) < theEndofWorld_R)
 				{
 					val->_this->RotationDegree(0, 0, 0);
 					ex_Position.x += moveSpeed * Timer->Elapsed();
@@ -160,21 +181,23 @@ void Friuts::StatusSet()
 	{
 		case EnemyStatus::nothing:
 			currentAnimation = 0;
+			break;
 
 		case EnemyStatus::walking:
-			currentAnimation = 3;
-			if (val->_this->Clip_Check_IfEnd())
-			{
-				val->act = EnemyStatus::nothing;
-				currentAnimation = 0;
-			}
+ 			currentAnimation = 1;
+			break;
 
 		case EnemyStatus::hit:
+			if (currentAnimation == 2)
+				currentAnimation = 3;
+			else
+				currentAnimation = 2;
 			if(val->_this->Clip_Check_IfEnd())
 			{
 				val->act = EnemyStatus::nothing;
 				currentAnimation = 0;
 			}
+			break;
 
 		case EnemyStatus::attacking:
 			currentAnimation = 4;
@@ -183,6 +206,7 @@ void Friuts::StatusSet()
 				val->act = EnemyStatus::nothing;
 				currentAnimation = 0;
 			}
+			break;
 	}
 	val->_this->Play(currentAnimation);
 }

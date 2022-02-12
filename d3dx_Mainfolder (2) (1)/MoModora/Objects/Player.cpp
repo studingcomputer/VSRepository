@@ -646,8 +646,11 @@ void Player::Key_Check()
 {
 	Run_key = (Key->Press('A') && Key->Press('D'));
 	C_key = (status == PlayerAct::Falling || status == PlayerAct::Jumping);
-	Else_key = (status == PlayerAct::Crouching || status == PlayerAct::Rising || status == PlayerAct::Turning || status == PlayerAct::LandHard || status == PlayerAct::LandSoft || status == PlayerAct::Rolling);
-	Attack_key = (status == PlayerAct::Attack1 || status == PlayerAct::Attack2 || status == PlayerAct::Attack3 || status == PlayerAct::AirAttack_falling || status == PlayerAct::AirAttack_jumping);
+	Else_key = (status == PlayerAct::Crouching || status == PlayerAct::Rising || status == PlayerAct::Turning 
+		|| status == PlayerAct::LandHard || status == PlayerAct::LandSoft || status == PlayerAct::Rolling 
+		|| status == PlayerAct::AirAttack_falling || status == PlayerAct::AirAttack_jumping);
+	Attack_key = (status == PlayerAct::Attack1 || status == PlayerAct::Attack2 || status == PlayerAct::Attack3 
+		|| status == PlayerAct::AirAttack_falling || status == PlayerAct::AirAttack_jumping);
 	if (Key->Down('C') && !C_key && !Attack_key)//뭘 누르던지간에 c가 먼저 확인됨(현재로선)
 	{
 		if (status == PlayerAct::Crouching)

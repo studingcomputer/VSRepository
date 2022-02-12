@@ -5,7 +5,7 @@ class Enemy;
 class Friuts : public Enemy
 {
 public:
-	Friuts(wstring shaderFile, D3DXVECTOR2 position);
+	Friuts(wstring shaderFile, D3DXVECTOR2 position, Sprite* worldSprite);
 	~Friuts();
 
 	virtual void Update(D3DXMATRIX V, D3DXMATRIX P) override;
@@ -22,6 +22,8 @@ private:
 	float moveSpeed;
 	void SetClip(wstring shaderFile, wstring textureFile, Clip * clip, int x, int y, int width, int height, float speed);
 
+	D3DXVECTOR2 velocity;
+
 	bool attackAble = true;
 	bool timerUpdate = false;
 	bool metPlayer = false;
@@ -36,4 +38,7 @@ private:
 	void StartTimer();
 	int RtTimer();
 	void ResetTimer();
+
+	float theEndofWorld_L;
+	float theEndofWorld_R;
 };

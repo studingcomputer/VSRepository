@@ -30,7 +30,7 @@ MainScene::MainScene(SceneValues * values)
 	lines.push_back(new Line(shaderFile, D3DXVECTOR2((backGround[mapSelect]->Position().x) - (backGround[mapSelect]->TextureSize().x * 0.5f), -(Height * 0.35f)), D3DXVECTOR2((backGround[mapSelect]->Position().x) + (backGround[mapSelect]->TextureSize().x * 0.5f), -(Height * 0.35f))));
 
 	player = new Player(D3DXVECTOR2(-100, 100), D3DXVECTOR2(2.5f, 2.5f), backGround[mapSelect]);
-	fruitDatabase.push_back(new Friuts(shaderFile, D3DXVECTOR2(500, 100)));
+	fruitDatabase.push_back(new Friuts(shaderFile, D3DXVECTOR2(500, 100), backGround[mapSelect]));
 
 	values->MainCamera = new Following(player);
 }
@@ -50,7 +50,6 @@ MainScene::~MainScene()
 
 void MainScene::Update()
 {
-
 	values->MainCamera->Update();
 	D3DXMATRIX V = values->MainCamera->View();
 	D3DXMATRIX P = values->Projection;
@@ -67,6 +66,7 @@ void MainScene::Update()
 	threads.push_back(thread(&UpdateThread1, this));
 	threads.push_back(thread(&UpdateThread2, this));
 	threads.push_back(thread(&UpdateThread3, this));
+	threads.push_back(thread(&UpdateThread4, this));
 
 	for (int i = 0; i< threads.size(); i++)
 		threads[i].join();
@@ -76,14 +76,10 @@ void MainScene::Update()
 
 void MainScene::UpdateThread1(MainScene* main)
 {
-
 	D3DXMATRIX V = main->values->MainCamera->View();
 	D3DXMATRIX P = main->values->Projection;
 
-	for (Friuts* f : main->fruitDatabase)
-	{
-		f->Update(V, P);
-	}
+	main->CheckLines();
 	main->player->Update(V, P);
 }
 
@@ -92,12 +88,10 @@ void MainScene::UpdateThread2(MainScene* main)
 	D3DXMATRIX V = main->values->MainCamera->View();
 	D3DXMATRIX P = main->values->Projection;
 
-
 	for (Line* l : main->lines)
 	{
 		l->Update(V, P);
 	}
-	main->CheckLines();
 }
 
 void MainScene::UpdateThread3(MainScene* main)
@@ -110,6 +104,18 @@ void MainScene::UpdateThread3(MainScene* main)
 		b->Update(V, P);
 	}
 }
+
+void MainScene::UpdateThread4(MainScene* main)
+{
+	D3DXMATRIX V = main->values->MainCamera->View();
+	D3DXMATRIX P = main->values->Projection;
+
+	for (Friuts* f : main->fruitDatabase)
+	{
+		f->Update(V, P);
+	}
+}
+
 
 void MainScene::Render()
 {
@@ -124,7 +130,7 @@ void MainScene::Render()
 			{ 
 				function<void(wstring)> f = bind(&MainScene::SaveComplete, this, placeholders::_1);
 
-				Path::SaveFileDialog(L"", L"Binary\0*.bin", L".", f, Hwnd);
+				Path::SaveFileDialog(L"", L".bin", L".", f, Hwnd);
 			}
 			if (ImGui::MenuItem("Open")) 
 			{
@@ -163,7 +169,8 @@ void MainScene::Render()
 		Reset_Process();
 	}
 	player->SetStart(isPlay);
-	player->SetStart(isPlay);
+	for(Friuts* f : fruitDatabase)
+		f->SetStart(isPlay);
 
 
 	ImGui::End();
@@ -234,8 +241,8 @@ void MainScene::OpenComplete(wstring name)
 
 	for (; i < count; i++)
 	{
-		if()//여기부터 시작한다: (D3DXVECTOR2(-224.0f, -224.0f)일때만 fruitdatabase에 저장
-		fruitDatabase.push_back(new Friuts(Shaders + L"009_Sprite.fx", v[i]));
+		if (v[i].x == -224.0f && v[i].y == -224.0f)//여기부터 시작한다: (D3DXVECTOR2(-224.0f, -224.0f)일때만 fruitdatabase에 저장
+			fruitDatabase.push_back(new Friuts(Shaders + L"009_Sprite.fx", v[++i], backGround[mapSelect]));
 	}
 
 	r->Close();
@@ -277,6 +284,7 @@ void MainScene::Reset_Process()
 	player = new Player(D3DXVECTOR2(-100, 100), D3DXVECTOR2(2.5f, 2.5f), backGround[mapSelect]);
 
 	values->MainCamera = new Following(player);
+	fruitDatabase.push_back(new Friuts(shaderFile, D3DXVECTOR2(500, 100), backGround[mapSelect]));
 }
 
 void MainScene::CheckLines()
